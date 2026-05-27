@@ -25,10 +25,10 @@ export function OfflineBanner() {
       <div className="mx-auto flex max-w-6xl items-center gap-3">
         {isOnline ? <Wifi className="size-4 shrink-0" /> : <CloudOff className="size-4 shrink-0" />}
         <p className="min-w-0 flex-1">
-          {isOnline ? (showReconnected ? "Back online. Refreshing marketplace data." : `Low-network mode active: ${connectionLabel}. Cached pages stay usable.`) : "Offline mode active. Cached browsing, orders, tracking, seller, and admin views may still open."}
+          {isOnline ? (showReconnected ? "You're back online." : "Your connection is slow. Shopping still works.") : "You're offline. Some shopping actions may pause until your connection returns."}
         </p>
         <Button size="sm" variant="secondary" className="h-8 bg-white" onClick={() => window.location.reload()}>
-          <RefreshCw /> Retry
+          <RefreshCw /> Refresh
         </Button>
       </div>
     </div>

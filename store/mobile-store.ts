@@ -23,7 +23,7 @@ interface MobileState {
   notificationPermission: NotificationPermission | "unsupported";
   notificationPreferences: Record<NotificationPreferenceKey, boolean>;
   lastReconnectAt?: string;
-  setOnline: (isOnline: boolean) => void;
+  setOnline: (isOnline: boolean, options?: { announceReconnect?: boolean }) => void;
   setConnectionLabel: (connectionLabel: string) => void;
   setStandalone: (isStandalone: boolean) => void;
   setInstallPromptReady: (installPromptReady: boolean) => void;
@@ -52,10 +52,10 @@ export const useMobileStore = create<MobileState>()(
       installPromptReady: false,
       notificationPermission: "unsupported",
       notificationPreferences: defaultPreferences,
-      setOnline: (isOnline) =>
+      setOnline: (isOnline, options) =>
         set({
           isOnline,
-          lastReconnectAt: isOnline ? new Date().toISOString() : undefined,
+          lastReconnectAt: isOnline && options?.announceReconnect ? new Date().toISOString() : undefined,
         }),
       setConnectionLabel: (connectionLabel) => set({ connectionLabel }),
       setStandalone: (isStandalone) => set({ isStandalone }),

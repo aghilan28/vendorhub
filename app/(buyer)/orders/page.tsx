@@ -5,7 +5,7 @@ import { BuyerOrdersClient } from "@/features/orders/components/buyer-orders-cli
 export default function OrdersPage() {
   return (
     <PageContainer>
-      <SectionWrapper title="Orders" description="Buyer transaction history with payment, lifecycle, inventory, and support references.">
+      <SectionWrapper title="Orders" description="Your local store orders, payments, delivery updates, and support details.">
         <BuyerOrdersClient />
       </SectionWrapper>
     </PageContainer>

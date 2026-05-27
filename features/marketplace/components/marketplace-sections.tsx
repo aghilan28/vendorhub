@@ -1,53 +1,50 @@
 "use client";
 
-import { ArrowRight, BadgeCheck, Clock3, PackageCheck } from "lucide-react";
+import { BadgeCheck, Clock3, PackageCheck, Search, Star, Store } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useTranslation } from "react-i18next";
 import { ProductGrid } from "@/components/commerce/product-grid";
-import { RatingDisplay } from "@/components/commerce/rating-display";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { useCurrentLocale } from "@/components/i18n/language-switcher";
 import { localizeCategory, localizeProduct, localizeVendor } from "@/features/localization/catalog";
-import { marketplaceCategories, marketplaceProducts, marketplaceVendors } from "@/features/marketplace/lib/data";
+import { getVendorActivityLine, getVendorHumanLine, marketplaceCategories, marketplaceProducts, marketplaceVendors } from "@/features/marketplace/lib/data";
 import type { Category, Product, Vendor } from "@/types";
 
 const heroTrustSignals = [
-  { key: "liveVendors", icon: BadgeCheck },
-  { key: "medianPromise", icon: Clock3 },
-  { key: "stockChecked", icon: PackageCheck },
+  { label: "128", detail: "verified sellers", icon: BadgeCheck },
+  { label: "22 min", detail: "avg delivery", icon: Clock3 },
+  { label: "96%", detail: "in-stock accuracy", icon: PackageCheck },
 ] as const;
 
 export function MarketplaceHero() {
-  const { t } = useTranslation();
-
   return (
-    <section className="rounded-lg border border-border bg-surface p-5 shadow-sm sm:p-7">
-      <div>
-        <h1 className="mt-4 max-w-3xl text-3xl font-semibold leading-tight text-primary-text sm:text-4xl">
-          {t("home.title")}
+    <section className="rounded-lg border border-emerald-100 bg-gradient-to-b from-white to-emerald-50/55 px-4 py-8 shadow-sm sm:px-8 sm:py-11">
+      <div className="mx-auto max-w-4xl text-center">
+        <h1 className="text-3xl font-semibold leading-tight text-primary-text sm:text-5xl">
+          Fresh groceries and essentials from your neighbourhood.
         </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-secondary-text">
-          {t("home.subtitle")}
+        <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-secondary-text sm:text-lg">
+          Verified local sellers. Honest stock. Delivered in under 30 minutes.
         </p>
-        <form action="/search" className="mt-5 flex flex-col gap-2 sm:flex-row">
+        <form action="/search" className="mx-auto mt-7 flex max-w-3xl items-center gap-2 rounded-full border border-emerald-200 bg-white p-2 shadow-[0_18px_45px_rgba(15,23,42,0.10)] transition focus-within:border-emerald-500 focus-within:shadow-[0_20px_50px_rgba(5,150,105,0.18)]">
           <label className="sr-only" htmlFor="home-search">Search products</label>
+          <Search className="ml-3 size-5 shrink-0 text-secondary-text" aria-hidden />
           <input
             id="home-search"
             name="q"
-            className="focus-ring h-11 flex-1 rounded-md border border-border bg-background px-4 text-sm"
-            placeholder={t("home.searchPlaceholder")}
+            className="h-12 min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-secondary-text"
+            placeholder="Search tomatoes, dosa batter, jasmine flowers..."
           />
-          <Button className="h-11" type="submit">
-            {t("home.searchButton")} <ArrowRight />
-          </Button>
+          <button type="submit" className="focus-ring min-h-12 rounded-full bg-brand px-5 text-sm font-semibold text-white transition hover:bg-emerald-700 active:scale-[0.98]">
+            Search
+          </button>
         </form>
-        <div className="mt-5 grid gap-2 text-xs text-secondary-text sm:grid-cols-3">
-          {heroTrustSignals.map(({ key, icon: Icon }) => (
-            <span key={key} className="inline-flex items-center gap-2 rounded-md bg-slate-50 px-3 py-2">
-              <Icon className="size-4 text-brand" /> {t(`home.${key}`)}
-            </span>
+        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+          {heroTrustSignals.map(({ label, detail, icon: Icon }) => (
+            <div key={detail} className="rounded-lg border border-white/80 bg-white/80 px-4 py-3 text-left shadow-sm">
+              <Icon className="mb-2 size-4 text-brand" aria-hidden />
+              <p className="text-xl font-semibold leading-none text-primary-text">{label}</p>
+              <p className="mt-1 text-sm text-secondary-text">{detail}</p>
+            </div>
           ))}
         </div>
       </div>
@@ -60,14 +57,14 @@ export function CategoryRail({ categories = marketplaceCategories }: { categorie
   const localizedCategories = categories.map((category) => localizeCategory(category, locale));
 
   return (
-    <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
       {localizedCategories.map((category) => (
-        <Link key={category.id} href={`/categories/${category.slug}`} className="group rounded-lg border border-border bg-surface p-3 shadow-sm transition hover:border-emerald-200">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-md bg-slate-100">
+        <Link key={category.id} href={`/categories/${category.slug}`} className="group min-h-36 rounded-lg border border-border bg-surface p-3 text-center shadow-sm transition hover:border-emerald-200 hover:shadow-[0_14px_30px_rgba(15,23,42,0.1)] focus-ring">
+          <div className="relative mx-auto aspect-square max-w-28 overflow-hidden rounded-full bg-slate-100">
             {category.imageUrl ? <Image src={category.imageUrl} alt={category.name} fill sizes="20vw" className="object-cover transition group-hover:scale-105" /> : null}
           </div>
           <h3 className="mt-3 text-sm font-semibold text-primary-text">{category.name}</h3>
-          <p className="mt-1 text-xs text-secondary-text">{category.productCount} local items</p>
+          <p className="mt-1 line-clamp-2 text-xs leading-5 text-secondary-text">{category.description}</p>
         </Link>
       ))}
     </div>
@@ -81,17 +78,20 @@ export function VendorRail({ vendors = marketplaceVendors }: { vendors?: Vendor[
   return (
     <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
       {localizedVendors.map((vendor) => (
-        <article key={vendor.id} className="rounded-lg border border-border bg-surface p-4 shadow-sm">
+        <article key={vendor.id} className="rounded-lg border border-border bg-surface p-4 shadow-sm transition hover:border-emerald-200 hover:shadow-[0_14px_30px_rgba(15,23,42,0.1)]">
           <div className="flex items-start justify-between gap-3">
             <div>
               <h3 className="font-semibold text-primary-text">{vendor.name}</h3>
               <p className="mt-1 text-sm text-secondary-text">{vendor.locality}</p>
             </div>
-            <Badge variant={vendor.serviceStatus === "open" ? "default" : "warning"}>{vendor.serviceStatus}</Badge>
+            <span className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-primary-text">
+              <Star className="size-4 fill-warning text-warning" aria-hidden /> {vendor.rating.toFixed(1)}
+            </span>
           </div>
-          <div className="mt-4 flex items-center justify-between text-sm">
-            <RatingDisplay rating={vendor.rating} />
-            <span className="text-secondary-text">{vendor.fulfillmentPromiseMinutes} min promise</span>
+          <p className="mt-3 text-sm leading-6 text-secondary-text">{getVendorHumanLine(vendor)}</p>
+          <div className="mt-3 flex flex-wrap gap-2 text-xs text-secondary-text">
+            <span className="inline-flex items-center gap-1 rounded-full bg-slate-50 px-2.5 py-1"><Clock3 className="size-3.5" /> {vendor.fulfillmentPromiseMinutes}-{vendor.fulfillmentPromiseMinutes + 8} min</span>
+            <span className="inline-flex items-center gap-1 rounded-full bg-slate-50 px-2.5 py-1"><Store className="size-3.5" /> {getVendorActivityLine(vendor)}</span>
           </div>
         </article>
       ))}
@@ -102,4 +102,15 @@ export function VendorRail({ vendors = marketplaceVendors }: { vendors?: Vendor[
 export function DealsStrip({ products = marketplaceProducts }: { products?: Product[] }) {
   const locale = useCurrentLocale();
   return <ProductGrid products={products.filter((product) => product.originalPrice).slice(0, 4).map((product) => localizeProduct(product, locale))} compact />;
+}
+
+export function MarketplaceFooter() {
+  return (
+    <footer className="border-t border-border py-6 text-sm text-secondary-text">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <p className="font-medium text-primary-text">VendorHub</p>
+        <p>Verified local sellers, fresh stock, and quick delivery across Chennai.</p>
+      </div>
+    </footer>
+  );
 }

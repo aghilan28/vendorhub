@@ -136,6 +136,22 @@ export function searchMarketplaceProducts(
     .filter((product) => filters.category === "all" || product.category.slug === filters.category)
     .filter((product) => filters.availability === "all" || product.stockCount > 0)
     .filter((product) => {
+      if (!filters.price || filters.price === "all") return true;
+      if (filters.price === "under-100") return product.price <= 100;
+      if (filters.price === "under-500") return product.price <= 500;
+      return product.price <= 1000;
+    })
+    .filter((product) => {
+      if (!filters.rating || filters.rating === "all") return true;
+      if (filters.rating === "4-5-plus") return product.rating >= 4.5;
+      return product.rating >= 4;
+    })
+    .filter((product) => {
+      if (!filters.deliveryTime || filters.deliveryTime === "all") return true;
+      if (filters.deliveryTime === "under-30") return (product.deliveryMinutes ?? 999) <= 30;
+      return (product.deliveryMinutes ?? 999) <= 45;
+    })
+    .filter((product) => {
       if (!filters.nearbyOnly && !filters.radiusKm) return true;
       const feasibility = deliveryFeasibility(product.vendor, buyerLocation);
       return feasibility.distanceKm === null || feasibility.distanceKm <= (filters.radiusKm ?? 6);
@@ -171,17 +187,7 @@ export function searchMarketplaceProducts(
   const mode = detectMode(query, correctedQuery, ranked);
   const fallbackUsed = ranked.length === 0 || ranked[0]?.score < 0.34;
   const confidence = ranked[0]?.score > 0.7 ? "high" : ranked.length && !fallbackUsed ? "medium" : "fallback";
-  const signals = [
-    "semantic relevance",
-    "keyword and fuzzy match",
-    "distance",
-    "delivery feasibility",
-    "stock availability",
-    "seller quality",
-    "local demand",
-    "behavioral affinity",
-    "fairness balancing",
-  ];
+  const signals = ["name", "category", "distance", "delivery", "availability", "seller", "popularity", "freshness"];
 
   return {
     query,
@@ -193,18 +199,18 @@ export function searchMarketplaceProducts(
     alternatives: ["popular nearby", "available now", "fast delivery", "highly rated"].filter((item) => item !== correctedQuery),
     intelligence: {
       summary: ranked.length
-        ? `${ranked.length} adaptive matches ranked by relevance, local demand, delivery feasibility, seller quality, availability, and fairness balancing.`
-        : "No confident smart matches. Fallback discovery is ready through broader product, category, and nearby popularity signals.",
+        ? `${ranked.length} results for ${query.trim() ? `'${query.trim()}'` : "nearby products"}.`
+        : `No results found for ${query.trim() ? `'${query.trim()}'` : "this search"}.`,
       confidence,
       signals,
       fallbackUsed,
       pipeline: rankingPipelineDiagnostics,
       coldStart: {
         active: coldStartActive,
-        strategy: coldStartActive ? "Geographic popularity, category trends, seller trust, available stock, and exploration balancing" : "Behavior-aware hybrid ranking",
+        strategy: coldStartActive ? "Popular nearby products available now" : "Products matched to this search",
         signals: coldStartActive
-          ? ["nearby demand", "trusted sellers", "category trends", "new seller/product exploration"]
-          : ["session intent", "search terms", "local availability", "seller operations"],
+          ? ["nearby", "available now", "popular", "fresh picks"]
+          : ["search terms", "local availability", "seller", "delivery"],
       },
     },
   };

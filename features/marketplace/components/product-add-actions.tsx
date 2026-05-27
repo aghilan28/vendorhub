@@ -27,7 +27,7 @@ export function ProductAddActions({ product }: { product: Product }) {
           })
         }
       >
-        <ShoppingCart /> {isPending ? "Syncing" : "Add to cart"}
+        <ShoppingCart /> {isPending ? "Adding..." : "Add to cart"}
       </Button>
     </div>
   );

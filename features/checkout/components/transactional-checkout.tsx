@@ -197,7 +197,7 @@ export function TransactionalCheckout() {
             { label: "Cart", value: items.length ? "Ready" : "Empty", icon: PackageCheck },
             { label: "Payment", value: paymentMethod === "cod" ? "COD available" : "Secure payment", icon: ShieldCheck },
             { label: "Delivery", value: deliverySlot, icon: Truck },
-            { label: "Refunds", value: "Easy order support", icon: RotateCcw },
+            { label: "Support", value: "Help after order", icon: RotateCcw },
           ]}
         />
         {!isOnline ? (
@@ -255,7 +255,7 @@ export function TransactionalCheckout() {
               <div key={item.id} className="flex items-center justify-between rounded-md bg-slate-50 px-3 py-2 text-sm">
                 <div>
                   <p className="font-medium text-primary-text">{item.product.name}</p>
-                  <p className="text-xs text-secondary-text">{item.product.vendor.name} x {item.quantity}</p>
+                  <p className="text-xs text-secondary-text">{item.product.vendor.name} · x{item.quantity}</p>
                 </div>
                 <PriceDisplay value={item.product.price * item.quantity} currency={item.product.currency} />
               </div>
@@ -302,7 +302,7 @@ export function TransactionalCheckout() {
             </div>
           ) : null}
           <Input className="mt-4" placeholder="Add delivery instructions" {...form.register("orderNote")} />
-          <p className="mt-3 flex items-center gap-2 text-xs text-secondary-text"><ShieldCheck className="size-4 text-brand" /> Your payment is checked before the seller starts packing.</p>
+          <p className="mt-3 flex items-center gap-2 text-xs text-secondary-text"><ShieldCheck className="size-4 text-brand" /> The seller starts packing after payment confirmation.</p>
         </section>
       </div>
 

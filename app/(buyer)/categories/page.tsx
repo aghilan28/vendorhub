@@ -7,10 +7,10 @@ import { marketplaceProducts } from "@/features/marketplace/lib/data";
 export default function CategoriesPage() {
   return (
     <PageContainer className="space-y-8">
-      <SectionWrapper title="Categories" description="Browse local commerce lanes with operational stock and seller availability.">
+      <SectionWrapper title="Categories" description="Browse what you need nearby.">
         <CategoryRail />
       </SectionWrapper>
-      <SectionWrapper title="Available now" description="A pagination-ready grid of products currently sellable nearby.">
+      <SectionWrapper title="Available now" description="Fresh products ready to add.">
         <ProductGrid products={marketplaceProducts} />
       </SectionWrapper>
     </PageContainer>

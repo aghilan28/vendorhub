@@ -11,7 +11,7 @@ export default async function TrackingDetailPage({ params }: { params: Promise<{
 
   return (
     <PageContainer>
-      <SectionWrapper title={`Tracking ${order.code}`} description="Dispatch, pickup, transit, ETA, and delivery completion events.">
+      <SectionWrapper title={`Tracking ${order.code}`} description="Follow your order from seller packing to delivery.">
         <BuyerTrackingExperience orderId={order.id} />
       </SectionWrapper>
     </PageContainer>

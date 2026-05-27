@@ -10,7 +10,7 @@ export function TrackingTimeline({ delivery }: { delivery: Delivery }) {
       <div className="flex flex-col gap-2 border-b border-border pb-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="font-semibold text-primary-text">Live delivery timeline</h2>
-          <p className="mt-1 text-sm text-secondary-text">Timestamped dispatch, pickup, transit, and ETA events.</p>
+          <p className="mt-1 text-sm text-secondary-text">Follow your order from seller packing to doorstep delivery.</p>
         </div>
         <DeliveryStatusBadge status={delivery.status} />
       </div>

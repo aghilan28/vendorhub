@@ -16,12 +16,14 @@ export function setupPwaRuntime(queryClient: QueryClient) {
   const store = useMobileStore.getState();
   const media = window.matchMedia("(display-mode: standalone)");
   const connection = getConnection();
+  let initializedNetwork = false;
 
   const updateNetwork = () => {
     const isOnline = navigator.onLine;
-    useMobileStore.getState().setOnline(isOnline);
+    useMobileStore.getState().setOnline(isOnline, { announceReconnect: initializedNetwork && isOnline });
     useMobileStore.getState().setConnectionLabel(getConnectionLabel(connection));
     onlineManager.setOnline(isOnline);
+    initializedNetwork = true;
     if (isOnline) {
       queryClient.resumePausedMutations().catch(() => undefined);
       queryClient.invalidateQueries({ stale: true }).catch(() => undefined);

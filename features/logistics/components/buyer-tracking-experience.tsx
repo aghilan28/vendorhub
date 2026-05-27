@@ -31,10 +31,10 @@ export function BuyerTrackingExperience({ orderId }: { orderId?: string }) {
             <h2 className="font-semibold text-primary-text">Delivery trust</h2>
             <TrustStrip
               className="mt-3 sm:grid-cols-1 lg:grid-cols-1"
-              label="Delivery trust indicators"
+              label="Delivery updates"
               items={[
-                { label: "Handoff", value: "Package verification tracked", icon: PackageCheck },
-                { label: "Status", value: delivery.status.replace("_", " "), icon: PackageCheck },
+                { label: "Handoff", value: "Seller packed and checked", icon: PackageCheck },
+                { label: "Status", value: delivery.status.replace("_", " ").toLowerCase(), icon: PackageCheck },
                 { label: "Delivery address", value: delivery.deliveryAddress, icon: PackageCheck },
               ]}
             />

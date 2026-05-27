@@ -5,13 +5,13 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-export function SearchBar({ className, placeholder = "Search products, vendors, categories" }: { className?: string; placeholder?: string }) {
+export function SearchBar({ className, placeholder = "Search tomatoes, dosa batter, jasmine flowers..." }: { className?: string; placeholder?: string }) {
   const { t } = useTranslation();
 
   return (
     <form action="/search" className={cn("relative w-full", className)}>
-      <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-secondary-text" />
-      <Input name="q" aria-label={t("search.aria")} className="h-10 pl-9" placeholder={placeholder === "Search products, vendors, categories" ? t("search.placeholder") : placeholder} />
+      <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-secondary-text" />
+      <Input name="q" aria-label={t("search.aria")} className="h-12 rounded-lg pl-11 text-base shadow-sm focus-visible:shadow-[0_0_0_3px_rgba(5,150,105,0.12)]" placeholder={placeholder} />
     </form>
   );
 }

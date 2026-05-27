@@ -12,7 +12,7 @@ import { ProductGeoPanel } from "@/features/geo/components/product-geo-panel";
 import { RelatedProductStrip } from "@/features/intelligence/components/recommendation-strip";
 import { ProductDeliveryPromise } from "@/features/logistics/components/delivery-commerce-panels";
 import { ProductAddActions } from "@/features/marketplace/components/product-add-actions";
-import { formatEta } from "@/features/marketplace/lib/data";
+import { formatEta, getProductActivityLine, getProductFreshnessLine, getProductReviewSnippets, getVendorActivityLine, getVendorHumanLine } from "@/features/marketplace/lib/data";
 import { BuyerSellerTrustCard } from "@/features/trust/components/buyer-seller-trust-card";
 import { getLiveProductBySlug, listVectorRelatedProducts } from "@/lib/api/queries/products";
 
@@ -45,7 +45,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           </div>
           <div>
             <h1 className="text-2xl font-semibold leading-tight text-primary-text sm:text-3xl">{product.name}</h1>
-            <p className="mt-2 text-sm text-secondary-text">{product.vendor.name} · {product.vendor.locality}</p>
+            <p className="mt-2 text-sm text-secondary-text">{product.vendor.name} - {product.vendor.locality}</p>
+            <p className="mt-2 text-sm font-medium text-emerald-700">{getProductFreshnessLine(product)} · {getProductActivityLine(product)}</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <RatingDisplay rating={product.rating} count={product.reviewCount} />
@@ -55,11 +56,19 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <div className="rounded-md bg-slate-50 p-4">
             <div className="flex items-baseline gap-2">
               <span className="text-2xl"><PriceDisplay value={product.price} currency={product.currency} /></span>
-              {product.originalPrice ? <span className="text-sm text-secondary-text line-through">₹{product.originalPrice}</span> : null}
+              {product.originalPrice ? <span className="text-sm text-secondary-text line-through">Rs {product.originalPrice}</span> : null}
               <span className="text-sm text-secondary-text">/ {product.unit}</span>
             </div>
           </div>
           <ProductAddActions product={product} />
+          <section className="rounded-lg border border-emerald-100 bg-emerald-50 p-4">
+            <h2 className="font-semibold text-primary-text">{product.vendor.name}</h2>
+            <p className="mt-1 text-sm leading-6 text-secondary-text">{getVendorHumanLine(product.vendor)}</p>
+            <div className="mt-3 flex flex-wrap gap-2 text-xs text-emerald-900">
+              <span className="rounded-full bg-white px-2.5 py-1">{getVendorActivityLine(product.vendor)}</span>
+              <span className="rounded-full bg-white px-2.5 py-1">{product.vendor.area}</span>
+            </div>
+          </section>
           <BuyerSellerTrustCard vendor={product.vendor} />
           <ProductDeliveryPromise deliveryMinutes={product.deliveryMinutes} stockCount={product.stockCount} />
           <Button variant="secondary" className="w-full"><Heart /> Save for later</Button>
@@ -94,17 +103,18 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       </section>
 
       <section className="rounded-lg border border-border bg-surface p-5 shadow-sm">
-        <h2 className="font-semibold text-primary-text">Reviews preview</h2>
+        <h2 className="font-semibold text-primary-text">Recent local reviews</h2>
         <div className="mt-4 grid gap-3 md:grid-cols-2">
-          {["Arrived exactly within the promised window.", "Stock and freshness matched the product page."].map((review) => (
-            <blockquote key={review} className="rounded-md bg-slate-50 p-4 text-sm text-secondary-text">
-              “{review}”
+          {getProductReviewSnippets(product).map((review) => (
+            <blockquote key={`${review.name}-${review.area}`} className="rounded-md bg-slate-50 p-4 text-sm text-secondary-text">
+              <p>&ldquo;{review.text}&rdquo;</p>
+              <footer className="mt-3 text-xs font-medium text-primary-text">{review.name} · {review.area}</footer>
             </blockquote>
           ))}
         </div>
       </section>
 
-      <SectionWrapper title="Similar products">
+      <SectionWrapper title="You may also like">
         <RelatedProductStrip productId={product.id} products={relatedProducts} />
       </SectionWrapper>
     </PageContainer>

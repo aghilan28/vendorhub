@@ -17,6 +17,9 @@ export interface SearchFilters {
   category: string;
   availability: "available" | "all";
   sort: SearchSort;
+  price?: "all" | "under-100" | "under-500" | "under-1000";
+  rating?: "all" | "4-plus" | "4-5-plus";
+  deliveryTime?: "all" | "under-30" | "under-45";
   radiusKm?: number;
   nearbyOnly?: boolean;
 }

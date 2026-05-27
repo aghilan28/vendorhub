@@ -1,12 +1,11 @@
 "use client";
 
-import { AlertTriangle, MapPin, Navigation, PackageCheck, Truck } from "lucide-react";
+import { AlertTriangle, Clock3, MapPin, PackageCheck, Truck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { deliveryFeasibility, formatDistance, productDeliveryLabel, rankProductsByGeo } from "@/lib/geo";
+import { deliveryFeasibility, productDeliveryLabel, rankProductsByGeo } from "@/lib/geo";
 import { marketplaceProducts } from "@/features/marketplace/lib/data";
 import { useLocationStore } from "@/store/location-store";
 import type { Product } from "@/types";
-import { ServiceZoneMapPreview } from "./map-preview";
 
 export function ProductGeoPanel({ product }: { product: Product }) {
   const location = useLocationStore((state) => state.currentLocation);
@@ -18,39 +17,36 @@ export function ProductGeoPanel({ product }: { product: Product }) {
   ).slice(0, 3);
 
   return (
-    <section className="grid gap-4 lg:grid-cols-[1fr_420px]">
-      <div className="rounded-lg border border-border bg-surface p-5 shadow-sm">
-        <div className="flex flex-wrap gap-2">
-          <Badge variant={feasibility.status === "outside_radius" ? "warning" : "default"}>
-            <Truck className="size-3" /> {feasibility.label}
-          </Badge>
-          <Badge variant="secondary">
-            <MapPin className="size-3" /> {formatDistance(feasibility.distanceKm)}
-          </Badge>
-        </div>
-        <h2 className="mt-3 font-semibold text-primary-text">Delivery near you</h2>
-        <div className="mt-4 grid gap-3 sm:grid-cols-3">
-          <GeoFact icon={Navigation} label="Service radius" value={`${feasibility.radiusKm ?? product.vendor.serviceRadiusKm ?? 5} km`} />
-          <GeoFact icon={Truck} label="Delivery" value={productDeliveryLabel(product, location)} />
-          <GeoFact icon={PackageCheck} label="Stock" value={`${product.stockCount} available`} />
-        </div>
-        {feasibility.status === "outside_radius" ? (
-          <div className="mt-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
-            <AlertTriangle className="mr-2 inline size-4" />
-            This seller is outside the selected delivery radius. Choose a closer address or compare nearby alternatives.
-          </div>
-        ) : null}
-        <div className="mt-4 space-y-2">
-          <p className="text-sm font-medium text-primary-text">Nearby alternatives</p>
-          {alternatives.map((item) => (
-            <div key={item.product.id} className="flex items-center justify-between gap-3 rounded-md border border-border p-3 text-sm">
-              <span className="font-medium text-primary-text">{item.product.name}</span>
-              <span className="text-secondary-text">{formatDistance(item.distanceKm)}</span>
-            </div>
-          ))}
-        </div>
+    <section className="rounded-lg border border-border bg-surface p-5 shadow-sm">
+      <div className="flex flex-wrap gap-2">
+        <Badge variant={feasibility.status === "outside_radius" ? "warning" : "default"}>
+          <Truck className="size-3" /> {feasibility.status === "outside_radius" ? "Check delivery" : "Delivers here"}
+        </Badge>
+        <Badge variant="secondary">
+          <MapPin className="size-3" /> {location.locality}, {location.city}
+        </Badge>
       </div>
-      <ServiceZoneMapPreview vendor={product.vendor} />
+      <h2 className="mt-3 font-semibold text-primary-text">Delivery near you</h2>
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        <GeoFact icon={Clock3} label="Delivery" value={productDeliveryLabel(product, location)} />
+        <GeoFact icon={PackageCheck} label="Stock" value={`${product.stockCount} available`} />
+        <GeoFact icon={Truck} label="Seller" value={product.vendor.locality} />
+      </div>
+      {feasibility.status === "outside_radius" ? (
+        <div className="mt-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+          <AlertTriangle className="mr-2 inline size-4" />
+          Delivery may take longer for this address. Choose a closer area or compare nearby picks.
+        </div>
+      ) : null}
+      <div className="mt-4 space-y-2">
+        <p className="text-sm font-medium text-primary-text">Nearby alternatives</p>
+        {alternatives.map((item) => (
+          <div key={item.product.id} className="flex items-center justify-between gap-3 rounded-md border border-border p-3 text-sm">
+            <span className="font-medium text-primary-text">{item.product.name}</span>
+            <span className="text-secondary-text">{item.product.vendor.locality}</span>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }

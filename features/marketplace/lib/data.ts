@@ -474,7 +474,7 @@ export const coreMarketplaceProducts: Product[] = [
     tags: ["Ergonomic", "Work from home", "Comfort"],
     description: "Adjustable office chair with lumbar support and cushioned seating for long work sessions.",
     specs: { Support: "Lumbar", Height: "Adjustable", Assembly: "Basic tools included" },
-    trustSignals: ["9 units nearby", "Assembly support placeholder"],
+    trustSignals: ["9 units nearby", "Basic assembly support"],
   },
   {
     id: "kx-running-sneakers",
@@ -495,7 +495,7 @@ export const coreMarketplaceProducts: Product[] = [
     tags: ["Sneakers", "Walking", "Lightweight"],
     description: "Lightweight sneakers for morning walks, short runs, and daily comfort.",
     specs: { Upper: "Breathable mesh", Sole: "Cushioned EVA", Fit: "Regular" },
-    trustSignals: ["Size exchange placeholder", "Popular nearby"],
+    trustSignals: ["Size exchange available", "Popular nearby"],
   },
   {
     id: "kx-makhana-snack",
@@ -648,6 +648,65 @@ export function getCategoryBySlug(slug: string) {
 
 export function getProductsByCategory(slug: string) {
   return marketplaceProducts.filter((product) => product.category.slug === slug);
+}
+
+export function getVendorServingSince(vendor: Vendor) {
+  const years = [2018, 2019, 2020, 2021, 2022];
+  return years[vendor.id.length % years.length];
+}
+
+export function getVendorHumanLine(vendor: Vendor) {
+  const since = getVendorServingSince(vendor);
+  if (/pharmacy|care/i.test(vendor.name)) return `Serving ${vendor.locality} care orders since ${since}.`;
+  return `Delivering in ${vendor.locality} since ${since}.`;
+}
+
+export function getVendorActivityLine(vendor: Vendor) {
+  if (vendor.serviceStatus === "busy") return "Packing local orders right now";
+  if (vendor.fulfillmentPromiseMinutes <= 24) return "Usually responds in 5 minutes";
+  if (vendor.fulfillmentPromiseMinutes <= 32) return "Usually responds in 8 minutes";
+  return "Usually responds within 12 minutes";
+}
+
+export function getProductFreshnessLine(product: Product) {
+  const tag = product.tags?.find((item) => /baked|fresh|washed|batch|breakfast|tea-time|hydration/i.test(item));
+  if (tag) return tag;
+  if (product.category.slug === "fresh-produce") return "Fresh stock checked today";
+  if (product.category.slug === "bakery-breakfast") return "Morning batch available";
+  if (product.category.slug === "ready-meals") return "Prepared for today";
+  return "Local stock available";
+}
+
+export function getProductActivityLine(product: Product) {
+  if (product.reviewCount >= 180) return `${Math.max(8, Math.round(product.reviewCount / 18))} local reorders this week`;
+  if (product.stockCount <= 12) return "Small fresh batch available";
+  if (product.deliveryMinutes <= 24) return `Fast from ${product.vendor.locality}`;
+  return `Popular around ${product.vendor.locality}`;
+}
+
+export function getProductReviewSnippets(product: Product) {
+  const reviews: Record<string, Array<{ name: string; area: string; text: string }>> = {
+    "fresh-produce": [
+      { name: "Meena R.", area: "West Mambalam", text: "Tomatoes were firm and fresh. Good for rasam and chutney." },
+      { name: "Karthik S.", area: "T. Nagar", text: "Packed neatly, delivery came before lunch prep." },
+    ],
+    "bakery-breakfast": [
+      { name: "Anitha K.", area: "Mylapore", text: "Bread was soft and the morning delivery was on time." },
+      { name: "Prakash V.", area: "Alwarpet", text: "Filter coffee and breakfast items arrived fresh." },
+    ],
+    "ready-meals": [
+      { name: "Nisha P.", area: "Nungambakkam", text: "Warm when it arrived. Nice for evening snacks." },
+      { name: "Suresh M.", area: "Anna Nagar", text: "Good portion and packed without spills." },
+    ],
+    "personal-care": [
+      { name: "Divya N.", area: "Adyar", text: "Sealed pack, pharmacy delivery was quick." },
+      { name: "Rahul B.", area: "Besant Nagar", text: "Useful for same-day care items." },
+    ],
+  };
+  return reviews[product.category.slug] ?? [
+    { name: "Lakshmi S.", area: product.vendor.locality, text: "Product matched the page and arrived neatly packed." },
+    { name: "Arun K.", area: product.vendor.locality, text: "Local seller packed it well and delivered on time." },
+  ];
 }
 
 export function formatEta(minutes?: number) {

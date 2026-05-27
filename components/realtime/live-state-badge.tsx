@@ -5,11 +5,11 @@ import { Badge } from "@/components/ui/badge";
 import { useMarketplaceRealtime } from "@/hooks/use-marketplace-realtime";
 
 function labelForState(state: ReturnType<typeof useMarketplaceRealtime>["connectionState"]) {
-  if (state === "connected") return "Realtime connected";
-  if (state === "connecting") return "Realtime connecting";
-  if (state === "degraded") return "Realtime degraded";
-  if (state === "offline") return "Local live mode";
-  return "Realtime idle";
+  if (state === "connected") return "Updates live";
+  if (state === "connecting") return "Checking updates";
+  if (state === "degraded") return "Updates may be slow";
+  if (state === "offline") return "Updates paused";
+  return "Ready";
 }
 
 export function LiveStateBadge() {

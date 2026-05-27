@@ -12,11 +12,11 @@ function productVector(product: Product) {
 }
 
 function recommendationReason(product: Product, context?: RecommendationContext) {
-  if (context?.isNewUser) return "Cold-start pick from trusted nearby demand, available stock, and category trends.";
-  if (context?.recentlyViewedProductIds?.length) return `Session-aware match from ${product.category.name.toLowerCase()} discovery.`;
-  if ((product.reviewCount ?? 0) > 150) return "Popular nearby with strong local demand and reliable seller signals.";
-  if ((product.vendor.orderCount ?? 0) < 5500) return "Exploration slot to keep newer local sellers discoverable.";
-  return "Contextual recommendation with stock, trust, and neighborhood relevance.";
+  if (context?.isNewUser) return "Popular nearby and available now.";
+  if (context?.recentlyViewedProductIds?.length) return `More ${product.category.name.toLowerCase()} picks you may like.`;
+  if ((product.reviewCount ?? 0) > 150) return "Popular nearby with a trusted seller.";
+  if ((product.vendor.orderCount ?? 0) < 5500) return "Fresh local pick worth a look.";
+  return "Recommended for your next basket.";
 }
 
 export function getRelatedProducts(product: Product, products: Product[], limit = 4, context?: RecommendationContext): ProductRecommendation[] {
@@ -44,7 +44,7 @@ export function getRelatedProducts(product: Product, products: Product[], limit 
   return applyDiversityBalancing(ranked, limit).map((item) => ({
     product: item.product,
     score: item.score,
-    reason: item.product.category.slug === product.category.slug ? "Similar category and buyer intent with operational quality signals." : recommendationReason(item.product, context),
+    reason: item.product.category.slug === product.category.slug ? "Similar picks from trusted local sellers." : recommendationReason(item.product, context),
     source: item.product.category.slug === product.category.slug ? "semantic_similarity" : "category_affinity",
     explanations: item.explanations,
     confidence: item.score > 0.7 ? "high" : "medium",
@@ -81,7 +81,7 @@ export function getHomepageRecommendations(products: Product[], cartItems: CartI
   return applyDiversityBalancing(ranked, limit).map((item) => ({
     product: item.product,
     score: item.score,
-    reason: cartItems.length ? "Fits your current basket context with adaptive stock and seller quality signals." : recommendationReason(item.product, sessionContext),
+    reason: cartItems.length ? "Goes well with your basket." : recommendationReason(item.product, sessionContext),
     source: cartItems.length ? "basket_context" : sessionContext.isNewUser ? "cold_start" : "session_similarity",
     explanations: item.explanations,
     confidence: item.score > 0.7 ? "high" : "medium",

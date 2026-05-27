@@ -19,14 +19,14 @@ const icons = {
 export function LiveEventFeed({ scope, limit = 5 }: { scope?: "buyer" | "seller" | "admin" | "marketplace"; limit?: number }) {
   const { events } = useMarketplaceRealtime();
   const visibleEvents = events.filter((event) => !scope || event.scope === scope || event.scope === "marketplace").slice(0, limit);
-  const feedLabel = `${scope ?? "marketplace"} realtime event feed`;
+  const feedLabel = `${scope ?? "marketplace"} update feed`;
 
   if (!visibleEvents.length) {
     return (
       <EmptyState
         icon={Bell}
-        title="No live events yet"
-        description="Order, inventory, tracking, and notification updates will stream here as they occur."
+        title="No updates yet"
+        description="Order, stock, delivery, and notification updates will appear here."
       />
     );
   }

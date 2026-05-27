@@ -9,9 +9,9 @@ export function HomepageDeliveryIntelligence() {
   const readyProducts = marketplaceProducts.filter((product) => product.stockCount > 0 && (product.deliveryMinutes ?? 60) <= 30).slice(0, 4);
   return (
     <section className="grid gap-4 lg:grid-cols-3">
-      <DeliverySignal icon={Truck} label="Fast Delivery Nearby" value={`${readyProducts.length} ready`} detail="Stocked products under 30 min dispatch promise" />
-      <DeliverySignal icon={Clock3} label="Same-Day Delivery" value="Available" detail="Choose a delivery time that works for you" />
-      <DeliverySignal icon={PackageCheck} label="Ready To Deliver" value={`${seedDeliveries.filter((delivery) => delivery.status !== "FAILED").length} active`} detail="Orders are packed and tracked clearly" />
+      <DeliverySignal icon={Truck} label="Fast delivery nearby" value={`${readyProducts.length} ready`} detail="Local sellers can pack these in under 30 minutes" />
+      <DeliverySignal icon={Clock3} label="Same-day delivery" value="Available" detail="Choose the timing that works for your home" />
+      <DeliverySignal icon={PackageCheck} label="Orders moving" value={`${seedDeliveries.filter((delivery) => delivery.status !== "FAILED").length} active`} detail="Packed orders are easy to follow" />
     </section>
   );
 }
@@ -22,12 +22,12 @@ export function ProductDeliveryPromise({ deliveryMinutes, stockCount }: { delive
     <div className="rounded-md border border-border bg-slate-50 p-3">
       <div className="flex flex-wrap gap-2">
         <Badge variant={sameDayEligible ? "default" : "secondary"}>
-          <Truck className="size-3" /> {sameDayEligible ? "Same-day eligible" : "Delivery check needed"}
+          <Truck className="size-3" /> {sameDayEligible ? "Delivered today" : "Check delivery"}
         </Badge>
         <Badge variant="secondary">{stockCount} in stock</Badge>
       </div>
       <p className="mt-2 text-sm text-secondary-text">
-        Delivery estimate is based on seller prep time and your address.
+        Packed by the seller and delivered from a nearby store partner.
       </p>
     </div>
   );

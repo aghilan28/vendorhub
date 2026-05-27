@@ -121,17 +121,17 @@ function explainSignals(signals: RankingSignalBreakdown, coldStart: boolean) {
     .slice(0, 4)
     .map(([key]) => key.replace(/[A-Z]/g, (match) => ` ${match.toLowerCase()}`));
 
-  return coldStart ? ["Cold-start blend using local demand, trusted sellers, and useful exploration.", ...ordered] : ordered;
+  return coldStart ? ["Popular nearby", ...ordered] : ordered;
 }
 
 function explainHybridMatch(product: Product, signals: RankingSignalBreakdown, distanceKm: number | null, locale: AppLocale, coldStart: boolean) {
-  if (coldStart && signals.popularity > 0.72) return "Useful cold-start pick based on nearby demand, seller quality, and available stock.";
+  if (coldStart && signals.popularity > 0.72) return "Popular nearby and ready to order.";
   if (typeof distanceKm === "number" && distanceKm < 2.5) return `Nearby match from ${product.vendor.locality}, ${distanceKm.toFixed(1)} km away.`;
-  if (signals.behavioral > 0.72) return "Ranked higher because it matches recent discovery intent without using personal profiling.";
-  if (signals.sellerQuality > 0.82) return "Trusted seller with reliable fulfillment and strong local operating signals.";
-  if (signals.trendingVelocity > 0.78) return "Local demand and time-aware discovery signals are strong right now.";
-  if (signals.fairness > 0.72) return "Balanced into discovery to keep new and smaller sellers visible.";
+  if (signals.behavioral > 0.72) return "A good fit for what you have been browsing.";
+  if (signals.sellerQuality > 0.82) return "Trusted seller with reliable delivery.";
+  if (signals.trendingVelocity > 0.78) return "Trending nearby today.";
+  if (signals.fairness > 0.72) return "Fresh local pick worth a look.";
   return locale === "ta" || locale === "hi"
-    ? `Adaptive local match for ${product.category.name} with relevance, stock, and seller quality signals.`
-    : `Adaptive local match for ${product.category.name.toLowerCase()} with relevance, stock, and seller quality signals.`;
+    ? `Available ${product.category.name} pick from a local seller.`
+    : `Available ${product.category.name.toLowerCase()} pick from a local seller.`;
 }
