@@ -1,0 +1,44 @@
+{
+  "common": {
+    "search": "खोजें",
+    "cart": "कार्ट",
+    "checkout": "चेकआउट",
+    "orders": "ऑर्डर",
+    "login": "लॉगिन",
+    "logout": "लॉगआउट",
+    "seller": "विक्रेता",
+    "admin": "प्रशासक",
+    "back": "वापस",
+    "save": "सहेजें",
+    "cancel": "रद्द करें"
+  },
+  "product": {
+    "add_to_cart": "कार्ट में डालें",
+    "out_of_stock": "स्टॉक में नहीं",
+    "in_stock": "उपलब्ध",
+    "delivery_in": "डिलीवरी",
+    "price": "कीमत"
+  },
+  "payment": {
+    "upi": "UPI से भुगतान करें",
+    "cod": "कैश ऑन डिलीवरी",
+    "pay_now": "अभी भुगतान करें",
+    "payment_success": "भुगतान सफल",
+    "payment_failed": "भुगतान विफल",
+    "total": "कुल",
+    "gst": "GST"
+  },
+  "error": {
+    "something_wrong": "कुछ गलत हुआ",
+    "try_again": "पुनः प्रयास करें",
+    "not_found": "नहीं मिला",
+    "offline": "ऑफलाइन"
+  },
+  "order": {
+    "placed": "ऑर्डर दिया गया",
+    "confirmed": "पुष्टि हुई",
+    "shipped": "भेजा गया",
+    "delivered": "पहुंचाया गया",
+    "track": "ट्रैक करें"
+  }
+}

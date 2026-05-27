@@ -1,0 +1,25 @@
+{
+  "generatedAt": "2026-05-27T00:25:01.809Z",
+  "migrationsAudited": 28,
+  "strict": true,
+  "destructiveOperations": [
+    {
+      "file": "20260526193000_phase_25_enterprise_security_hardening.sql",
+      "line": 85,
+      "kind": "delete",
+      "risk": "low",
+      "rollback": "not_required",
+      "allowed": true,
+      "annotationId": "security_replay_keys_expired_cleanup",
+      "statement": "delete from public.security_replay_keys where expires_at <= now()",
+      "reason": "Purges expired replay nonce metadata before checking for active replay keys. It is deterministic, bounded by TTL expiry, and does not affect active sessions, orders, payments, ledger records, vendors, or audit history."
+    }
+  ],
+  "findings": [],
+  "summary": {
+    "approvedDestructiveCleanups": 1,
+    "blockedDestructiveOperations": 0,
+    "warnings": 0,
+    "critical": 0
+  }
+}

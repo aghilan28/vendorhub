@@ -1,0 +1,159 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --color-background: #f8fafc;
+  --color-surface: #ffffff;
+  --color-primary-text: #0f172a;
+  --color-secondary-text: #475569;
+  --color-border: #e2e8f0;
+  --color-brand: #059669;
+  --color-brand-hover: #047857;
+  --color-ai: #2563eb;
+  --color-warning: #f59e0b;
+  --color-danger: #dc2626;
+  --color-success: #16a34a;
+}
+
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #059669;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #475569;
+  --accent: #e0f2fe;
+  --accent-foreground: #075985;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #059669;
+  --radius: 0.5rem;
+}
+
+* {
+  border-color: var(--border);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: var(--background);
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: rgba(5, 150, 105, 0.12);
+}
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Inter, ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+:lang(ta) body,
+[lang="ta"] {
+  font-family: var(--font-noto-tamil), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+:lang(hi) body,
+[lang="hi"] {
+  font-family: var(--font-noto-devanagari), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+a,
+button,
+[role="button"] {
+  touch-action: manipulation;
+}
+
+a {
+  text-underline-offset: 0.18em;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  min-width: 0;
+}
+
+@media (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  button,
+  [role="button"],
+  a {
+    -webkit-tap-highlight-color: rgba(5, 150, 105, 0.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+::selection {
+  background: rgba(5, 150, 105, 0.16);
+}
+
+.focus-ring {
+  @apply outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+}
+
+.skip-link {
+  @apply fixed left-3 top-3 z-[80] flex min-h-11 -translate-y-20 items-center rounded-md bg-primary-text px-3 py-2 text-sm font-medium text-white transition focus:translate-y-0;
+}
+
+.operational-surface {
+  @apply border border-border bg-surface shadow-[0_1px_2px_rgba(15,23,42,0.05)];
+}
+
+.polished-surface {
+  @apply rounded-lg border border-border bg-surface shadow-[0_1px_2px_rgba(15,23,42,0.05)] transition duration-150 ease-out;
+}
+
+.metric-value {
+  @apply text-2xl font-semibold tracking-normal text-primary-text;
+}
+
+.responsive-table-shell {
+  @apply w-full overflow-x-auto overscroll-x-contain;
+}

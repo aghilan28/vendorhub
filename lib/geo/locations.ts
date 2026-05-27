@@ -1,0 +1,61 @@
+import type { LocationPreset } from "./types";
+
+export const chennaiLocationPresets: LocationPreset[] = [
+  {
+    id: "loc-t-nagar",
+    label: "T. Nagar",
+    source: "default",
+    latitude: 13.0418,
+    longitude: 80.2341,
+    locality: "T. Nagar",
+    city: "Chennai",
+    pincode: "600017",
+    description: "Dense retail and household delivery zone",
+  },
+  {
+    id: "loc-anna-nagar",
+    label: "Anna Nagar",
+    source: "manual",
+    latitude: 13.085,
+    longitude: 80.2101,
+    locality: "Anna Nagar",
+    city: "Chennai",
+    pincode: "600040",
+    description: "Residential commerce cluster with strong evening demand",
+  },
+  {
+    id: "loc-adyar",
+    label: "Adyar",
+    source: "manual",
+    latitude: 13.0067,
+    longitude: 80.2574,
+    locality: "Adyar",
+    city: "Chennai",
+    pincode: "600020",
+    description: "South Chennai grocery, care, and meal delivery zone",
+  },
+  {
+    id: "loc-velachery",
+    label: "Velachery",
+    source: "manual",
+    latitude: 12.9791,
+    longitude: 80.218,
+    locality: "Velachery",
+    city: "Chennai",
+    pincode: "600042",
+    description: "High-density apartment and office corridor",
+  },
+  {
+    id: "loc-mylapore",
+    label: "Mylapore",
+    source: "manual",
+    latitude: 13.0339,
+    longitude: 80.2695,
+    locality: "Mylapore",
+    city: "Chennai",
+    pincode: "600004",
+    description: "Traditional retail, produce, and food commerce cluster",
+  },
+];
+
+export const defaultBuyerLocation = chennaiLocationPresets[0];

@@ -1,0 +1,30 @@
+{
+  "local": {
+    "supabaseProjectRef": "vendorhub-local",
+    "vercelTarget": "local",
+    "telemetryScope": "local",
+    "storageBuckets": ["product-images-local", "vendor-assets-local", "profile-images-local"],
+    "allowsProductionSecrets": false
+  },
+  "development": {
+    "supabaseProjectRef": "vendorhub-dev",
+    "vercelTarget": "preview",
+    "telemetryScope": "development",
+    "storageBuckets": ["product-images-dev", "vendor-assets-dev", "profile-images-dev"],
+    "allowsProductionSecrets": false
+  },
+  "staging": {
+    "supabaseProjectRef": "vendorhub-staging",
+    "vercelTarget": "preview",
+    "telemetryScope": "staging",
+    "storageBuckets": ["product-images-staging", "vendor-assets-staging", "profile-images-staging"],
+    "allowsProductionSecrets": false
+  },
+  "production": {
+    "supabaseProjectRef": "vendorhub-prod",
+    "vercelTarget": "production",
+    "telemetryScope": "production",
+    "storageBuckets": ["product-images", "vendor-assets", "profile-images"],
+    "allowsProductionSecrets": true
+  }
+}

@@ -1,0 +1,38 @@
+name: VendorHub Production Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        default: "staging"
+        type: choice
+        options:
+          - staging
+          - production
+
+jobs:
+  release-gates:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run test
+      - run: npm run ops:preflight
+      - run: npm run build
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: vendorhub-release-${{ inputs.environment }}
+          path: |
+            docs/operations/generated/release-manifest.json
+            docs/operations/generated/backup-restore-plan.json
+            .next

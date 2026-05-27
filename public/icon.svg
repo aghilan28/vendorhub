@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="VendorHub">
+  <rect width="512" height="512" rx="112" fill="#059669"/>
+  <path d="M128 178c0-24 19-43 43-43h170c24 0 43 19 43 43v192c0 24-19 43-43 43H171c-24 0-43-19-43-43V178Z" fill="#fff"/>
+  <path d="M177 199h158v42H177v-42Zm0 80h74v42h-74v-42Zm104 0h54v42h-54v-42Zm-104 80h158v22H177v-22Z" fill="#047857"/>
+  <path d="M196 133c8-27 32-46 60-46s52 19 60 46h-36c-6-8-14-12-24-12s-18 4-24 12h-36Z" fill="#bbf7d0"/>
+</svg>

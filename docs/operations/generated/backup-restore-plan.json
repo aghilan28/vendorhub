@@ -1,0 +1,55 @@
+{
+  "generatedAt": "2026-05-26T22:40:34.040Z",
+  "strategy": "Supabase managed PITR plus explicit pre-release logical snapshot",
+  "rehearsalEnvironment": "staging",
+  "requiredBeforeProductionMigration": true,
+  "retention": {
+    "preReleaseSnapshots": "14 days",
+    "weeklyRestoreDrills": "last 4 successful drills",
+    "operationalManifests": "180 days"
+  },
+  "protectedDatasets": [
+    "orders",
+    "payment_attempts",
+    "financial_ledger_journals",
+    "financial_ledger_entries",
+    "settlement_records",
+    "governance_cases",
+    "marketplace_disputes",
+    "seller_intelligence_snapshots"
+  ],
+  "integrityVerification": [
+    "critical table row count comparison",
+    "financial ledger debit/credit balance validation",
+    "settlement state count comparison",
+    "governance case and dispute count comparison",
+    "RLS smoke validation on sensitive tables",
+    "readiness and health endpoint smoke validation"
+  ],
+  "restoreValidation": [
+    "Restore snapshot into isolated staging Supabase project.",
+    "Run migration chain against restored database.",
+    "Validate financial ledger journal balance and settlement counts.",
+    "Validate governance case/dispute counts and RLS access.",
+    "Run /api/readiness and /api/health against staging deployment."
+  ],
+  "restoreSimulation": {
+    "status": "metadata-ready",
+    "validBackupRequiresRestoreDrill": true,
+    "maxRestoreDrillAgeHours": 168,
+    "expectedEvidence": [
+      "snapshot identifier",
+      "restore target project",
+      "started_at and completed_at timestamps",
+      "critical table row count comparison",
+      "ledger balance result",
+      "RLS validation result",
+      "health and readiness smoke output"
+    ]
+  },
+  "failureHandling": {
+    "backupInconsistency": "Block production migration, keep current production online, create fresh snapshot, and rerun restore rehearsal.",
+    "restoreMismatch": "Escalate incident, freeze writes with maintenance mode or kill switches, and compare release manifest migration hashes before promotion."
+  },
+  "checksum": "b9009ba738329866343df65155dd6945a0ebca2d9364c2aa61d5324aaf199f77"
+}

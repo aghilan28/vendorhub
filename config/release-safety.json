@@ -1,0 +1,91 @@
+{
+  "requiredChecks": [
+    "npm run lint",
+    "npm run typecheck",
+    "npm run test",
+    "npm run ops:migration-audit",
+    "npm run ops:secret-scan",
+    "npm run build"
+  ],
+  "criticalFeatureFlags": [
+    "atomic_checkout_rpc",
+    "payment_webhook_reconciliation",
+    "phase_28_financial_ledger_engine",
+    "phase_29_governance_operating_layer",
+    "live_ai_embeddings",
+    "scoped_realtime_subscriptions"
+  ],
+  "criticalTables": [
+    "orders",
+    "payment_attempts",
+    "financial_ledger_journals",
+    "financial_ledger_entries",
+    "settlement_records",
+    "governance_cases",
+    "marketplace_disputes",
+    "seller_intelligence_snapshots"
+  ],
+  "rollbackTargets": {
+    "frontend": "Vercel previous production deployment",
+    "database": "Forward-only compensating migration",
+    "featureFlags": "Disable critical feature flag through Supabase feature_flags",
+    "ai": "Disable live embeddings and use fuzzy/keyword fallback",
+    "realtime": "Disable scoped realtime subscriptions and rely on polling refresh"
+  },
+  "migrationSafety": {
+    "blockedOperations": ["drop table", "drop column", "truncate table", "alter type drop value", "broad delete"],
+    "allowedDestructiveCleanups": [
+      {
+        "id": "security_replay_keys_expired_cleanup",
+        "file": "20260526193000_phase_25_enterprise_security_hardening.sql",
+        "operation": "delete",
+        "table": "public.security_replay_keys",
+        "where": "expires_at <= now()",
+        "risk": "low",
+        "rollback": "not_required",
+        "reason": "Purges expired replay nonce metadata before checking for active replay keys. It is deterministic, bounded by TTL expiry, and does not affect active sessions, orders, payments, ledger records, vendors, or audit history."
+      }
+    ],
+    "rollbackRequiredForRisk": ["medium", "high", "critical"],
+    "reportPath": "docs/operations/generated/migration-safety-report.json"
+  },
+  "backupRestore": {
+    "requiredBeforeProductionMigration": true,
+    "restoreDrillRequired": true,
+    "integrityChecks": [
+      "critical table row count comparison",
+      "financial ledger debit/credit balance validation",
+      "settlement state count comparison",
+      "governance case and dispute count comparison",
+      "RLS smoke validation on sensitive tables",
+      "readiness and health endpoint smoke validation"
+    ],
+    "rehearsalEnvironment": "staging",
+    "maxRestoreDrillAgeHours": 168
+  },
+  "deploymentVerification": {
+    "smokeEndpoints": ["/api/health", "/api/readiness"],
+    "maxHealthLatencyMs": 1500,
+    "maxReadinessLatencyMs": 2500,
+    "rollbackSmokeRequired": true,
+    "stagingBeforeProduction": true
+  },
+  "observability": {
+    "track": ["deploymentDurationMs", "migrationDurationMs", "rollbackDurationMs", "backupHealth", "restoreValidationState", "releaseIntegrity", "operationalReadiness"],
+    "alertOn": ["failedDeployment", "failedRollback", "migrationCorruptionRisk", "backupInconsistency", "restoreMismatch", "readinessDegradation", "environmentDrift"]
+  },
+  "environmentGovernance": {
+    "isolatedEnvironments": ["local", "development", "staging", "production"],
+    "productionSecretsAllowedOnlyIn": ["production"],
+    "productionRequiresPrivateSecrets": true
+  },
+  "featureKillSwitches": {
+    "maintenanceMode": "maintenance_mode",
+    "checkout": "atomic_checkout_rpc",
+    "payments": "payment_webhook_reconciliation",
+    "financialLedger": "phase_28_financial_ledger_engine",
+    "governance": "phase_29_governance_operating_layer",
+    "ai": "live_ai_embeddings",
+    "realtime": "scoped_realtime_subscriptions"
+  }
+}

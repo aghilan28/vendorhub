@@ -1,0 +1,222 @@
+{
+  "generatedAt": "2026-05-26T22:40:33.321Z",
+  "app": "vendorhub",
+  "phase": 30,
+  "node": "22",
+  "environment": "local",
+  "release": {
+    "gitSha": "local",
+    "deploymentId": "local",
+    "operator": "AKILA"
+  },
+  "requiredChecks": [
+    "npm run lint",
+    "npm run typecheck",
+    "npm run test",
+    "npm run ops:migration-audit",
+    "npm run ops:secret-scan",
+    "npm run build"
+  ],
+  "criticalFeatureFlags": [
+    "atomic_checkout_rpc",
+    "payment_webhook_reconciliation",
+    "phase_28_financial_ledger_engine",
+    "phase_29_governance_operating_layer",
+    "live_ai_embeddings",
+    "scoped_realtime_subscriptions"
+  ],
+  "criticalTables": [
+    "orders",
+    "payment_attempts",
+    "financial_ledger_journals",
+    "financial_ledger_entries",
+    "settlement_records",
+    "governance_cases",
+    "marketplace_disputes",
+    "seller_intelligence_snapshots"
+  ],
+  "rollbackTargets": {
+    "frontend": "Vercel previous production deployment",
+    "database": "Forward-only compensating migration",
+    "featureFlags": "Disable critical feature flag through Supabase feature_flags",
+    "ai": "Disable live embeddings and use fuzzy/keyword fallback",
+    "realtime": "Disable scoped realtime subscriptions and rely on polling refresh"
+  },
+  "rollbackManifest": {
+    "frontend": {
+      "target": "Vercel previous production deployment",
+      "validation": [
+        "/api/health",
+        "/api/readiness"
+      ],
+      "maxReadinessLatencyMs": 2500
+    },
+    "database": {
+      "target": "Forward-only compensating migration",
+      "forwardOnly": true,
+      "compensatingMigrationRequired": true,
+      "snapshotRestoreRequiresStagingValidation": true
+    },
+    "featureFlags": {
+      "maintenanceMode": "maintenance_mode",
+      "checkout": "atomic_checkout_rpc",
+      "payments": "payment_webhook_reconciliation",
+      "financialLedger": "phase_28_financial_ledger_engine",
+      "governance": "phase_29_governance_operating_layer",
+      "ai": "live_ai_embeddings",
+      "realtime": "scoped_realtime_subscriptions"
+    }
+  },
+  "deploymentVerification": {
+    "smokeEndpoints": [
+      "/api/health",
+      "/api/readiness"
+    ],
+    "maxHealthLatencyMs": 1500,
+    "maxReadinessLatencyMs": 2500,
+    "rollbackSmokeRequired": true,
+    "stagingBeforeProduction": true
+  },
+  "backupRestore": {
+    "requiredBeforeProductionMigration": true,
+    "restoreDrillRequired": true,
+    "integrityChecks": [
+      "critical table row count comparison",
+      "financial ledger debit/credit balance validation",
+      "settlement state count comparison",
+      "governance case and dispute count comparison",
+      "RLS smoke validation on sensitive tables",
+      "readiness and health endpoint smoke validation"
+    ],
+    "rehearsalEnvironment": "staging",
+    "maxRestoreDrillAgeHours": 168
+  },
+  "observability": {
+    "track": [
+      "deploymentDurationMs",
+      "migrationDurationMs",
+      "rollbackDurationMs",
+      "backupHealth",
+      "restoreValidationState",
+      "releaseIntegrity",
+      "operationalReadiness"
+    ],
+    "alertOn": [
+      "failedDeployment",
+      "failedRollback",
+      "migrationCorruptionRisk",
+      "backupInconsistency",
+      "restoreMismatch",
+      "readinessDegradation",
+      "environmentDrift"
+    ]
+  },
+  "migrations": [
+    {
+      "file": "20260525151000_phase_1_marketplace_core.sql",
+      "sha256": "4986248848a3df67b864bbf78b70ce694b088761de9457bfc78871eb9178f6ed"
+    },
+    {
+      "file": "20260525233000_phase_7_ai_discovery_intelligence.sql",
+      "sha256": "ebb2fdc1cb1f3083ca5799476a168c1314e562a3ff1b67a7b4e74f27201f5bda"
+    },
+    {
+      "file": "20260526013000_phase_10_true_hyperlocal_geo.sql",
+      "sha256": "cc0eb5312f8f711bbe6635f3fe41bdfc4f0dc7f041adaf69e0a03e8f377cda0c"
+    },
+    {
+      "file": "20260526023000_phase_11_delivery_logistics_engine.sql",
+      "sha256": "d2a8edbf35f2f5b9392224685729d5eb3406e31f95ba28a067447d594d00abca"
+    },
+    {
+      "file": "20260526033000_phase_13_trust_kyc_compliance.sql",
+      "sha256": "8fc9481ae18b44115b78c8903ea86f8620780940f59911e8459a519d84b6b86a"
+    },
+    {
+      "file": "20260526043000_phase_17_atomic_transaction_engine.sql",
+      "sha256": "57ef6fa087fe519aedbe1427df182f5d07a9ea162a9c3e4139c89abdd2fff645"
+    },
+    {
+      "file": "20260526053000_phase_18_live_payment_orchestration.sql",
+      "sha256": "d70d39e25398ce6c88c1218015e928144467311df0cf52faa0113d85b338de0d"
+    },
+    {
+      "file": "20260526063000_phase_19_live_backend_activation.sql",
+      "sha256": "f5aca13a9e5fe4a5ca4e212e518dad2c809fadb057b03d2a62cf2d7ba919b461"
+    },
+    {
+      "file": "20260526070000_phase_19_operational_completion.sql",
+      "sha256": "df515f6ecca4eb79ee3b550b983bf746bb2689a32cb3b0d0805f39a8eb1e1de1"
+    },
+    {
+      "file": "20260526090000_phase_21_live_ai_activation.sql",
+      "sha256": "f6f3714b7e0e27efb4df8c8fdda8b961d78d9f10faf9ba383ced49cee21ce95b"
+    },
+    {
+      "file": "20260526183000_phase_24_delivery_execution_hardening.sql",
+      "sha256": "6453cc1b0055efe9af8d092811a38e70ee2aa15ec96c544fb846197e7b887d1a"
+    },
+    {
+      "file": "20260526193000_phase_25_enterprise_security_hardening.sql",
+      "sha256": "c8722209b6b27d54f83d734538cdb1ef557de7bf285f49d8737498d986033ec5"
+    },
+    {
+      "file": "20260526200000_phase_26_performance_scalability.sql",
+      "sha256": "13f89dcfa9a8b8bb177b7ed5ff3cf69e2e9341399e824e73cf72cd97bd61371a"
+    },
+    {
+      "file": "20260526210000_phase_27_merchant_intelligence.sql",
+      "sha256": "6c5c205d33d88051b91ec7a6178345ff393507b24020676d7a68b714800f7c1f"
+    },
+    {
+      "file": "20260526213000_phase_28_marketplace_financial_operating_layer.sql",
+      "sha256": "f21b1c1ba33ad2cc9dc9434abb9c55d8705e7d53d0a28f46858039224155a1f8"
+    },
+    {
+      "file": "20260526220000_phase_29_trust_governance_operating_layer.sql",
+      "sha256": "7f4db2a45caf5f2df11bbc697a73fbe2e2cf7006c6ba43ed6a3126f9beb1e3b7"
+    },
+    {
+      "file": "20260526230000_stabilization_s1_async_infrastructure.sql",
+      "sha256": "aa85776ec0a59855bdc32c324d820e035b14b0bd84885336c67ced15772d2b63"
+    },
+    {
+      "file": "20260526233000_stabilization_s2_logistics_hardening.sql",
+      "sha256": "a9ce4945783b2d3a04eb1b6a392034b7a4384fff72954a3673c3df23629c0b19"
+    },
+    {
+      "file": "20260527003000_stabilization_s3_governance_hardening.sql",
+      "sha256": "fc277487948b2eb4a8a4b7d951d97aec936807e62b95ab7d947f11bd504f6203"
+    },
+    {
+      "file": "20260527010000_stabilization_s4_india_commerce_hardening.sql",
+      "sha256": "160e5f706c082a0154cf6b8bc1466ee5bf7c6811da77c7f801cf7d31d4fd9ed0"
+    },
+    {
+      "file": "20260527013000_stabilization_s5_reliability_survivability.sql",
+      "sha256": "6ec848b5a52d0058bf2720448b668dbff828f2aa7586702916c857803a5d3de2"
+    },
+    {
+      "file": "20260527220000_phase_31_distributed_async_compute.sql",
+      "sha256": "9b0cfc2c2cc265a3cca698eeb9630b9a900853397c661bb90176b34b5e277005"
+    },
+    {
+      "file": "20260528010000_phase_32_live_logistics_operations.sql",
+      "sha256": "a2d907200edbd8105e9438bc671bf942c8d370d2802f3e131ffcb0e8b102c000"
+    },
+    {
+      "file": "20260528020000_phase_33_ai_commerce_intelligence.sql",
+      "sha256": "8e1fc5e18a8d2c137a69b9d413d13f643cc1adc9f720fdbf091d76a2bd7c8d59"
+    },
+    {
+      "file": "20260528030000_phase_34_finance_operating_system.sql",
+      "sha256": "a28972a1957da18c886f892ae7efc9a26640b55cf14fa1e749bdf27fd70b980c"
+    },
+    {
+      "file": "20260529010000_phase_41_production_hardening.sql",
+      "sha256": "d76a2bd3b468e2fa2c84d233cee5f124a1e530580130574f3e27b42c24d8caa2"
+    }
+  ],
+  "migrationSafetyReportSha256": "7e178b118f025efce4e8ca015e9c2b51060e578e2417e0238584707e9794a5f2",
+  "packageLockSha256": "b87ec2e60de187254c7835f772b2caada8185b855191fa55a654183cc4819717"
+}
