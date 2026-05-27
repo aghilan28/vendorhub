@@ -1,13 +1,11 @@
 "use client";
 
-import { Search, SlidersHorizontal, Sparkles, X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { IntelligentProductGrid } from "@/components/commerce/intelligent-product-grid";
-import { ProductionExperiencePanel } from "@/components/experience/production-experience-panel";
 import { EmptyState } from "@/components/feedback/empty-state";
 import { SearchSkeleton } from "@/components/feedback/search-skeleton";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSemanticMarketplaceSearch } from "@/features/intelligence/queries";
@@ -44,15 +42,6 @@ export function SearchExperience({ initialQuery = "", products = marketplaceProd
 
   return (
     <div className="space-y-5">
-      <ProductionExperiencePanel
-        compact
-        input={{
-          persona: "buyer",
-          aiAvailable: !isError,
-          logisticsDelayed: nearbyOnly && !data?.results.length,
-          accessibilityMode: true,
-        }}
-      />
       <div className="rounded-lg border border-border bg-surface p-4 shadow-sm">
         <div className="grid gap-3 lg:grid-cols-[1fr_180px_180px_180px_160px]">
           <div className="relative">
@@ -99,14 +88,6 @@ export function SearchExperience({ initialQuery = "", products = marketplaceProd
           </div>
         </div>
         <div className="mt-3 flex flex-wrap items-center gap-2">
-          <Badge variant="secondary">
-            <SlidersHorizontal className="size-3" /> {t("search.smartMatches", { count: data?.results.length ?? 0 })}
-          </Badge>
-          <Badge variant="default">
-            <Sparkles className="size-3" /> {t("search.ranking", { mode: data?.mode ?? "hybrid" })}
-          </Badge>
-          <Badge variant="secondary">{nearbyOnly ? t("search.deliverableNearby") : t("search.distanceAware")}</Badge>
-          {data?.correctedQuery ? <Badge variant="warning">{t("search.showingFor", { query: data.correctedQuery })}</Badge> : null}
           {query ? (
             <Button variant="ghost" size="sm" onClick={reset}>
               <X /> {t("common.clearSearch")}
@@ -119,20 +100,15 @@ export function SearchExperience({ initialQuery = "", products = marketplaceProd
           ))}
         </div>
         {data ? (
-          <div className="mt-3 rounded-md border border-border bg-slate-50 p-3">
-            <p className="text-sm font-medium text-primary-text">{data.intelligence.summary}</p>
-            <p className="mt-1 text-xs text-secondary-text">
-              {t("search.signals", { signals: data.intelligence.signals.join(", "), latency: data.latencyMs })}
-            </p>
-            {data.intelligence.coldStart?.active ? <p className="mt-1 text-xs text-secondary-text">Cold-start discovery is blending nearby demand, trusted sellers, and exploration slots.</p> : null}
-            {data.intelligence.fallbackUsed ? <p className="mt-1 text-xs text-warning">Fallback relevance is active with keyword, popularity, category, and geo signals.</p> : null}
+          <div className="mt-3">
+            <p className="text-sm font-medium text-primary-text">{t("search.resultsFor", { count: data.results.length, query: query || t("common.allCategories") })}</p>
           </div>
         ) : null}
       </div>
       {isLoading ? (
         <SearchSkeleton />
       ) : isError ? (
-        <EmptyState icon={Search} title={t("search.fallbackTitle")} description={t("search.fallbackDescription")} />
+        <EmptyState icon={Search} title={t("search.emptyTitle")} description={t("search.emptyDescription")} />
       ) : data?.results.length ? (
         <IntelligentProductGrid products={data.results} />
       ) : (

@@ -22,7 +22,7 @@ export default function ProfilePage() {
 
       <div className="grid gap-5 lg:grid-cols-[1fr_360px]">
         <div className="space-y-5">
-          <SectionWrapper title="Addresses" description="Address management UI prepared for checkout and future logistics.">
+          <SectionWrapper title="Addresses">
             <div className="grid gap-3 md:grid-cols-2">
               {[
                 ["Home", "12, 8th Cross, Malleswaram, Bengaluru", "Default"],
@@ -61,7 +61,7 @@ export default function ProfilePage() {
         <aside className="space-y-4">
           <div className="rounded-lg border border-border bg-surface p-4 shadow-sm">
             <h2 className="flex items-center gap-2 font-semibold text-primary-text"><CreditCard className="size-4" /> Saved payments</h2>
-            <p className="mt-3 rounded-md border border-dashed border-border p-3 text-sm text-secondary-text">Payment instruments are placeholders until the payments phase.</p>
+            <p className="mt-3 rounded-md border border-dashed border-border p-3 text-sm text-secondary-text">Add UPI, card, or wallet options for faster checkout.</p>
           </div>
           <div className="rounded-lg border border-border bg-surface p-4 shadow-sm">
             <h2 className="font-semibold text-primary-text">Account settings</h2>

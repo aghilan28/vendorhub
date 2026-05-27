@@ -5,7 +5,7 @@ import { TransactionalCheckout } from "@/features/checkout/components/transactio
 export default function CheckoutPage() {
   return (
     <PageContainer>
-      <SectionWrapper title="Checkout" description="UPI-first checkout with COD eligibility, GST invoice generation, and secure transaction recovery.">
+      <SectionWrapper title="Checkout">
         <TransactionalCheckout />
       </SectionWrapper>
     </PageContainer>

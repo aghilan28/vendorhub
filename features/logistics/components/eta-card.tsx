@@ -13,7 +13,6 @@ export function EtaCard({ delivery }: { delivery: Delivery }) {
         <Badge variant="default">
           <Clock3 className="size-3" /> ETA {delivery.etaWindow}
         </Badge>
-        <span className="text-xs font-medium uppercase text-secondary-text">{delivery.etaConfidence} confidence</span>
       </div>
       <h2 className="mt-3 text-2xl font-semibold text-primary-text">{delivery.orderCode}</h2>
       <p className="mt-2 text-sm leading-6 text-secondary-text">
@@ -28,7 +27,7 @@ export function EtaCard({ delivery }: { delivery: Delivery }) {
           <Navigation className="size-4 text-emerald-700" /> {delivery.assignedTo ?? "Partner assignment pending"} {delivery.assignedPhone ? `· ${delivery.assignedPhone}` : ""}
         </span>
         <span className="flex items-center gap-2 rounded-md bg-slate-50 px-3 py-2 text-secondary-text">
-          <ShieldCheck className="size-4 text-emerald-700" /> Dispatch and ETA updates are synchronized through delivery events.
+          <ShieldCheck className="size-4 text-emerald-700" /> Delivery updates appear here as your order moves.
         </span>
       </div>
     </section>

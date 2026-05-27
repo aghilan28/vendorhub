@@ -21,10 +21,10 @@ export default async function CategoryDetailPage({ params }: { params: Promise<{
         <p className="mt-2 max-w-2xl text-sm leading-6 text-secondary-text">{category.description}</p>
       </section>
       <LocationControlBar />
-      <SectionWrapper title="Filter this category" description="Filter chips and sorting are ready for paginated category discovery.">
+      <SectionWrapper title="Filter this category">
         <SearchExperience products={products} />
       </SectionWrapper>
-      <SectionWrapper title="Category highlights" description="Fast add cards with seller, stock, and delivery confidence.">
+      <SectionWrapper title="Category highlights">
         <ProductGrid products={products} />
       </SectionWrapper>
     </PageContainer>

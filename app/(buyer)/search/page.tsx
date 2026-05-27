@@ -11,7 +11,7 @@ export default async function SearchPage({ searchParams }: { searchParams?: Prom
   return (
     <PageContainer className="space-y-6">
       <LocationControlBar />
-      <SectionWrapper title="Search local marketplace" description="Tamil, Hindi, English, and mixed-language discovery with stock, delivery, rating, and price controls.">
+      <SectionWrapper title="Search local marketplace">
         <SearchExperience initialQuery={resolvedSearchParams?.q ?? ""} products={products} />
       </SectionWrapper>
     </PageContainer>

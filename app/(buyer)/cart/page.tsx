@@ -8,7 +8,7 @@ export default async function CartPage() {
 
   return (
     <PageContainer>
-      <SectionWrapper title="Cart" description="Vendor-grouped cart with stock confidence, quantity updates, and checkout readiness.">
+      <SectionWrapper title="Cart">
         <CartClient items={items} />
       </SectionWrapper>
     </PageContainer>

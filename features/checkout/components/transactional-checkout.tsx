@@ -10,7 +10,6 @@ import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PriceDisplay } from "@/components/commerce/price-display";
-import { ProductionExperiencePanel } from "@/components/experience/production-experience-panel";
 import { TrustStrip } from "@/components/experience/trust-strip";
 import { useCartStore } from "@/store/cart-store";
 import { useCheckoutStore } from "@/store/checkout-store";
@@ -81,7 +80,6 @@ export function TransactionalCheckout() {
   const selectedAddress = addresses.find((address) => address.id === selectedAddressId) ?? addresses[0];
   const pricing = calculateOrderPricing(items);
   const codEligibility = checkCodEligibility({ items, total: pricing.total, pincode: selectedAddress.pincode });
-  const checkoutDegraded = !isOnline || ["slow-2g", "2g", "3g", "data saver"].includes(connectionLabel);
   const form = useForm<any>({
     resolver: zodResolver(CheckoutSchema as any),
     values: { addressId: selectedAddress.id, deliverySlot, paymentMethod, upiApp, orderNote: "" },
@@ -165,7 +163,7 @@ export function TransactionalCheckout() {
         <ShieldCheck className="size-10 text-amber-700" aria-hidden />
         <h2 className="mt-4 text-xl font-semibold text-primary-text">Payment confirmation pending</h2>
         <p className="mt-2 max-w-2xl text-sm text-secondary-text">
-          Inventory is reserved and VendorHub is waiting for server-side Razorpay verification and webhook reconciliation before fulfillment starts.
+          Your order is being confirmed. We will show it in your order history as soon as payment is verified.
         </p>
         <div className="mt-5 flex flex-col gap-2 sm:flex-row">
           <Button variant="secondary" asChild><Link href="/orders">Order history</Link></Button>
@@ -180,7 +178,7 @@ export function TransactionalCheckout() {
         <PackageCheck className="size-10 text-brand" aria-hidden />
         <h2 className="mt-4 text-xl font-semibold text-primary-text">Order confirmed</h2>
         <p className="mt-2 max-w-2xl text-sm text-secondary-text">
-          The transaction has a verified payment reference, GST invoice, settlement record, and seller queue handoff.
+          Your payment is confirmed and the seller has received the order.
         </p>
         <div className="mt-5 flex flex-col gap-2 sm:flex-row">
           <Button asChild><Link href={`/orders/${lastOrderId}`}>View order</Link></Button>
@@ -193,24 +191,13 @@ export function TransactionalCheckout() {
   return (
     <form onSubmit={form.handleSubmit(onSubmit as any)} className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px]">
       <div className="space-y-4">
-        <ProductionExperiencePanel
-          compact
-          input={{
-            persona: "buyer",
-            isOnline,
-            realtimeState: checkoutDegraded ? "degraded" : "connected",
-            paymentRecoverable: Boolean(lastError) || atomicProgress.state === "failed" || atomicProgress.state === "recovering",
-            logisticsDelayed: deliverySlot !== "Fastest available",
-            accessibilityMode: true,
-          }}
-        />
         <TrustStrip
-          label="Checkout trust and continuity indicators"
+          label="Checkout trust"
           items={[
-            { label: "Cart state", value: items.length ? "Reserved until payment step" : "No items ready", icon: PackageCheck },
-            { label: "Payment", value: paymentMethod === "cod" ? "COD eligibility checked" : "Server verified before fulfillment", icon: ShieldCheck },
-            { label: "Network", value: checkoutDegraded ? "Recovery mode visible" : "Ready for secure handoff", icon: Truck },
-            { label: "Refunds", value: "Ledger and order history traceable", icon: RotateCcw },
+            { label: "Cart", value: items.length ? "Ready" : "Empty", icon: PackageCheck },
+            { label: "Payment", value: paymentMethod === "cod" ? "COD available" : "Secure payment", icon: ShieldCheck },
+            { label: "Delivery", value: deliverySlot, icon: Truck },
+            { label: "Refunds", value: "Easy order support", icon: RotateCcw },
           ]}
         />
         {!isOnline ? (
@@ -218,8 +205,8 @@ export function TransactionalCheckout() {
             <p>Your cart remains available, but orders, UPI handoff, COD checks, and payment verification need a connection.</p>
           </Alert>
         ) : ["slow-2g", "2g", "3g", "data saver"].includes(connectionLabel) ? (
-          <Alert title="Low-network checkout mode" variant="info">
-            <p>Keep this screen open. VendorHub will avoid unnecessary refreshes and recover payment state on reconnect.</p>
+          <Alert title="Slow connection" variant="info">
+            <p>Keep this screen open while your order is placed.</p>
           </Alert>
         ) : null}
 
@@ -314,8 +301,8 @@ export function TransactionalCheckout() {
               <p className="mt-1 text-xs">COD max limit Rs {codEligibility.maxAmount.toLocaleString("en-IN")}. Seller and pincode restrictions are checked before order confirmation.</p>
             </div>
           ) : null}
-          <Input className="mt-4" placeholder="Order note placeholder" {...form.register("orderNote")} />
-          <p className="mt-3 flex items-center gap-2 text-xs text-secondary-text"><ShieldCheck className="size-4 text-brand" /> Payment success is finalized only by server verification and Razorpay webhook reconciliation.</p>
+          <Input className="mt-4" placeholder="Add delivery instructions" {...form.register("orderNote")} />
+          <p className="mt-3 flex items-center gap-2 text-xs text-secondary-text"><ShieldCheck className="size-4 text-brand" /> Your payment is checked before the seller starts packing.</p>
         </section>
       </div>
 
@@ -324,7 +311,7 @@ export function TransactionalCheckout() {
         <Button className="min-h-12 w-full" type="submit" disabled={!items.length || isProcessing || atomicCheckout.isPending || !isOnline}>
           <span data-testid="checkout-btn" className="contents">
           {isProcessing || atomicCheckout.isPending ? <Loader2 className="animate-spin" /> : paymentMethod === "cod" ? <WalletCards /> : <CreditCard />}
-          {!isOnline ? t("error.offline") : isProcessing || atomicCheckout.isPending ? "Processing transaction" : paymentMethod === "cod" ? t("payment.cod") : paymentMethod === "upi" ? t("payment.upi") : t("payment.pay_now")}
+          {!isOnline ? t("error.offline") : isProcessing || atomicCheckout.isPending ? "Placing order" : paymentMethod === "cod" ? t("payment.cod") : paymentMethod === "upi" ? t("payment.upi") : t("payment.pay_now")}
           </span>
         </Button>
         {lastError?.code === "PAYMENT_FAILED" ? (

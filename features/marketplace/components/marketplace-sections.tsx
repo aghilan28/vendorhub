@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, BadgeCheck, Clock3, MapPin, PackageCheck, ShieldCheck, Truck } from "lucide-react";
+import { ArrowRight, BadgeCheck, Clock3, PackageCheck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
@@ -23,11 +23,8 @@ export function MarketplaceHero() {
   const { t } = useTranslation();
 
   return (
-    <section className="grid gap-4 lg:grid-cols-[1.35fr_0.65fr]">
-      <div className="rounded-lg border border-border bg-surface p-5 shadow-sm sm:p-7">
-        <Badge variant="default">
-          <MapPin className="size-3" /> {t("home.badge")}
-        </Badge>
+    <section className="rounded-lg border border-border bg-surface p-5 shadow-sm sm:p-7">
+      <div>
         <h1 className="mt-4 max-w-3xl text-3xl font-semibold leading-tight text-primary-text sm:text-4xl">
           {t("home.title")}
         </h1>
@@ -54,22 +51,7 @@ export function MarketplaceHero() {
           ))}
         </div>
       </div>
-      <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-        <OperationalStat icon={Truck} label="Active delivery zones" value="14" />
-        <OperationalStat icon={ShieldCheck} label="Verified sellers" value="96%" />
-        <OperationalStat icon={Clock3} label="Avg dispatch" value="18 min" />
-      </div>
     </section>
-  );
-}
-
-function OperationalStat({ icon: Icon, label, value }: { icon: typeof Truck; label: string; value: string }) {
-  return (
-    <div className="rounded-lg border border-border bg-surface p-4 shadow-sm">
-      <Icon className="size-5 text-brand" />
-      <p className="mt-3 text-2xl font-semibold text-primary-text">{value}</p>
-      <p className="text-sm text-secondary-text">{label}</p>
-    </div>
   );
 }
 

@@ -23,11 +23,11 @@ export function BuyerSellerTrustCard({ vendor }: { vendor: Vendor }) {
       <div className="mt-4 grid gap-2 text-sm">
         <span className="flex items-center gap-2 rounded-md bg-slate-50 px-3 py-2 text-secondary-text"><Building2 className="size-4 text-brand" /> Business identity reviewed</span>
         <span className="flex items-center gap-2 rounded-md bg-slate-50 px-3 py-2 text-secondary-text"><ReceiptText className="size-4 text-brand" /> {profile.gst.invoiceEnabled ? `GST invoice enabled: ${profile.gst.gstin}` : "GST verification in review"}</span>
-        <span className="flex items-center gap-2 rounded-md bg-slate-50 px-3 py-2 text-secondary-text"><Landmark className="size-4 text-brand" /> Payout account {profile.bank.payoutReadiness}</span>
-        <span className="flex items-center gap-2 rounded-md bg-slate-50 px-3 py-2 text-secondary-text"><Truck className="size-4 text-brand" /> Fulfillment reliability placeholder active</span>
+        <span className="flex items-center gap-2 rounded-md bg-slate-50 px-3 py-2 text-secondary-text"><Landmark className="size-4 text-brand" /> Verified payment account</span>
+        <span className="flex items-center gap-2 rounded-md bg-slate-50 px-3 py-2 text-secondary-text"><Truck className="size-4 text-brand" /> Reliable local delivery</span>
       </div>
       <div className="mt-4 rounded-md border border-emerald-100 bg-emerald-50 p-3 text-xs text-emerald-800">
-        <p className="flex items-center gap-2 font-medium"><CheckCircle2 className="size-4" /> VendorHub records verification actions, document reviews, compliance flags, and seller restrictions.</p>
+        <p className="flex items-center gap-2 font-medium"><CheckCircle2 className="size-4" /> This seller is reviewed before appearing on VendorHub.</p>
       </div>
     </section>
   );

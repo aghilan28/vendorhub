@@ -16,7 +16,7 @@ export function ServiceZoneMapPreview({ vendor }: { vendor?: Vendor }) {
       <div className="relative z-10 flex items-center justify-between gap-3">
         <div>
           <p className="text-sm font-semibold text-primary-text">{vendor ? "Seller service zone" : "Nearby vendor coverage"}</p>
-          <p className="mt-1 text-xs text-secondary-text">Map provider slot ready for Mapbox or Google Maps token.</p>
+          <p className="mt-1 text-xs text-secondary-text">Sellers serving your area.</p>
         </div>
         <span className="inline-flex items-center gap-1 rounded-md bg-white/85 px-2 py-1 text-xs font-medium text-secondary-text">
           <Navigation className="size-3.5" /> {currentLocation.locality}

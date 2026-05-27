@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Heart, Plus, ShieldCheck, ShoppingCart, Truck } from "lucide-react";
+import { Heart, Plus, ShoppingCart, Truck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTransition } from "react";
@@ -11,9 +11,7 @@ import { Button } from "@/components/ui/button";
 import { upsertCartItemAction } from "@/lib/actions/cart";
 import { toggleWishlistAction } from "@/lib/actions/wishlist";
 import { formatEta } from "@/features/marketplace/lib/data";
-import { deliveryFeasibility, formatDistance, productDeliveryLabel } from "@/lib/geo";
 import { formatLocalizedCurrency } from "@/lib/i18n/format";
-import { useLocationStore } from "@/store/location-store";
 import { useLocaleStore } from "@/store/locale-store";
 import { useMobileStore } from "@/store/mobile-store";
 import { useWishlistStore } from "@/store/wishlist-store";
@@ -23,16 +21,13 @@ import { RatingDisplay } from "./rating-display";
 import { SellerBadge } from "./seller-badge";
 import { StockBadge } from "./stock-badge";
 
-export function ProductCard({ product, compact = false }: { product: Product; compact?: boolean }) {
+export function ProductCard({ product }: { product: Product; compact?: boolean }) {
   const [isPending, startTransition] = useTransition();
   const { t } = useTranslation();
-  const currentLocation = useLocationStore((state) => state.currentLocation);
   const locale = useLocaleStore((state) => state.locale);
   const isOnline = useMobileStore((state) => state.isOnline);
-  const connectionLabel = useMobileStore((state) => state.connectionLabel);
   const isWishlisted = useWishlistStore((state) => state.has(product.id));
   const toggleWishlist = useWishlistStore((state) => state.toggle);
-  const feasibility = deliveryFeasibility(product.vendor, currentLocation);
   const discount =
     product.originalPrice && product.originalPrice > product.price
       ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
@@ -78,11 +73,6 @@ export function ProductCard({ product, compact = false }: { product: Product; co
         </button>
         <div className="absolute left-3 top-3 flex flex-wrap gap-1">
           {discount ? <Badge variant="warning">{discount}% off</Badge> : null}
-          {product.vendor.verified ? (
-            <Badge variant="secondary">
-              <ShieldCheck className="size-3" /> Verified
-            </Badge>
-          ) : null}
         </div>
       </div>
 
@@ -96,16 +86,6 @@ export function ProductCard({ product, compact = false }: { product: Product; co
             <RatingDisplay rating={product.rating} count={product.reviewCount} />
           </div>
         </div>
-
-        {!compact ? (
-          <div className="flex flex-wrap gap-1">
-            {(product.tags ?? []).slice(0, 2).map((tag) => (
-              <span key={tag} className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-secondary-text">
-                {tag}
-              </span>
-            ))}
-          </div>
-        ) : null}
 
         <div className="mt-auto flex items-end justify-between gap-3">
           <div className="min-w-0">
@@ -122,17 +102,8 @@ export function ProductCard({ product, compact = false }: { product: Product; co
           <span className="inline-flex items-center gap-1">
             <Truck className="size-3.5" /> {formatEta(product.deliveryMinutes)}
           </span>
-          <span className="shrink-0">{formatDistance(feasibility.distanceKm)}</span>
+          <span className="shrink-0">{product.vendor.locality}</span>
         </div>
-        <div className="flex min-w-0 items-center justify-between gap-2 rounded-md bg-slate-50 px-3 py-2 text-xs">
-          <span className="min-w-0 truncate font-medium text-primary-text">{product.vendor.locality}</span>
-          <span className={feasibility.status === "outside_radius" ? "shrink-0 text-warning" : "shrink-0 text-emerald-700"}>{productDeliveryLabel(product, currentLocation)}</span>
-        </div>
-        {!isOnline || ["slow-2g", "2g", "3g", "data saver"].includes(connectionLabel) ? (
-          <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-medium text-amber-900">
-            {isOnline ? "Low-network view. Stock refreshes when the connection improves." : "Cached product view. Reconnect before checkout."}
-          </p>
-        ) : null}
 
         <Button
           className="min-h-11 w-full"
@@ -149,9 +120,9 @@ export function ProductCard({ product, compact = false }: { product: Product; co
           {product.stockCount <= 0 ? (
             t("product.out_of_stock")
           ) : !isOnline ? (
-            "Reconnect to add"
+            "Connect to add"
           ) : isPending ? (
-            "Syncing"
+            "Adding"
           ) : (
             <>
               <ShoppingCart /> Quick add <Plus className="size-3" />

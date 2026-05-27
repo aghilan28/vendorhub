@@ -1,11 +1,8 @@
 "use client";
 
 import { AlertTriangle, PackageCheck } from "lucide-react";
-import { ProductionExperiencePanel } from "@/components/experience/production-experience-panel";
 import { TrustStrip } from "@/components/experience/trust-strip";
 import { EmptyState } from "@/components/feedback/empty-state";
-import { LiveEventFeed } from "@/components/realtime/live-event-feed";
-import { LiveStateBadge } from "@/components/realtime/live-state-badge";
 import { useDeliveryTracking } from "../queries";
 import { DeliveryMapPlaceholder } from "./delivery-map-placeholder";
 import { EtaCard } from "./eta-card";
@@ -23,18 +20,6 @@ export function BuyerTrackingExperience({ orderId }: { orderId?: string }) {
 
   return (
     <div className="space-y-5">
-      <ProductionExperiencePanel
-        compact
-        input={{
-          persona: "buyer",
-          realtimeState: delivery.shipment.syncStatus === "failed" || delivery.shipment.syncStatus === "pending" ? "degraded" : "connected",
-          logisticsDelayed: delivery.shipment.syncStatus === "failed" || delivery.shipment.syncStatus === "pending",
-          accessibilityMode: true,
-        }}
-      />
-      <div className="rounded-lg border border-border bg-surface p-4 shadow-sm">
-        <LiveStateBadge />
-      </div>
       <div className="grid gap-5 lg:grid-cols-[1fr_360px]">
         <div className="space-y-5">
           <TrackingTimeline delivery={delivery} />
@@ -49,16 +34,10 @@ export function BuyerTrackingExperience({ orderId }: { orderId?: string }) {
               label="Delivery trust indicators"
               items={[
                 { label: "Handoff", value: "Package verification tracked", icon: PackageCheck },
-                { label: "Provider sync", value: delivery.shipment.syncStatus.replace("_", " "), icon: PackageCheck },
+                { label: "Status", value: delivery.status.replace("_", " "), icon: PackageCheck },
                 { label: "Delivery address", value: delivery.deliveryAddress, icon: PackageCheck },
               ]}
             />
-          </section>
-          <section className="rounded-lg border border-border bg-surface p-4 shadow-sm">
-            <h2 className="font-semibold text-primary-text">Live notifications</h2>
-            <div className="mt-3">
-              <LiveEventFeed scope="buyer" limit={3} />
-            </div>
           </section>
         </aside>
       </div>

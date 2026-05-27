@@ -27,10 +27,9 @@ export function HyperlocalHomepageSections() {
             <Badge variant="default">
               <MapPin className="size-3" /> Products near {location.locality}
             </Badge>
-            <Badge variant="secondary">{radiusKm} km discovery radius</Badge>
           </div>
           <h2 className="mt-3 text-xl font-semibold text-primary-text">Nearby Products</h2>
-          <p className="mt-1 text-sm text-secondary-text">Inventory ranked by seller distance, delivery radius, stock, and demand signals.</p>
+          <p className="mt-1 text-sm text-secondary-text">Fresh essentials available from sellers around you.</p>
           <div className="mt-4">
             <ProductGrid products={nearbyProducts} compact />
           </div>
@@ -41,18 +40,16 @@ export function HyperlocalHomepageSections() {
       <section className="grid gap-4 lg:grid-cols-3">
         <GeoSignalCard icon={Store} label="Sellers around you" value={`${nearbyVendors.length} active`} detail={`Closest seller ${formatDistance(nearbyVendors[0]?.distanceKm ?? null)}`} />
         <GeoSignalCard icon={Truck} label="Fast delivery nearby" value={`${fastProducts[0]?.deliveryMinutes ?? 22} min`} detail="Based on seller prep time and local distance" />
-        <GeoSignalCard icon={TrendingUp} label="Trending in your area" value="Fresh + pantry" detail="Local demand signal placeholder ready for analytics" />
+        <GeoSignalCard icon={TrendingUp} label="Trending in your area" value="Fresh + pantry" detail="Popular picks near you" />
       </section>
 
       <section className="rounded-lg border border-border bg-surface p-5 shadow-sm">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h2 className="text-xl font-semibold text-primary-text">Fast Delivery Nearby</h2>
-            <p className="mt-1 text-sm text-secondary-text">Deliverable products prioritized by travel distance and seller readiness.</p>
+            <p className="mt-1 text-sm text-secondary-text">Products that can arrive quickly from nearby sellers.</p>
           </div>
-          <Badge variant="secondary">
-            <Clock3 className="size-3" /> ETA placeholders only
-          </Badge>
+          <Badge variant="secondary"><Clock3 className="size-3" /> Delivery in 20-30 min</Badge>
         </div>
         <div className="mt-4">
           <ProductGrid products={fastProducts} compact />

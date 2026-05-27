@@ -37,11 +37,11 @@ export function CartClient({ items }: { items: CartItem[] }) {
     <div className="grid gap-5 lg:grid-cols-[1fr_360px]">
       <div className="space-y-4">
         <TrustStrip
-          label="Cart continuity and commerce trust indicators"
+          label="Cart trust"
           items={[
-            { label: "Seller grouping", value: `${Object.keys(grouped).length} dispatch groups`, icon: Truck },
+            { label: "Sellers", value: `${Object.keys(grouped).length} local shops`, icon: Truck },
             { label: "Stock check", value: "Revalidated at checkout", icon: ShieldCheck },
-            { label: "Cart recovery", value: isPending ? "Updating safely" : "Ready for checkout", icon: PackageCheck },
+            { label: "Cart", value: isPending ? "Updating" : "Ready", icon: PackageCheck },
             { label: "Payment", value: "No charge before confirmation", icon: ShieldCheck },
           ]}
         />
@@ -49,7 +49,7 @@ export function CartClient({ items }: { items: CartItem[] }) {
           <section key={vendor} className="rounded-lg border border-border bg-surface shadow-sm">
             <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
               <h2 className="min-w-0 truncate font-semibold text-primary-text">{vendor}</h2>
-              <span className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-xs text-secondary-text"><Truck className="size-3.5" /> grouped dispatch</span>
+              <span className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-xs text-secondary-text"><Truck className="size-3.5" /> local seller</span>
             </div>
             <div className="divide-y divide-border">
               {vendorItems.map((item) => (
@@ -119,7 +119,7 @@ export function CartClient({ items }: { items: CartItem[] }) {
       <aside className="h-fit rounded-lg border border-border bg-surface p-4 shadow-sm lg:sticky lg:top-24">
         <h2 className="font-semibold text-primary-text">Order summary</h2>
         <div className="mt-4 rounded-md border border-emerald-100 bg-emerald-50 p-3 text-sm text-secondary-text">
-          Verified seller handoff, stock recheck, and payment state are shown before confirmation.
+          Your items are reserved after order confirmation.
         </div>
         <dl className="mt-4 space-y-3 text-sm">
           <div className="flex justify-between gap-3"><dt className="text-secondary-text">Subtotal</dt><dd><PriceDisplay value={subtotal} /></dd></div>

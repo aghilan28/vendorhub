@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { Bell, Menu, ShoppingCart } from "lucide-react";
-import { LanguageSwitcher } from "@/components/i18n/language-switcher";
+import { Menu, ShoppingCart, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SearchBar } from "./search-bar";
 
@@ -17,17 +16,10 @@ export function Header() {
         </Link>
         <SearchBar className="hidden max-w-2xl flex-1 md:block" />
         <div className="ml-auto flex min-w-0 items-center gap-1 sm:gap-2">
-          <div className="hidden sm:block">
-            <LanguageSwitcher compact />
-          </div>
-          <Button className="hidden sm:inline-flex" variant="ghost" size="sm" asChild>
-            <Link href="/demo">Demo</Link>
-          </Button>
-          <Button className="hidden sm:inline-flex" variant="ghost" size="sm" asChild>
-            <Link href="/launch">Launch</Link>
-          </Button>
-          <Button variant="ghost" size="icon" aria-label="Notifications">
-            <Bell />
+          <Button variant="ghost" size="icon" aria-label="Profile" asChild>
+            <Link href="/profile">
+              <User />
+            </Link>
           </Button>
           <Button className="w-11 px-0 sm:w-auto sm:px-3" variant="secondary" size="sm" asChild>
             <Link href="/cart" aria-label="Cart">
@@ -37,7 +29,6 @@ export function Header() {
         </div>
       </div>
       <div className="space-y-3 border-t border-border px-4 py-3 md:hidden">
-        <LanguageSwitcher />
         <SearchBar />
       </div>
     </header>

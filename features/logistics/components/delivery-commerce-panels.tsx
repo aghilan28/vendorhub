@@ -10,8 +10,8 @@ export function HomepageDeliveryIntelligence() {
   return (
     <section className="grid gap-4 lg:grid-cols-3">
       <DeliverySignal icon={Truck} label="Fast Delivery Nearby" value={`${readyProducts.length} ready`} detail="Stocked products under 30 min dispatch promise" />
-      <DeliverySignal icon={Clock3} label="Same-Day Delivery" value="Enabled" detail="Provider architecture ready for self-delivery and Shiprocket" />
-      <DeliverySignal icon={PackageCheck} label="Ready To Deliver" value={`${seedDeliveries.filter((delivery) => delivery.status !== "FAILED").length} active`} detail="Dispatch queue and tracking events are live in demo data" />
+      <DeliverySignal icon={Clock3} label="Same-Day Delivery" value="Available" detail="Choose a delivery time that works for you" />
+      <DeliverySignal icon={PackageCheck} label="Ready To Deliver" value={`${seedDeliveries.filter((delivery) => delivery.status !== "FAILED").length} active`} detail="Orders are packed and tracked clearly" />
     </section>
   );
 }
@@ -24,10 +24,10 @@ export function ProductDeliveryPromise({ deliveryMinutes, stockCount }: { delive
         <Badge variant={sameDayEligible ? "default" : "secondary"}>
           <Truck className="size-3" /> {sameDayEligible ? "Same-day eligible" : "Delivery check needed"}
         </Badge>
-        <Badge variant="secondary">{stockCount} nearby stock</Badge>
+        <Badge variant="secondary">{stockCount} in stock</Badge>
       </div>
       <p className="mt-2 text-sm text-secondary-text">
-        Estimated delivery uses seller prep time, local distance, provider mode, service zone, and traffic placeholder factors.
+        Delivery estimate is based on seller prep time and your address.
       </p>
     </div>
   );

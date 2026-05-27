@@ -5,12 +5,12 @@ import type { Delivery } from "../types";
 
 export function DeliveryMapPlaceholder({ delivery }: { delivery: Delivery }) {
   return (
-    <section className="relative min-h-[260px] overflow-hidden rounded-lg border border-border bg-[#eef4f7] p-4 shadow-sm" role="img" aria-label="Delivery route placeholder map">
+    <section className="relative min-h-[260px] overflow-hidden rounded-lg border border-border bg-[#eef4f7] p-4 shadow-sm" role="img" aria-label="Delivery route map">
       <div className="absolute inset-0 opacity-70 [background-image:linear-gradient(#d5e3e7_1px,transparent_1px),linear-gradient(90deg,#d5e3e7_1px,transparent_1px)] [background-size:30px_30px]" />
       <div className="relative z-10 flex items-center justify-between">
         <div>
-          <p className="text-sm font-semibold text-primary-text">Tracking map placeholder</p>
-          <p className="mt-1 text-xs text-secondary-text">Route and moving courier data can attach to delivery_tracking_events later.</p>
+          <p className="text-sm font-semibold text-primary-text">Delivery route</p>
+          <p className="mt-1 text-xs text-secondary-text">Track your seller and dropoff area.</p>
         </div>
         <Route className="size-5 text-emerald-700" />
       </div>

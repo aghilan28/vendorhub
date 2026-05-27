@@ -37,8 +37,8 @@ export function CheckoutForm() {
     return (
       <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-8 text-center">
         <CheckCircle2 className="mx-auto size-10 text-brand" />
-        <h2 className="mt-4 text-xl font-semibold text-primary-text">Order simulation confirmed</h2>
-        <p className="mt-2 text-sm text-secondary-text">Payment and logistics are placeholders for later phases. The buyer checkout flow is ready.</p>
+        <h2 className="mt-4 text-xl font-semibold text-primary-text">Order confirmed</h2>
+        <p className="mt-2 text-sm text-secondary-text">Your order is ready for seller confirmation.</p>
       </div>
     );
   }
@@ -64,7 +64,7 @@ export function CheckoutForm() {
         </section>
         <section className="rounded-lg border border-border bg-surface p-4 shadow-sm">
           <h2 className="flex items-center gap-2 font-semibold text-primary-text"><CreditCard className="size-4" /> Payment method</h2>
-          <p className="mt-3 rounded-md border border-dashed border-border p-3 text-sm text-secondary-text">Payment gateway integration is reserved. This confirms checkout UX only.</p>
+          <p className="mt-3 rounded-md border border-dashed border-border p-3 text-sm text-secondary-text">Choose your payment method at confirmation.</p>
         </section>
       </div>
       <aside className="h-fit rounded-lg border border-border bg-surface p-4 shadow-sm lg:sticky lg:top-24">
@@ -75,8 +75,8 @@ export function CheckoutForm() {
           <div className="flex justify-between"><dt className="text-secondary-text">Delivery</dt><dd>{delivery ? <PriceDisplay value={delivery} /> : "Free"}</dd></div>
           <div className="flex justify-between border-t border-border pt-3 font-semibold"><dt>Total</dt><dd><PriceDisplay value={total} /></dd></div>
         </dl>
-        <p className="mt-3 flex items-center gap-2 text-xs text-secondary-text"><ShieldCheck className="size-4 text-brand" /> Secure checkout foundation. No payment captured.</p>
-        <Button className="mt-4 w-full" type="submit" disabled={!items.length}>Confirm order simulation</Button>
+        <p className="mt-3 flex items-center gap-2 text-xs text-secondary-text"><ShieldCheck className="size-4 text-brand" /> You review the total before paying.</p>
+        <Button className="mt-4 w-full" type="submit" disabled={!items.length}>Confirm order</Button>
       </aside>
     </form>
   );

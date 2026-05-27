@@ -28,11 +28,11 @@ export function ProductGeoPanel({ product }: { product: Product }) {
             <MapPin className="size-3" /> {formatDistance(feasibility.distanceKm)}
           </Badge>
         </div>
-        <h2 className="mt-3 font-semibold text-primary-text">Local delivery intelligence</h2>
+        <h2 className="mt-3 font-semibold text-primary-text">Delivery near you</h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
           <GeoFact icon={Navigation} label="Service radius" value={`${feasibility.radiusKm ?? product.vendor.serviceRadiusKm ?? 5} km`} />
-          <GeoFact icon={Truck} label="Arrival placeholder" value={productDeliveryLabel(product, location)} />
-          <GeoFact icon={PackageCheck} label="Local stock" value={`${product.stockCount} units visible`} />
+          <GeoFact icon={Truck} label="Delivery" value={productDeliveryLabel(product, location)} />
+          <GeoFact icon={PackageCheck} label="Stock" value={`${product.stockCount} available`} />
         </div>
         {feasibility.status === "outside_radius" ? (
           <div className="mt-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">

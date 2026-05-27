@@ -104,7 +104,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         </div>
       </section>
 
-      <SectionWrapper title="Similar products" description="Related products ranked by product meaning, category fit, stock, and local seller quality.">
+      <SectionWrapper title="Similar products">
         <RelatedProductStrip productId={product.id} products={relatedProducts} />
       </SectionWrapper>
     </PageContainer>
