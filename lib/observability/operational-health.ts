@@ -30,10 +30,7 @@ function domainStatus(domain: ObservabilityDomain, value: string, detail: string
 export async function getOperationalHealthSnapshot() {
   const started = Date.now();
   const readiness = getEnvironmentReadiness();
-  const supabase = await createSupabaseServerClient();
-  const unsafeSupabase = supabase as typeof supabase & {
-    from: (relation: string) => ReturnType<typeof supabase.from>;
-  };
+  const supabase = (await createSupabaseServerClient()) as any;
   const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
   const since7d = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
@@ -70,7 +67,7 @@ export async function getOperationalHealthSnapshot() {
     countQuery(supabase.from("governance_risk_signals").select("id", { count: "exact", head: true }).gte("created_at", since24h).in("severity", ["high", "critical"])),
     countQuery(supabase.from("governance_cases").select("id", { count: "exact", head: true }).not("state", "in", "(RESOLVED,DISMISSED)").lt("sla_due_at", new Date().toISOString())),
     countQuery(supabase.from("marketplace_disputes").select("id", { count: "exact", head: true }).not("state", "in", "(RESOLVED_BUYER,RESOLVED_SELLER,RESOLVED_PLATFORM,DISMISSED)").lt("sla_due_at", new Date().toISOString())),
-    countQuery(unsafeSupabase.from("governance_recovery_jobs").select("id", { count: "exact", head: true }).in("state", ["PENDING", "RUNNING"])),
+    countQuery(supabase.from("governance_recovery_jobs").select("id", { count: "exact", head: true }).in("state", ["PENDING", "RUNNING"])),
     countQuery(supabase.from("marketplace_disputes").select("id", { count: "exact", head: true }).not("state", "in", "(RESOLVED_BUYER,RESOLVED_SELLER,RESOLVED_PLATFORM,DISMISSED)")),
     countQuery(supabase.from("audit_logs").select("id", { count: "exact", head: true }).gte("created_at", since7d)),
   ]);

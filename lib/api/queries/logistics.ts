@@ -79,7 +79,7 @@ export async function getLiveDispatchQueue(): Promise<DispatchQueue> {
 
 export async function transitionLiveDelivery(input: { deliveryId: string; toStatus: Delivery["status"]; note: string; etaMinutes?: number; failureReason?: string; proofPlaceholder?: string }) {
   const supabase = await createSupabaseServerClient();
-  const { data, error } = await (supabase as never as { rpc: (fn: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: Error | null }> }).rpc("advance_delivery_state", {
+  const { data, error } = await (supabase as any as { rpc: (fn: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: Error | null }> }).rpc("advance_delivery_state", {
     target_delivery_id: input.deliveryId,
     target_status: input.toStatus,
     status_note: input.note,

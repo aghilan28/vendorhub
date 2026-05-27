@@ -69,7 +69,7 @@ export async function refreshProductEmbedding(productId: string) {
       embedding_model: embedding.model,
       embedding_updated_at: new Date().toISOString(),
       search_quality_score: Math.min(100, Math.max(1, Math.round(input.length / 12))),
-    } as never)
+    } as any)
     .eq("id", productId);
 
   if (updateError) throw updateError;

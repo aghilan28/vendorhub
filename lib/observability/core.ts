@@ -12,7 +12,8 @@ function environment() {
 }
 
 function sanitizeValue(value: unknown): string | number | boolean | null | undefined {
-  if (value === undefined || value === null) return value;
+  if (value === undefined) return undefined;
+  if (value === null) return null;
   if (typeof value === "string") return value.length > MAX_VALUE_LENGTH ? `${value.slice(0, MAX_VALUE_LENGTH)}...` : value;
   if (typeof value === "number" || typeof value === "boolean") return value;
   if (value instanceof Date) return value.toISOString();
@@ -24,7 +25,7 @@ export function sanitizeMetadata(metadata?: Record<string, unknown>): Observabil
 
   return Object.fromEntries(
     Object.entries(metadata).map(([key, value]) => [key, SENSITIVE_KEY_PATTERN.test(key) ? "[redacted]" : sanitizeValue(value)]),
-  );
+  ) as ObservabilityMetadata;
 }
 
 function normalizeError(error: unknown): OperationalEvent["error"] | undefined {

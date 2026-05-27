@@ -264,7 +264,7 @@ export async function requestAndInitiateRefund(input: unknown) {
     .single();
 
   if (attemptError || !attempt) {
-    await admin.from("refund_requests").update({ state: "REFUND_RECONCILING", failure_reason: "PAYMENT_ATTEMPT_NOT_FOUND" } as never).eq("id", refundId);
+    await admin.from("refund_requests").update({ state: "REFUND_RECONCILING", failure_reason: "PAYMENT_ATTEMPT_NOT_FOUND" } as any).eq("id", refundId);
     recordOperationalEvent("warn", "refund.reconciliation_required", {
       refundId,
       orderId: parsed.data.orderId,
@@ -275,7 +275,7 @@ export async function requestAndInitiateRefund(input: unknown) {
 
   const paymentAttempt = attempt as PaymentAttemptRow;
   if (!paymentAttempt.provider_payment_id) {
-    await admin.from("refund_requests").update({ state: "REFUND_RECONCILING", failure_reason: "PROVIDER_PAYMENT_ID_MISSING" } as never).eq("id", refundId);
+    await admin.from("refund_requests").update({ state: "REFUND_RECONCILING", failure_reason: "PROVIDER_PAYMENT_ID_MISSING" } as any).eq("id", refundId);
     recordOperationalEvent("warn", "refund.provider_payment_missing", {
       refundId,
       orderId: parsed.data.orderId,
@@ -285,7 +285,7 @@ export async function requestAndInitiateRefund(input: unknown) {
   }
 
   try {
-    await admin.from("refund_requests").update({ state: "REFUND_INITIATED" } as never).eq("id", refundId);
+    await admin.from("refund_requests").update({ state: "REFUND_INITIATED" } as any).eq("id", refundId);
     const refund = await getRazorpayClient().payments.refund(paymentAttempt.provider_payment_id, {
       amount: Math.round(parsed.data.amount * 100),
       speed: "normal",
@@ -305,7 +305,7 @@ export async function requestAndInitiateRefund(input: unknown) {
         provider_refund_id: refund.id,
         raw_payload: refund as unknown as Json,
         completed_at: refund.status === "processed" ? new Date().toISOString() : null,
-      } as never)
+      } as any)
       .eq("id", refundId);
 
     let accountingAdjustment: unknown = null;
@@ -316,7 +316,7 @@ export async function requestAndInitiateRefund(input: unknown) {
       });
 
       if (adjustmentError) {
-        await admin.from("refund_requests").update({ state: "REFUND_RECONCILING", failure_reason: "REFUND_ACCOUNTING_ADJUSTMENT_FAILED" } as never).eq("id", refundId);
+        await admin.from("refund_requests").update({ state: "REFUND_RECONCILING", failure_reason: "REFUND_ACCOUNTING_ADJUSTMENT_FAILED" } as any).eq("id", refundId);
         recordOperationalEvent("error", "refund.accounting_adjustment_failed", {
           refundId,
           orderId: parsed.data.orderId,
@@ -338,7 +338,7 @@ export async function requestAndInitiateRefund(input: unknown) {
   } catch (error) {
     await admin
       .from("refund_requests")
-      .update({ state: "REFUND_FAILED", failure_reason: error instanceof Error ? error.message : "Razorpay refund initiation failed." } as never)
+      .update({ state: "REFUND_FAILED", failure_reason: error instanceof Error ? error.message : "Razorpay refund initiation failed." } as any)
       .eq("id", refundId);
     recordOperationalEvent("error", "refund.provider_failed", {
       refundId,

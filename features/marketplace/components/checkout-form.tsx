@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2, CreditCard, Home, ShieldCheck, Truck } from "lucide-react";
 import { useState } from "react";
-import { type FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,8 +23,8 @@ export function CheckoutForm() {
   const subtotal = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
   const delivery = subtotal > 499 || subtotal === 0 ? 0 : 39;
   const total = subtotal + delivery;
-  const form = useForm<FieldValues>({
-    resolver: zodResolver(CheckoutSchema as never),
+  const form = useForm<any>({
+    resolver: zodResolver(CheckoutSchema as any),
     defaultValues: { recipient: "Ananya Rao", phone: "+91 98765 43210", address: "12, 8th Cross, Malleswaram, Bengaluru", slot: "Fastest available" },
   });
 
@@ -44,7 +44,7 @@ export function CheckoutForm() {
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-5 lg:grid-cols-[1fr_360px]">
+    <form onSubmit={form.handleSubmit(onSubmit as any)} className="grid gap-5 lg:grid-cols-[1fr_360px]">
       <div className="space-y-4">
         <section className="rounded-lg border border-border bg-surface p-4 shadow-sm">
           <h2 className="flex items-center gap-2 font-semibold text-primary-text"><Home className="size-4" /> Delivery address</h2>

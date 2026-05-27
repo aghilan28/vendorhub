@@ -18,7 +18,7 @@ export async function createProductAction(input: unknown) {
 
   const supabase = await createSupabaseServerClient();
   const { images, ...productInput } = parsed.data;
-  const { data: product, error } = await supabase.from("products").insert(productInput as never).select("id,vendor_id,updated_at").single();
+  const { data: product, error } = await supabase.from("products").insert(productInput as any).select("id,vendor_id,updated_at").single();
 
   if (error || !product) {
     throw new AppError("DATABASE_ERROR", "Unable to create product.", error);
@@ -29,7 +29,7 @@ export async function createProductAction(input: unknown) {
       images.map((image: ProductImageInput) => ({
         ...image,
         product_id: product.id,
-      })) as never,
+      })) as any,
     );
     if (imageError) throw new AppError("DATABASE_ERROR", "Unable to attach product images.", imageError);
   }
@@ -56,7 +56,7 @@ export async function updateProductAction(id: string, input: unknown) {
   const supabase = await createSupabaseServerClient();
   const { images, ...productInput } = parsed.data;
   const updatePayload = { ...productInput, updated_at: new Date().toISOString() };
-  const { data: product, error } = await supabase.from("products").update(updatePayload as never).eq("id", id).select("id,vendor_id,updated_at").single();
+  const { data: product, error } = await supabase.from("products").update(updatePayload as any).eq("id", id).select("id,vendor_id,updated_at").single();
 
   if (error || !product) {
     throw new AppError("DATABASE_ERROR", "Unable to update product.", error);
@@ -70,7 +70,7 @@ export async function updateProductAction(id: string, input: unknown) {
         images.map((image: ProductImageInput) => ({
           ...image,
           product_id: id,
-        })) as never,
+        })) as any,
       );
       if (imageError) throw new AppError("DATABASE_ERROR", "Unable to attach product images.", imageError);
     }
@@ -93,7 +93,7 @@ export async function archiveProductAction(id: string) {
   const archivePayload: Database["public"]["Tables"]["products"]["Update"] = { status: "ARCHIVED", deleted_at: new Date().toISOString() };
   const { error } = await supabase
     .from("products")
-    .update(archivePayload as never)
+    .update(archivePayload as any)
     .eq("id", id);
 
   if (error) {

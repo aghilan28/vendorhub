@@ -26,7 +26,7 @@ export async function addToWishlist(userId: string, productId: string) {
   const supabase = (await createSupabaseServerClient()) as UnsafeSupabase;
   const { data, error } = await supabase
     .from("wishlists")
-    .upsert({ user_id: userId, product_id: productId, updated_at: new Date().toISOString() } as never, { onConflict: "user_id,product_id", ignoreDuplicates: true })
+    .upsert({ user_id: userId, product_id: productId, updated_at: new Date().toISOString() } as any, { onConflict: "user_id,product_id", ignoreDuplicates: true })
     .select()
     .maybeSingle();
 

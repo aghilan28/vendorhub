@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BadgeIndianRupee, CreditCard, Home, Loader2, PackageCheck, QrCode, RotateCcw, ShieldCheck, Smartphone, Truck, WalletCards } from "lucide-react";
 import Link from "next/link";
-import { type FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { Alert } from "@/components/ui/alert";
@@ -56,8 +56,6 @@ const CheckoutSchema = z.object({
   orderNote: z.string().max(160).optional(),
 });
 
-type CheckoutInput = z.infer<typeof CheckoutSchema>;
-
 export function TransactionalCheckout() {
   const { t } = useTranslation();
   const { items, clearCart } = useCartStore();
@@ -84,12 +82,12 @@ export function TransactionalCheckout() {
   const pricing = calculateOrderPricing(items);
   const codEligibility = checkCodEligibility({ items, total: pricing.total, pincode: selectedAddress.pincode });
   const checkoutDegraded = !isOnline || ["slow-2g", "2g", "3g", "data saver"].includes(connectionLabel);
-  const form = useForm<FieldValues>({
-    resolver: zodResolver(CheckoutSchema as never),
+  const form = useForm<any>({
+    resolver: zodResolver(CheckoutSchema as any),
     values: { addressId: selectedAddress.id, deliverySlot, paymentMethod, upiApp, orderNote: "" },
   });
 
-  async function onSubmit(values: CheckoutInput) {
+  async function onSubmit(values: any) {
     const address = addresses.find((item) => item.id === values.addressId) ?? selectedAddress;
     const result = await atomicCheckout.mutateAsync({ address, deliverySlot: values.deliverySlot, paymentMethod: values.paymentMethod, orderNote: values.orderNote });
 
@@ -193,7 +191,7 @@ export function TransactionalCheckout() {
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px]">
+    <form onSubmit={form.handleSubmit(onSubmit as any)} className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px]">
       <div className="space-y-4">
         <ProductionExperiencePanel
           compact

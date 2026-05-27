@@ -83,7 +83,7 @@ export function orderStatusForDelivery(status: DeliveryStatus): OrderStatus | nu
 }
 
 export function canDispatchWithPayment(status: PaymentStatus | string) {
-  return [PaymentStatus.Succeeded, PaymentStatus.CodConfirmed, "SUCCEEDED", "COD_CONFIRMED", "PAYMENT_CAPTURED"].includes(status as never);
+  return [PaymentStatus.Succeeded, PaymentStatus.CodConfirmed, "SUCCEEDED", "COD_CONFIRMED", "PAYMENT_CAPTURED"].includes(status as any);
 }
 
 export function isTerminalDeliveryStatus(status: DeliveryStatus) {

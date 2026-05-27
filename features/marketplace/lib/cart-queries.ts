@@ -55,7 +55,7 @@ export async function addToCart(userId: string, productId: string, quantity: num
       product_id: productId,
       quantity,
       updated_at: new Date().toISOString(),
-    } as never,
+    } as any,
     { onConflict: "user_id,product_id" },
   ).select().single();
 
@@ -70,7 +70,7 @@ export async function updateCartItem(itemId: string, quantity: number) {
       eq: (column: string, value: string) => { select: () => { single: () => Promise<{ data: unknown; error: Error | null }> } };
     };
   })
-    .update({ quantity, updated_at: new Date().toISOString() } as never)
+    .update({ quantity, updated_at: new Date().toISOString() } as any)
     .eq("id", itemId)
     .select()
     .single();

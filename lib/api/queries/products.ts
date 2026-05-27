@@ -158,10 +158,10 @@ export async function listVectorRelatedProducts(productId: string, categorySlug:
     return listLiveProducts({ ...input, categorySlug });
   }
 
-  const order = new Map(ids.map((id, index) => [id, index]));
+  const order = new Map<string, number>((ids as string[]).map((id, index) => [id, index]));
   return {
     products: ((data ?? []) as unknown as ProductListRow[])
-      .sort((a, b) => (order.get(a.id) ?? 999) - (order.get(b.id) ?? 999))
+      .sort((a, b) => (order.get(String(a.id)) ?? 999) - (order.get(String(b.id)) ?? 999))
       .map(mapProductRowToProduct),
     count: data?.length ?? 0,
   };

@@ -41,18 +41,18 @@ export async function runAsyncJobHandler(job: AsyncJobRow): Promise<AsyncWorkerR
       const ingestionId = optionalString(payload, "ingestionId");
       const supabase = createAsyncSupabaseClient();
       if (ingestionId) {
-        await supabase.from("webhook_ingestions").update({ state: "PROCESSING", attempts: job.attempts, last_error: null } as never).eq("id", ingestionId);
+        await supabase.from("webhook_ingestions").update({ state: "PROCESSING", attempts: job.attempts, last_error: null } as any).eq("id", ingestionId);
       }
       try {
         const result = await reconcileRazorpayWebhookSystem(requiredString(payload, "rawBody"), optionalString(payload, "signature"));
         if (ingestionId) {
-          await supabase.from("webhook_ingestions").update({ state: "PROCESSED", processed_at: new Date().toISOString(), last_error: null } as never).eq("id", ingestionId);
+          await supabase.from("webhook_ingestions").update({ state: "PROCESSED", processed_at: new Date().toISOString(), last_error: null } as any).eq("id", ingestionId);
         }
         await persistDurableEvent({
           source: "vendorhub.async",
           eventKey: idempotencyKeyFor(["payment.webhook.reconciled", job.id]),
           eventType: "payment.webhook.reconciled",
-          payload: { jobId: job.id, result: result as never },
+          payload: { jobId: job.id, result: result as any },
           subjectType: "async_job",
           subjectId: job.id,
         });
@@ -65,7 +65,7 @@ export async function runAsyncJobHandler(job: AsyncJobRow): Promise<AsyncWorkerR
               state: job.attempts >= job.max_attempts ? "DEAD_LETTER" : "FAILED",
               attempts: job.attempts,
               last_error: error instanceof Error ? error.message : "Webhook reconciliation failed.",
-            } as never)
+            } as any)
             .eq("id", ingestionId);
         }
         throw error;
@@ -74,7 +74,7 @@ export async function runAsyncJobHandler(job: AsyncJobRow): Promise<AsyncWorkerR
 
     case "payment.reconciliation.run": {
       const result = await runFinancialReconciliationSystem(optionalNumber(payload, "batchSize", 100));
-      return { ok: true, metadata: { result: result as never } };
+      return { ok: true, metadata: { result: result as any } };
     }
 
     case "delivery.eta.refresh": {
@@ -85,54 +85,54 @@ export async function runAsyncJobHandler(job: AsyncJobRow): Promise<AsyncWorkerR
         optionalString(payload, "confidence") ?? "MEDIUM",
         optionalString(payload, "reason") ?? "Async ETA refresh.",
       );
-      return { ok: true, metadata: { result: result as never } };
+      return { ok: true, metadata: { result: result as any } };
     }
 
     case "delivery.dispatch.recalculate": {
       const result = await runDispatchIntelligenceSystem(optionalNumber(payload, "batchSize", 100), optionalString(payload, "zoneId"));
-      return { ok: true, metadata: { result: result as never } };
+      return { ok: true, metadata: { result: result as any } };
     }
 
     case "delivery.reconciliation.run": {
       const result = await runDeliveryReconciliationSystem(optionalNumber(payload, "batchSize", 100));
       await runDeliverySlaDetectionSystem();
-      return { ok: true, metadata: { result: result as never } };
+      return { ok: true, metadata: { result: result as any } };
     }
 
     case "delivery.failed.recover": {
       const result = await runDeliveryReconciliationSystem(optionalNumber(payload, "batchSize", 50));
-      return { ok: true, metadata: { result: result as never, recovery: true } };
+      return { ok: true, metadata: { result: result as any, recovery: true } };
     }
 
     case "delivery.provider.failover": {
       const result = await runProviderFailoverSystem(optionalString(payload, "provider"), optionalString(payload, "reason") ?? "provider_health_recheck");
-      return { ok: true, metadata: { result: result as never } };
+      return { ok: true, metadata: { result: result as any } };
     }
 
     case "delivery.routing.refresh": {
       const result = await runRoutingRefreshSystem(optionalString(payload, "zoneId"), optionalNumber(payload, "batchSize", 100));
-      return { ok: true, metadata: { result: result as never } };
+      return { ok: true, metadata: { result: result as any } };
     }
 
     case "delivery.sla.recalculate": {
       const result = await runDynamicSlaEnforcementSystem(optionalNumber(payload, "batchSize", 100));
-      return { ok: true, metadata: { result: result as never } };
+      return { ok: true, metadata: { result: result as any } };
     }
 
     case "delivery.congestion.analyze": {
       const result = await runCongestionAnalysisSystem(optionalString(payload, "zoneId"));
-      return { ok: true, metadata: { result: result as never } };
+      return { ok: true, metadata: { result: result as any } };
     }
 
 
     case "ai.embedding.refresh": {
       const result = await refreshProductEmbedding(requiredString(payload, "productId"));
-      return { ok: true, metadata: { result: result as never } };
+      return { ok: true, metadata: { result: result as any } };
     }
 
     case "ai.embedding.refresh_stale": {
       const result = await refreshStaleProductEmbeddings(optionalNumber(payload, "limit", 20));
-      return { ok: true, metadata: { result: result as never } };
+      return { ok: true, metadata: { result: result as any } };
     }
 
     case "governance.fraud.scan": {
@@ -141,11 +141,11 @@ export async function runAsyncJobHandler(job: AsyncJobRow): Promise<AsyncWorkerR
         source: "vendorhub.async",
         eventKey: idempotencyKeyFor(["governance.fraud.scan.completed", job.id]),
         eventType: "governance.fraud.scan.completed",
-        payload: { jobId: job.id, result: result as never },
+        payload: { jobId: job.id, result: result as any },
         subjectType: "async_job",
         subjectId: job.id,
       });
-      return { ok: true, metadata: { result: result as never } };
+      return { ok: true, metadata: { result: result as any } };
     }
 
     case "governance.moderation.scan": {
@@ -154,11 +154,11 @@ export async function runAsyncJobHandler(job: AsyncJobRow): Promise<AsyncWorkerR
         source: "vendorhub.async",
         eventKey: idempotencyKeyFor(["governance.moderation.scan.completed", job.id]),
         eventType: "governance.moderation.scan.completed",
-        payload: { jobId: job.id, result: result as never },
+        payload: { jobId: job.id, result: result as any },
         subjectType: "async_job",
         subjectId: job.id,
       });
-      return { ok: true, metadata: { result: result as never } };
+      return { ok: true, metadata: { result: result as any } };
     }
 
     case "india.upi.recover": {

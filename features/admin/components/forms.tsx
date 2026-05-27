@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Save, ShieldCheck } from "lucide-react";
-import { type FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { FormField } from "@/components/shared/form-field";
 import { Button } from "@/components/ui/button";
@@ -29,13 +29,13 @@ const settingsSchema = z.object({
 });
 
 export function CategoryForm() {
-  const form = useForm<FieldValues>({
-    resolver: zodResolver(categorySchema as never),
+  const form = useForm<any>({
+    resolver: zodResolver(categorySchema as any),
     defaultValues: { name: "Fresh foods", slug: "fresh-foods", parent: "Marketplace root", status: "active" },
   });
 
   return (
-    <form className="grid gap-4 lg:grid-cols-2" onSubmit={form.handleSubmit(() => undefined)}>
+    <form className="grid gap-4 lg:grid-cols-2" onSubmit={form.handleSubmit((() => undefined) as any)}>
       <FormField label="Category name"><Input {...form.register("name")} /></FormField>
       <FormField label="Slug"><Input {...form.register("slug")} /></FormField>
       <FormField label="Parent category"><Input {...form.register("parent")} /></FormField>
@@ -52,13 +52,13 @@ export function CategoryForm() {
 }
 
 export function GovernanceNoteForm({ label = "Governance action" }: { label?: string }) {
-  const form = useForm<FieldValues>({
-    resolver: zodResolver(noteSchema as never),
+  const form = useForm<any>({
+    resolver: zodResolver(noteSchema as any),
     defaultValues: { decision: "Approve placeholder", note: "" },
   });
 
   return (
-    <form className="space-y-4" onSubmit={form.handleSubmit(() => undefined)}>
+    <form className="space-y-4" onSubmit={form.handleSubmit((() => undefined) as any)}>
       <FormField label={label}>
         <Select defaultValue="Approve placeholder" onValueChange={(value) => form.setValue("decision", value)}>
           <SelectTrigger><SelectValue /></SelectTrigger>
@@ -77,12 +77,12 @@ export function GovernanceNoteForm({ label = "Governance action" }: { label?: st
 }
 
 export function AdminSettingsForm() {
-  const form = useForm<FieldValues>({
-    resolver: zodResolver(settingsSchema as never),
+  const form = useForm<any>({
+    resolver: zodResolver(settingsSchema as any),
     defaultValues: { moderationMode: "Manual review queues", notificationEmail: "ops@vendorhub.local", featureFlags: "Realtime, AI moderation, settlements deferred" },
   });
   return (
-    <form className="grid gap-4 lg:grid-cols-2" onSubmit={form.handleSubmit(() => undefined)}>
+    <form className="grid gap-4 lg:grid-cols-2" onSubmit={form.handleSubmit((() => undefined) as any)}>
       <FormField label="Moderation settings placeholder"><Input {...form.register("moderationMode")} /></FormField>
       <FormField label="Notification settings"><Input {...form.register("notificationEmail")} /></FormField>
       <div className="lg:col-span-2"><FormField label="Feature flag placeholders"><Textarea {...form.register("featureFlags")} /></FormField></div>

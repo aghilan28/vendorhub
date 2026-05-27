@@ -81,7 +81,7 @@ export function InventoryScreen() {
       empty={<EmptyState icon={ClipboardList} title="No inventory records found" description="Inventory filters returned no operational records." />}
       actions={
         <div className="flex gap-2">
-          <Select value={filter} onValueChange={(value) => setFilter(value as never)}>
+          <Select value={filter} onValueChange={(value) => setFilter(value as any)}>
             <SelectTrigger className="w-44"><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All stock</SelectItem>

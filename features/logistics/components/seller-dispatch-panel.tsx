@@ -28,7 +28,7 @@ export function SellerDispatchPanel() {
           <h2 className="font-semibold text-primary-text">Dispatch management</h2>
           <p className="mt-1 text-sm text-secondary-text">Pending dispatch, active deliveries, failed attempts, and manual self-delivery updates.</p>
         </div>
-        <select value={status} onChange={(event) => setStatus(event.target.value as never)} className="focus-ring h-10 rounded-md border border-border bg-surface px-3 text-sm" aria-label="Filter delivery status">
+        <select value={status} onChange={(event) => setStatus(event.target.value as any)} className="focus-ring h-10 rounded-md border border-border bg-surface px-3 text-sm" aria-label="Filter delivery status">
           <option value="all">All deliveries</option>
           {Object.entries(deliveryStatusLabels).map(([value, label]) => (
             <option key={value} value={value}>{label}</option>

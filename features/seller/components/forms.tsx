@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ImagePlus, MapPin, Save, Upload } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { type FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { FormField } from "@/components/shared/form-field";
 import { Button } from "@/components/ui/button";
@@ -46,8 +46,8 @@ const onboardingSchema = z.object({
 export function ProductForm({ mode = "create" }: { mode?: "create" | "edit" }) {
   const { t } = useTranslation();
   const setDraftProductName = useSellerStore((state) => state.setDraftProductName);
-  const form = useForm<FieldValues>({
-    resolver: zodResolver(productSchema as never),
+  const form = useForm<any>({
+    resolver: zodResolver(productSchema as any),
     defaultValues: {
       name: mode === "edit" ? "Farm Fresh Paneer 200g" : "",
       sku: mode === "edit" ? "FRL-DAIRY-PNR-200" : "",
@@ -60,7 +60,7 @@ export function ProductForm({ mode = "create" }: { mode?: "create" | "edit" }) {
   });
 
   return (
-    <form className="space-y-6" onSubmit={form.handleSubmit((value) => setDraftProductName(String(value.name ?? "")))}>
+    <form className="space-y-6" onSubmit={form.handleSubmit(((value: any) => setDraftProductName(String(value.name ?? ""))) as any)}>
       <div className="grid gap-4 lg:grid-cols-2">
         <FormField label="Product name"><Input {...form.register("name")} placeholder="Example: Farm Fresh Paneer 200g" /></FormField>
         <FormField label="SKU"><Input {...form.register("sku")} placeholder="FRL-CAT-ITEM-SIZE" /></FormField>
@@ -120,8 +120,8 @@ export function ProductForm({ mode = "create" }: { mode?: "create" | "edit" }) {
 }
 
 export function StoreSettingsForm() {
-  const form = useForm<FieldValues>({
-    resolver: zodResolver(settingsSchema as never),
+  const form = useForm<any>({
+    resolver: zodResolver(settingsSchema as any),
     defaultValues: {
       storeName: "Freshline Local",
       phone: "+91 98765 43210",
@@ -134,7 +134,7 @@ export function StoreSettingsForm() {
   });
   const previewVendor = { ...marketplaceVendors[0], latitude: Number(form.watch("latitude")), longitude: Number(form.watch("longitude")), serviceRadiusKm: Number(form.watch("serviceRadiusKm")) };
   return (
-    <form className="space-y-5" onSubmit={form.handleSubmit(() => undefined)}>
+    <form className="space-y-5" onSubmit={form.handleSubmit((() => undefined) as any)}>
       <div className="grid gap-4 lg:grid-cols-2">
         <FormField label="Store name"><Input {...form.register("storeName")} /></FormField>
         <FormField label="Contact phone"><Input {...form.register("phone")} /></FormField>
@@ -158,12 +158,12 @@ export function StoreSettingsForm() {
 
 export function OnboardingForm() {
   const { t } = useTranslation();
-  const form = useForm<FieldValues>({
-    resolver: zodResolver(onboardingSchema as never),
+  const form = useForm<any>({
+    resolver: zodResolver(onboardingSchema as any),
     defaultValues: { businessName: "Freshline Local", ownerName: "Akash Kumar", category: "Daily essentials", brandColor: "Emerald", verificationNote: "" },
   });
   return (
-    <form className="space-y-5" onSubmit={form.handleSubmit(() => undefined)}>
+    <form className="space-y-5" onSubmit={form.handleSubmit((() => undefined) as any)}>
       <div className="grid gap-4 lg:grid-cols-2">
         <FormField label={t("seller.businessName")}><Input {...form.register("businessName")} /></FormField>
         <FormField label={t("seller.ownerName")}><Input {...form.register("ownerName")} /></FormField>

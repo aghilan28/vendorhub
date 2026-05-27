@@ -206,7 +206,7 @@ export function SellerDashboardScreen() {
         <div className="grid gap-3 sm:grid-cols-4">
           {["in_stock", "low_stock", "out_of_stock", "archived"].map((state) => (
             <div key={state} className="rounded-md border border-border bg-slate-50 p-3">
-              <p className="text-xs font-medium uppercase text-secondary-text">{statusLabel(state as never)}</p>
+              <p className="text-xs font-medium uppercase text-secondary-text">{statusLabel(state as any)}</p>
               <p className="mt-2 text-2xl font-semibold text-primary-text">{data.inventory.filter((item) => inventoryStatus(item) === state).length}</p>
             </div>
           ))}

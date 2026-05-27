@@ -92,7 +92,7 @@ async function runClaimedJob(job: AsyncJobRow) {
   const isolation = computeIsolationDecision(policy);
   if (shouldDeferHeavyJob(job, policy)) {
     await failAsyncJob(job, "Heavy compute deferred by queue pressure isolation.", policy.saturationBackoffSeconds, false, {
-      isolation: isolation as never,
+      isolation: isolation as any,
     });
     return { jobId: job.id, state: "DEFERRED", jobName: job.job_name, retryDelay: policy.saturationBackoffSeconds };
   }

@@ -82,11 +82,11 @@ export function SearchExperience({ initialQuery = "", products = marketplaceProd
               <option key={item.id} value={item.slug}>{item.name}</option>
             ))}
           </select>
-          <select className="focus-ring h-11 rounded-md border border-border bg-surface px-3 text-sm" value={filters.availability} onChange={(event) => setAvailability(event.target.value as never)} aria-label={t("search.availability")}>
+          <select className="focus-ring h-11 rounded-md border border-border bg-surface px-3 text-sm" value={filters.availability} onChange={(event) => setAvailability(event.target.value as any)} aria-label={t("search.availability")}>
             <option value="available">{t("common.availableNow")}</option>
             <option value="all">{t("search.includeUnavailable")}</option>
           </select>
-          <select className="focus-ring h-11 rounded-md border border-border bg-surface px-3 text-sm" value={filters.sort} onChange={(event) => setSort(event.target.value as never)} aria-label={t("search.sort")}>
+          <select className="focus-ring h-11 rounded-md border border-border bg-surface px-3 text-sm" value={filters.sort} onChange={(event) => setSort(event.target.value as any)} aria-label={t("search.sort")}>
             <option value="intelligent">{t("common.smartMatch")}</option>
             <option value="nearest">{t("common.nearestFirst")}</option>
             <option value="fastest">{t("common.fastestDelivery")}</option>
