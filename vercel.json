@@ -3,9 +3,6 @@
   "buildCommand": "npm run build",
   "installCommand": "npm ci",
   "regions": ["bom1", "sin1", "fra1", "iad1"],
-  "crons": [
-    { "path": "/api/worker", "schedule": "* * * * *" }
-  ],
   "headers": [
     {
       "source": "/(.*)",
