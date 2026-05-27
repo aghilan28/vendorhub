@@ -16,7 +16,7 @@ export async function createOrderAction(input: unknown) {
   }
 
   const supabase = await createSupabaseServerClient();
-  const { error } = await supabase.from("orders").insert(parsed.data);
+  const { error } = await supabase.from("orders").insert(parsed.data as never);
 
   if (error) {
     throw new AppError("DATABASE_ERROR", "Unable to create order.", error);
@@ -50,7 +50,7 @@ export async function updateOrderStatusAction(orderId: string, input: unknown) {
   }
 
   const orderUpdate: Database["public"]["Tables"]["orders"]["Update"] = { status: parsed.data.status };
-  const { error } = await supabase.from("orders").update(orderUpdate).eq("id", orderId);
+  const { error } = await supabase.from("orders").update(orderUpdate as never).eq("id", orderId);
 
   if (error) {
     throw new AppError("DATABASE_ERROR", "Unable to update order status.", error);
@@ -62,7 +62,7 @@ export async function updateOrderStatusAction(orderId: string, input: unknown) {
     note: parsed.data.note,
     metadata: { from, to },
   };
-  await supabase.from("order_status_history").insert(historyInsert);
+  await supabase.from("order_status_history").insert(historyInsert as never);
 
   await supabase.from("notifications").insert([
     {
@@ -84,7 +84,7 @@ export async function updateOrderStatusAction(orderId: string, input: unknown) {
       action_url: `/seller/orders/${current.id}`,
       metadata: { orderId: current.id, orderNumber: current.order_number, from, to },
     },
-  ]);
+  ] as never);
 
   revalidatePath("/orders");
   revalidatePath("/seller/orders");

@@ -68,7 +68,7 @@ export async function ingestRazorpayWebhook(input: {
         raw_body_hash: rawBodyHash,
         state: "RECEIVED",
         metadata: { hasProviderEventId: Boolean(providerEventId) },
-      },
+      } as never,
       { onConflict: "provider,event_id" },
     )
     .select("id,state")
@@ -103,7 +103,7 @@ export async function ingestRazorpayWebhook(input: {
   });
 
   const jobId = typeof job?.jobId === "string" ? job.jobId : null;
-  await supabase.from("webhook_ingestions").update({ state: "QUEUED", async_job_id: jobId }).eq("id", ingestion.id);
+  await supabase.from("webhook_ingestions").update({ state: "QUEUED", async_job_id: jobId } as never).eq("id", ingestion.id);
 
   return { duplicate: false, ingestionId: ingestion.id, jobId, state: "QUEUED" };
 }

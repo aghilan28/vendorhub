@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Save, ShieldCheck } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { type FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import { FormField } from "@/components/shared/form-field";
 import { Button } from "@/components/ui/button";
@@ -29,8 +29,8 @@ const settingsSchema = z.object({
 });
 
 export function CategoryForm() {
-  const form = useForm<z.infer<typeof categorySchema>>({
-    resolver: zodResolver(categorySchema),
+  const form = useForm<FieldValues>({
+    resolver: zodResolver(categorySchema as never),
     defaultValues: { name: "Fresh foods", slug: "fresh-foods", parent: "Marketplace root", status: "active" },
   });
 
@@ -52,8 +52,8 @@ export function CategoryForm() {
 }
 
 export function GovernanceNoteForm({ label = "Governance action" }: { label?: string }) {
-  const form = useForm<z.infer<typeof noteSchema>>({
-    resolver: zodResolver(noteSchema),
+  const form = useForm<FieldValues>({
+    resolver: zodResolver(noteSchema as never),
     defaultValues: { decision: "Approve placeholder", note: "" },
   });
 
@@ -77,8 +77,8 @@ export function GovernanceNoteForm({ label = "Governance action" }: { label?: st
 }
 
 export function AdminSettingsForm() {
-  const form = useForm<z.infer<typeof settingsSchema>>({
-    resolver: zodResolver(settingsSchema),
+  const form = useForm<FieldValues>({
+    resolver: zodResolver(settingsSchema as never),
     defaultValues: { moderationMode: "Manual review queues", notificationEmail: "ops@vendorhub.local", featureFlags: "Realtime, AI moderation, settlements deferred" },
   });
   return (

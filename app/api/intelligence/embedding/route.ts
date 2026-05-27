@@ -43,7 +43,7 @@ export async function POST(request: Request) {
       updated_at: new Date().toISOString(),
     };
     const { error } = await (supabase.from("products") as unknown as UpdateQuery)
-      .update(productUpdates)
+      .update(productUpdates as never)
       .eq("id", parsed.data.product_id);
 
     if (error) {

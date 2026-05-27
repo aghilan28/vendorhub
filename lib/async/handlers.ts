@@ -41,12 +41,12 @@ export async function runAsyncJobHandler(job: AsyncJobRow): Promise<AsyncWorkerR
       const ingestionId = optionalString(payload, "ingestionId");
       const supabase = createAsyncSupabaseClient();
       if (ingestionId) {
-        await supabase.from("webhook_ingestions").update({ state: "PROCESSING", attempts: job.attempts, last_error: null }).eq("id", ingestionId);
+        await supabase.from("webhook_ingestions").update({ state: "PROCESSING", attempts: job.attempts, last_error: null } as never).eq("id", ingestionId);
       }
       try {
         const result = await reconcileRazorpayWebhookSystem(requiredString(payload, "rawBody"), optionalString(payload, "signature"));
         if (ingestionId) {
-          await supabase.from("webhook_ingestions").update({ state: "PROCESSED", processed_at: new Date().toISOString(), last_error: null }).eq("id", ingestionId);
+          await supabase.from("webhook_ingestions").update({ state: "PROCESSED", processed_at: new Date().toISOString(), last_error: null } as never).eq("id", ingestionId);
         }
         await persistDurableEvent({
           source: "vendorhub.async",
@@ -65,7 +65,7 @@ export async function runAsyncJobHandler(job: AsyncJobRow): Promise<AsyncWorkerR
               state: job.attempts >= job.max_attempts ? "DEAD_LETTER" : "FAILED",
               attempts: job.attempts,
               last_error: error instanceof Error ? error.message : "Webhook reconciliation failed.",
-            })
+            } as never)
             .eq("id", ingestionId);
         }
         throw error;

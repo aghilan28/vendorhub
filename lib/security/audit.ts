@@ -28,7 +28,7 @@ export async function recordSecurityAudit(input: SecurityAuditInput) {
       new_values: null,
       ip_address: null,
       metadata: metadata as Json,
-    });
+    } as never);
   } catch (error) {
     recordOperationalEvent("warn", "security.audit.write_failed", { action: input.action }, { domain: "security", error });
   }

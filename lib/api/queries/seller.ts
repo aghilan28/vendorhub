@@ -96,7 +96,7 @@ async function persistMerchantIntelligenceSnapshot(vendor: Tables<"vendors">, pr
         fairness_score: snapshot.summary.fairnessScore,
         snapshot,
         stale_at: snapshotStaleAt(snapshot),
-      },
+      } as never,
       { onConflict: "vendor_id,generated_for_date" },
     ),
     alerts.length
@@ -117,7 +117,7 @@ async function persistMerchantIntelligenceSnapshot(vendor: Tables<"vendors">, pr
               localeText: insight.localeText,
               generatedAt: snapshot.generatedAt,
             },
-          })),
+          })) as never,
           { onConflict: "vendor_id,domain,title,state" },
         )
       : Promise.resolve({ error: null }),

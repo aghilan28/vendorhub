@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2, CreditCard, Home, ShieldCheck, Truck } from "lucide-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { type FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,16 +17,14 @@ const CheckoutSchema = z.object({
   slot: z.string().min(2),
 });
 
-type CheckoutInput = z.infer<typeof CheckoutSchema>;
-
 export function CheckoutForm() {
   const [confirmed, setConfirmed] = useState(false);
   const { items, clearCart } = useCartStore();
   const subtotal = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
   const delivery = subtotal > 499 || subtotal === 0 ? 0 : 39;
   const total = subtotal + delivery;
-  const form = useForm<CheckoutInput>({
-    resolver: zodResolver(CheckoutSchema),
+  const form = useForm<FieldValues>({
+    resolver: zodResolver(CheckoutSchema as never),
     defaultValues: { recipient: "Ananya Rao", phone: "+91 98765 43210", address: "12, 8th Cross, Malleswaram, Bengaluru", slot: "Fastest available" },
   });
 

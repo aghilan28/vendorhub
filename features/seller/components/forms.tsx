@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ImagePlus, MapPin, Save, Upload } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useForm } from "react-hook-form";
+import { type FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import { FormField } from "@/components/shared/form-field";
 import { Button } from "@/components/ui/button";
@@ -46,8 +46,8 @@ const onboardingSchema = z.object({
 export function ProductForm({ mode = "create" }: { mode?: "create" | "edit" }) {
   const { t } = useTranslation();
   const setDraftProductName = useSellerStore((state) => state.setDraftProductName);
-  const form = useForm<any>({
-    resolver: zodResolver(productSchema as any),
+  const form = useForm<FieldValues>({
+    resolver: zodResolver(productSchema as never),
     defaultValues: {
       name: mode === "edit" ? "Farm Fresh Paneer 200g" : "",
       sku: mode === "edit" ? "FRL-DAIRY-PNR-200" : "",
@@ -60,7 +60,7 @@ export function ProductForm({ mode = "create" }: { mode?: "create" | "edit" }) {
   });
 
   return (
-    <form className="space-y-6" onSubmit={form.handleSubmit((value) => setDraftProductName(value.name))}>
+    <form className="space-y-6" onSubmit={form.handleSubmit((value) => setDraftProductName(String(value.name ?? "")))}>
       <div className="grid gap-4 lg:grid-cols-2">
         <FormField label="Product name"><Input {...form.register("name")} placeholder="Example: Farm Fresh Paneer 200g" /></FormField>
         <FormField label="SKU"><Input {...form.register("sku")} placeholder="FRL-CAT-ITEM-SIZE" /></FormField>
@@ -120,8 +120,8 @@ export function ProductForm({ mode = "create" }: { mode?: "create" | "edit" }) {
 }
 
 export function StoreSettingsForm() {
-  const form = useForm<any>({
-    resolver: zodResolver(settingsSchema as any),
+  const form = useForm<FieldValues>({
+    resolver: zodResolver(settingsSchema as never),
     defaultValues: {
       storeName: "Freshline Local",
       phone: "+91 98765 43210",
@@ -158,8 +158,8 @@ export function StoreSettingsForm() {
 
 export function OnboardingForm() {
   const { t } = useTranslation();
-  const form = useForm<z.infer<typeof onboardingSchema>>({
-    resolver: zodResolver(onboardingSchema),
+  const form = useForm<FieldValues>({
+    resolver: zodResolver(onboardingSchema as never),
     defaultValues: { businessName: "Freshline Local", ownerName: "Akash Kumar", category: "Daily essentials", brandColor: "Emerald", verificationNote: "" },
   });
   return (

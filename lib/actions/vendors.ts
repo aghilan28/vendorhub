@@ -13,7 +13,7 @@ export async function startVendorOnboardingAction(input: unknown) {
   }
 
   const supabase = await createSupabaseServerClient();
-  const { error } = await supabase.from("vendors").insert(parsed.data);
+  const { error } = await supabase.from("vendors").insert(parsed.data as never);
 
   if (error) {
     throw new AppError("DATABASE_ERROR", "Unable to start vendor onboarding.", error);

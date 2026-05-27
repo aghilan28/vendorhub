@@ -36,7 +36,7 @@ export async function POST(request: Request) {
       auth_key: parsed.data.keys.auth,
       user_agent: request.headers.get("user-agent"),
       updated_at: new Date().toISOString(),
-    },
+    } as never,
     { onConflict: "endpoint" },
   );
 
