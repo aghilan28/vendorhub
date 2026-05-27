@@ -120,8 +120,8 @@ export function ProductForm({ mode = "create" }: { mode?: "create" | "edit" }) {
 }
 
 export function StoreSettingsForm() {
-  const form = useForm<z.infer<typeof settingsSchema>>({
-    resolver: zodResolver(settingsSchema),
+  const form = useForm<any>({
+    resolver: zodResolver(settingsSchema as any),
     defaultValues: {
       storeName: "Freshline Local",
       phone: "+91 98765 43210",
