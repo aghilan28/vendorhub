@@ -46,8 +46,8 @@ const onboardingSchema = z.object({
 export function ProductForm({ mode = "create" }: { mode?: "create" | "edit" }) {
   const { t } = useTranslation();
   const setDraftProductName = useSellerStore((state) => state.setDraftProductName);
-  const form = useForm<z.infer<typeof productSchema>>({
-    resolver: zodResolver(productSchema),
+  const form = useForm<any>({
+    resolver: zodResolver(productSchema as any),
     defaultValues: {
       name: mode === "edit" ? "Farm Fresh Paneer 200g" : "",
       sku: mode === "edit" ? "FRL-DAIRY-PNR-200" : "",
