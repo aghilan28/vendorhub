@@ -327,3 +327,4 @@ export type PaginatedResult<T> = {
 };
 
 export * from "./commerce-foundation";
+export * from "./catalog-governance";
