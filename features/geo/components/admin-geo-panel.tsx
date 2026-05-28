@@ -10,7 +10,7 @@ import { useLocationStore } from "@/store/location-store";
 export function AdminGeoPanel() {
   const location = useLocationStore((state) => state.currentLocation);
   const ranked = rankVendorsByGeo(marketplaceVendors, location, 15);
-  const avgRadius = marketplaceVendors.reduce((sum, vendor) => sum + (vendor.serviceRadiusKm ?? 5), 0) / marketplaceVendors.length;
+  const avgRadius = marketplaceVendors.length ? marketplaceVendors.reduce((sum, vendor) => sum + (vendor.serviceRadiusKm ?? 5), 0) / marketplaceVendors.length : 0;
 
   return (
     <div className="space-y-4">
@@ -22,10 +22,10 @@ export function AdminGeoPanel() {
       <div className="grid gap-4 xl:grid-cols-[1fr_360px]">
         <div className="rounded-md border border-border bg-slate-50 p-4">
           <div className="flex items-center justify-between gap-3">
-            <p className="font-medium text-primary-text">Regional activity placeholder</p>
-            <Badge variant="secondary">Chennai density view</Badge>
+            <p className="font-medium text-primary-text">Regional activity</p>
+            <Badge variant="secondary">Awaiting real sellers</Badge>
           </div>
-          <OperationalBarChart values={[42, 68, 54, 73, 88, 61, 49, 77, 92, 58]} />
+          <OperationalBarChart values={[0]} />
         </div>
         <div className="space-y-2">
           {ranked.slice(0, 5).map((vendor) => (

@@ -11,7 +11,7 @@ export function HomepageDeliveryIntelligence() {
     <section className="grid gap-4 lg:grid-cols-3">
       <DeliverySignal icon={Truck} label="Fast delivery nearby" value={`${readyProducts.length} ready`} detail="Local sellers can pack these in under 30 minutes" />
       <DeliverySignal icon={Clock3} label="Same-day delivery" value="Available" detail="Choose the timing that works for your home" />
-      <DeliverySignal icon={PackageCheck} label="Orders moving" value={`${seedDeliveries.filter((delivery) => delivery.status !== "FAILED").length} active`} detail="Packed orders are easy to follow" />
+      <DeliverySignal icon={PackageCheck} label="Orders moving" value={`${seedDeliveries.filter((delivery) => delivery.status !== "FAILED").length} active`} detail="Delivery telemetry is empty until real orders begin" />
     </section>
   );
 }

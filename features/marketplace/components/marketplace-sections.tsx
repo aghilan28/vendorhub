@@ -4,15 +4,16 @@ import { BadgeCheck, Clock3, PackageCheck, Search, Star, Store } from "lucide-re
 import Image from "next/image";
 import Link from "next/link";
 import { ProductGrid } from "@/components/commerce/product-grid";
+import { EmptyState } from "@/components/feedback/empty-state";
 import { useCurrentLocale } from "@/components/i18n/language-switcher";
 import { localizeCategory, localizeProduct, localizeVendor } from "@/features/localization/catalog";
 import { getVendorActivityLine, getVendorHumanLine, marketplaceCategories, marketplaceProducts, marketplaceVendors } from "@/features/marketplace/lib/data";
 import type { Category, Product, Vendor } from "@/types";
 
 const heroTrustSignals = [
-  { label: "128", detail: "verified sellers", icon: BadgeCheck },
-  { label: "22 min", detail: "avg delivery", icon: Clock3 },
-  { label: "96%", detail: "in-stock accuracy", icon: PackageCheck },
+  { label: "0", detail: "listed products", icon: BadgeCheck },
+  { label: "Ready", detail: "catalog ingestion", icon: Clock3 },
+  { label: "Clean", detail: "AI/search dataset", icon: PackageCheck },
 ] as const;
 
 export function MarketplaceHero() {
@@ -20,10 +21,10 @@ export function MarketplaceHero() {
     <section className="rounded-lg border border-emerald-100 bg-gradient-to-b from-white to-emerald-50/55 px-4 py-8 shadow-sm sm:px-8 sm:py-11">
       <div className="mx-auto max-w-4xl text-center">
         <h1 className="text-3xl font-semibold leading-tight text-primary-text sm:text-5xl">
-          Fresh groceries and essentials from your neighbourhood.
+          Marketplace catalog reset for verified regional listings.
         </h1>
         <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-secondary-text sm:text-lg">
-          Verified local sellers. Honest stock. Delivered in under 30 minutes.
+          The marketplace is empty, clean, and ready for real South Indian hyperlocal catalog ingestion.
         </p>
         <form action="/search" className="mx-auto mt-7 flex max-w-3xl items-center gap-2 rounded-full border border-emerald-200 bg-white p-2 shadow-[0_18px_45px_rgba(15,23,42,0.10)] transition focus-within:border-emerald-500 focus-within:shadow-[0_20px_50px_rgba(5,150,105,0.18)]">
           <label className="sr-only" htmlFor="home-search">Search products</label>
@@ -32,7 +33,7 @@ export function MarketplaceHero() {
             id="home-search"
             name="q"
             className="h-12 min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-secondary-text"
-            placeholder="Search tomatoes, dosa batter, jasmine flowers..."
+            placeholder="Search will activate after verified products are ingested"
           />
           <button type="submit" className="focus-ring min-h-12 rounded-full bg-brand px-5 text-sm font-semibold text-white transition hover:bg-emerald-700 active:scale-[0.98]">
             Search
@@ -56,6 +57,10 @@ export function CategoryRail({ categories = marketplaceCategories }: { categorie
   const locale = useCurrentLocale();
   const localizedCategories = categories.map((category) => localizeCategory(category, locale));
 
+  if (!localizedCategories.length) {
+    return <EmptyState icon={PackageCheck} title="Catalog population in progress" description="Real regional categories can now be ingested cleanly." />;
+  }
+
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
       {localizedCategories.map((category) => (
@@ -74,6 +79,10 @@ export function CategoryRail({ categories = marketplaceCategories }: { categorie
 export function VendorRail({ vendors = marketplaceVendors }: { vendors?: Vendor[] }) {
   const locale = useCurrentLocale();
   const localizedVendors = vendors.map((vendor) => localizeVendor(vendor, locale));
+
+  if (!localizedVendors.length) {
+    return <EmptyState icon={Store} title="No marketplace sellers yet" description="Seller onboarding remains available for verified real vendors." />;
+  }
 
   return (
     <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">

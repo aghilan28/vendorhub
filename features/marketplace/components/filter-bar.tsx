@@ -27,8 +27,8 @@ const sortLabels: Record<string, string> = {
   availability: "In stock",
 };
 
-const simpleSuggestions = ["tomatoes", "dosa batter", "filter coffee", "jasmine flowers", "paneer puffs", "baby wipes"];
-const recentSearches = ["tomatoes", "filter coffee", "idli batter"];
+const simpleSuggestions: string[] = [];
+const recentSearches: string[] = [];
 
 const priceLabels = [
   { value: "all", label: "Any price" },
@@ -102,7 +102,7 @@ export function SearchExperience({ initialQuery = "", products = marketplaceProd
                 recordEvent({ type: "search_interaction", query: event.target.value, source: "search_input" });
               }}
               className="h-12 rounded-full pl-12 text-base"
-              placeholder="Search tomatoes, dosa batter, jasmine flowers..."
+              placeholder="Search will activate after verified products are ingested"
               aria-label={t("search.aria")}
             />
             {showSuggestions ? (
@@ -199,7 +199,7 @@ export function SearchExperience({ initialQuery = "", products = marketplaceProd
           <EmptyState
             icon={Search}
             title={`No results found for '${query || "this search"}'`}
-            description="Try searching for fruits, snacks, beverages, care products, or a nearby seller."
+            description="The demo search index has been reset. Verified products will appear after real catalog ingestion."
             actionLabel={t("common.resetSearch")}
           />
           <div className="flex justify-center">

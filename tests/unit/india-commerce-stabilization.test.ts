@@ -13,7 +13,7 @@ describe("stabilization s4 india commerce", () => {
   it("normalizes vernacular and transliterated discovery queries", () => {
     expect(normalizeVernacularQuery("tamatar", "hi").expansions).toContain("tomato");
     expect(normalizeVernacularQuery("தக்காளி", "ta").expansions).toContain("tomato");
-    expect(normalizeVernacularQuery("कुर्सी", "hi").expansions).toContain("office chair");
+    expect(normalizeVernacularQuery("कुर्सी", "hi").expansions).toContain("chair");
   });
 
   it("detects localization quality gaps and falls back safely", () => {

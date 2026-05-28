@@ -88,7 +88,7 @@ export function OrdersScreen() {
                 {orderStates.map((state) => <SelectItem key={state} value={state}>{state.replaceAll("_", " ")}</SelectItem>)}
               </SelectContent>
             </Select>
-            <Button variant="secondary"><FileText /> Export placeholder</Button>
+            <Button variant="secondary"><FileText /> Export</Button>
           </div>
         }
       />

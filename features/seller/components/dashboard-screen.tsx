@@ -82,10 +82,10 @@ export function SellerDashboardScreen() {
       <TrustStrip
         label="Seller operational trust indicators"
         items={[
-          { label: "Payouts", value: kycProfile.bank.payoutReadiness, icon: ShieldCheck },
+          { label: "Payouts", value: kycProfile?.bank.payoutReadiness ?? "not started", icon: ShieldCheck },
           { label: "Inventory", value: `${lowStock.length} items need attention`, icon: AlertTriangle },
           { label: "Fulfillment", value: `${activeOrders.length} active orders`, icon: ClipboardCheck },
-          { label: "Compliance", value: kycProfile.verificationState.replace("_", " "), icon: ShieldCheck },
+          { label: "Compliance", value: kycProfile?.verificationState.replace("_", " ") ?? "not started", icon: ShieldCheck },
         ]}
       />
 
@@ -101,19 +101,19 @@ export function SellerDashboardScreen() {
         <div className="grid gap-4 md:grid-cols-4">
           <div className="rounded-md bg-slate-50 p-3">
             <p className="text-xs text-secondary-text">Verification</p>
-            <div className="mt-2"><VerificationStateBadge state={kycProfile.verificationState} /></div>
+            <div className="mt-2">{kycProfile ? <VerificationStateBadge state={kycProfile.verificationState} /> : <span className="text-sm text-secondary-text">Not started</span>}</div>
           </div>
           <div className="rounded-md bg-slate-50 p-3">
             <p className="text-xs text-secondary-text">Trust level</p>
-            <div className="mt-2"><TrustLevelBadge level={kycProfile.trustScore.level} /></div>
+            <div className="mt-2">{kycProfile ? <TrustLevelBadge level={kycProfile.trustScore.level} /> : <span className="text-sm text-secondary-text">Not scored</span>}</div>
           </div>
           <div className="rounded-md bg-slate-50 p-3">
             <p className="text-xs text-secondary-text">GST</p>
-            <p className="mt-2 font-semibold text-primary-text">{kycProfile.gst.invoiceEnabled ? "Invoice enabled" : "Review pending"}</p>
+            <p className="mt-2 font-semibold text-primary-text">{kycProfile?.gst.invoiceEnabled ? "Invoice enabled" : "Not started"}</p>
           </div>
           <div className="rounded-md bg-slate-50 p-3">
             <p className="text-xs text-secondary-text">Payout readiness</p>
-            <p className="mt-2 font-semibold text-primary-text">{kycProfile.bank.payoutReadiness}</p>
+            <p className="mt-2 font-semibold text-primary-text">{kycProfile?.bank.payoutReadiness ?? "not started"}</p>
           </div>
         </div>
       </OperationalCard>

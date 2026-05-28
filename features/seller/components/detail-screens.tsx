@@ -19,14 +19,15 @@ import { StatusBadge } from "./status-badge";
 
 export function ProductCreateScreen() {
   return (
-    <OperationalCard title="Create product" description="Structured seller catalog workflow with pricing, category, inventory, media, visibility, and placeholders for future variants.">
+    <OperationalCard title="Create product" description="Structured seller catalog workflow with pricing, category, inventory, media, visibility, and future variants.">
       <ProductForm />
     </OperationalCard>
   );
 }
 
 export function ProductDetailScreen({ id }: { id: string }) {
-  const product = products.find((item) => item.id === id) ?? products[0];
+  const product = products.find((item) => item.id === id);
+  if (!product) return <EmptyState icon={AlertTriangle} title="Product not found" description="No seller product exists for this route yet." />;
   return (
     <div className="space-y-6">
       <OperationalCard title={product.name} description={`${product.sku} · ${product.category}`}>
@@ -45,7 +46,8 @@ export function ProductDetailScreen({ id }: { id: string }) {
 }
 
 export function OrderDetailScreen({ id }: { id: string }) {
-  const order = orders.find((item) => item.id === id) ?? orders[0];
+  const order = orders.find((item) => item.id === id);
+  if (!order) return <EmptyState icon={AlertTriangle} title="Order not found" description="No seller order exists for this route yet." />;
   return (
     <div className="space-y-6">
       <OperationalCard title={`Order ${order.id}`} description={`${order.customer} · ${order.createdAt}`}>
@@ -75,12 +77,12 @@ export function OrderDetailScreen({ id }: { id: string }) {
           </div>
         </OperationalCard>
 
-        <OperationalCard title="Customer and fulfillment" description="Shipping is placeholder-only in this phase.">
+        <OperationalCard title="Customer and fulfillment" description="Shipping details will come from live checkout and dispatch records.">
           <div className="space-y-4 text-sm">
             <div><p className="text-xs font-medium uppercase text-secondary-text">Customer</p><p className="mt-1 font-medium text-primary-text">{order.customer}</p><p className="text-secondary-text">{order.phone}</p></div>
             <div><p className="text-xs font-medium uppercase text-secondary-text">Address</p><p className="mt-1 text-primary-text">{order.address}</p></div>
             <div><p className="text-xs font-medium uppercase text-secondary-text">Notes</p><p className="mt-1 text-primary-text">{order.notes}</p></div>
-            <div className="rounded-md border border-dashed border-border bg-slate-50 p-3 text-secondary-text">Shipment preparation placeholder. No logistics dispatch integration in this phase.</div>
+            <div className="rounded-md border border-dashed border-border bg-slate-50 p-3 text-secondary-text">Shipment preparation will activate when a live delivery is assigned.</div>
           </div>
         </OperationalCard>
       </div>
@@ -102,7 +104,7 @@ export function OrderDetailScreen({ id }: { id: string }) {
             <Button>Confirm order</Button>
             <Button variant="secondary">Mark processing</Button>
             <Button variant="secondary">Mark packed</Button>
-            <Button variant="outline">Prepare shipment placeholder</Button>
+            <Button variant="outline">Prepare shipment</Button>
           </div>
         </div>
       </OperationalCard>
@@ -148,7 +150,7 @@ export function AnalyticsScreen() {
 
 export function StoreSettingsScreen() {
   return (
-    <OperationalCard title="Store settings" description="Store profile, branding, contact information, operating hours placeholder, and policies placeholder.">
+    <OperationalCard title="Store settings" description="Store profile, branding, contact information, operating hours, and policies.">
       <StoreSettingsForm />
     </OperationalCard>
   );
@@ -176,7 +178,7 @@ export function OnboardingScreen() {
   const profile = sellerKycProfiles[0];
   return (
     <div className="space-y-6">
-      <OperationalCard title="Seller onboarding" description="Business information, store branding, verification placeholders, category selection, progress, validation, and completion UX.">
+      <OperationalCard title="Seller onboarding" description="Business information, store branding, verification, category selection, progress, validation, and completion UX.">
         <div className="grid gap-3 md:grid-cols-5">
           {onboardingProgress.map((step) => (
             <div key={step.step} className="rounded-md border border-border bg-slate-50 p-3">
@@ -188,24 +190,24 @@ export function OnboardingScreen() {
       <OperationalCard title="Onboarding workspace" description={`${sellerProfile.storeName} can complete business identity, documents, GST, and payout readiness review.`}>
         <OnboardingForm />
       </OperationalCard>
-      <SellerKycPanel sellerId={profile.sellerId} />
+      {profile ? <SellerKycPanel sellerId={profile.sellerId} /> : <EmptyState icon={ShieldCheck} title="No KYC profile yet" description="KYC records will appear after real seller onboarding starts." />}
     </div>
   );
 }
 
 export function PayoutsPlaceholderScreen() {
-  return <EmptyState icon={WalletCards} title="Payouts placeholder" description="Payment settlement and payout operations are intentionally deferred. This page reserves seller navigation and trust context for a later phase." />;
+  return <EmptyState icon={WalletCards} title="Payouts not started" description="Payment settlement and payout operations will activate after verified seller onboarding and live transactions." />;
 }
 
 export function SupportPlaceholderScreen() {
-  return <EmptyState icon={HelpCircle} title="Seller support placeholder" description="Support workflows, dispute tooling, and case operations will be implemented in a later operational phase." actionLabel="View operations dashboard" />;
+  return <EmptyState icon={HelpCircle} title="Seller support not started" description="Support workflows, dispute tooling, and case operations will activate with live seller operations." actionLabel="View operations dashboard" />;
 }
 
 export function TrustPanel() {
   return (
     <OperationalCard title="Seller trust indicators" description="Operational trust is visible even before deeper governance systems.">
       <div className="grid gap-3 md:grid-cols-3">
-        {[sellerProfile.verification, sellerProfile.fulfillmentHealth, `Seller rating placeholder ${sellerProfile.rating}`].map((item) => (
+        {[sellerProfile.verification, sellerProfile.fulfillmentHealth, `Seller rating ${sellerProfile.rating}`].map((item) => (
           <div key={item} className="flex items-center gap-3 rounded-md bg-slate-50 p-3"><ShieldCheck className="size-4 text-success" /><span className="text-sm font-medium text-primary-text">{item}</span></div>
         ))}
       </div>

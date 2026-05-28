@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertTriangle, BarChart3, Boxes, Languages, MapPin, PackageCheck, Search, ShieldCheck, Tags, TrendingUp } from "lucide-react";
+import { EmptyState } from "@/components/feedback/empty-state";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/formatting/currency";
 import type { MerchantInsightSeverity, MerchantIntelligenceSnapshot } from "../types";
@@ -29,6 +30,11 @@ export function MerchantIntelligencePanel({ intelligence }: { intelligence: Merc
   const restock = intelligence.inventory.filter((item) => item.risk === "restock" || item.risk === "watch").slice(0, 4);
   const discoverability = intelligence.discoverability.slice(0, 4);
   const pricing = intelligence.pricing.slice(0, 3);
+  const localizedGuidance = [intelligence.insights[0]?.localeText.ta, intelligence.insights[0]?.localeText.hi].filter(Boolean);
+  const fairnessGuidance =
+    intelligence.coldStart.isColdStart
+      ? intelligence.coldStart.recommendations[0] ?? "Cold-start guidance will be generated after real catalog and order signals are available."
+      : "Guidance balances performance history with listing quality, stock readiness, and fulfillment reliability.";
 
   return (
     <div className="space-y-6">
@@ -89,7 +95,7 @@ export function MerchantIntelligencePanel({ intelligence }: { intelligence: Merc
             <p className="mt-1 text-xs text-secondary-text">Explainable 7-day demand and stockout risk.</p>
           </div>
           <div className="divide-y divide-border">
-            {topForecasts.map((forecast) => (
+            {topForecasts.length ? topForecasts.map((forecast) => (
               <div key={forecast.productId} className="grid gap-3 p-4 md:grid-cols-[1fr_140px]">
                 <div>
                   <p className="font-medium text-primary-text">{forecast.productName}</p>
@@ -104,7 +110,7 @@ export function MerchantIntelligencePanel({ intelligence }: { intelligence: Merc
                   <Badge variant={forecast.stockoutRisk === "high" ? "danger" : forecast.stockoutRisk === "medium" ? "warning" : "secondary"}>{forecast.stockoutRisk} risk</Badge>
                 </div>
               </div>
-            ))}
+            )) : <EmptyState icon={TrendingUp} title="No demand forecasts yet" description="Forecasts will appear after real products and order signals are ingested." />}
           </div>
         </section>
 
@@ -114,7 +120,7 @@ export function MerchantIntelligencePanel({ intelligence }: { intelligence: Merc
             <p className="mt-1 text-xs text-secondary-text">Reorder guidance, turnover, and dead-stock prevention.</p>
           </div>
           <div className="divide-y divide-border">
-            {restock.map((item) => (
+            {restock.length ? restock.map((item) => (
               <div key={item.productId} className="grid gap-3 p-4 md:grid-cols-[1fr_150px]">
                 <div>
                   <p className="font-medium text-primary-text">{item.productName}</p>
@@ -126,7 +132,7 @@ export function MerchantIntelligencePanel({ intelligence }: { intelligence: Merc
                   <Badge variant={item.risk === "restock" ? "danger" : "warning"}>{item.risk.replace("_", " ")}</Badge>
                 </div>
               </div>
-            ))}
+            )) : <EmptyState icon={Boxes} title="No inventory guidance yet" description="Inventory intelligence will appear after verified stock is uploaded." />}
           </div>
         </section>
       </div>
@@ -137,7 +143,7 @@ export function MerchantIntelligencePanel({ intelligence }: { intelligence: Merc
             <h2 id="discoverability-heading" className="flex items-center gap-2 text-sm font-semibold text-primary-text"><Search className="size-4" /> Discoverability</h2>
           </div>
           <div className="space-y-3 p-4">
-            {discoverability.map((item) => (
+            {discoverability.length ? discoverability.map((item) => (
               <div key={item.productId} className="rounded-md border border-border p-3">
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-sm font-medium text-primary-text">{item.productName}</p>
@@ -145,7 +151,7 @@ export function MerchantIntelligencePanel({ intelligence }: { intelligence: Merc
                 </div>
                 <p className="mt-2 text-xs text-secondary-text">{item.recommendation}</p>
               </div>
-            ))}
+            )) : <EmptyState icon={Search} title="No discoverability signals" description="Search visibility guidance will appear after real catalog items are indexed." />}
           </div>
         </section>
 
@@ -154,13 +160,13 @@ export function MerchantIntelligencePanel({ intelligence }: { intelligence: Merc
             <h2 id="pricing-heading" className="flex items-center gap-2 text-sm font-semibold text-primary-text"><Tags className="size-4" /> Pricing guidance</h2>
           </div>
           <div className="space-y-3 p-4">
-            {pricing.map((item) => (
+            {pricing.length ? pricing.map((item) => (
               <div key={item.productId} className="rounded-md border border-border p-3">
                 <p className="text-sm font-medium text-primary-text">{item.productName}</p>
                 <p className="mt-1 text-xs text-secondary-text">{formatCurrency(item.currentPrice)} · {item.position}</p>
                 <p className="mt-2 text-xs text-secondary-text">{item.suggestion}</p>
               </div>
-            ))}
+            )) : <EmptyState icon={Tags} title="No pricing guidance yet" description="Pricing signals will appear after verified products and local demand data are available." />}
           </div>
         </section>
 
@@ -186,13 +192,12 @@ export function MerchantIntelligencePanel({ intelligence }: { intelligence: Merc
         </div>
         <div className="operational-surface rounded-lg p-4">
           <h2 className="flex items-center gap-2 text-sm font-semibold text-primary-text"><Languages className="size-4" /> Localized guidance</h2>
-          <p className="mt-3 text-sm text-secondary-text">{intelligence.insights[0]?.localeText.ta}</p>
-          <p className="mt-2 text-sm text-secondary-text">{intelligence.insights[0]?.localeText.hi}</p>
+          {localizedGuidance.length ? localizedGuidance.map((item) => <p key={item} className="mt-2 text-sm text-secondary-text">{item}</p>) : <p className="mt-3 text-sm text-secondary-text">Localized seller guidance will appear after live catalog signals are available.</p>}
         </div>
         <div className="operational-surface rounded-lg p-4">
           <h2 className="flex items-center gap-2 text-sm font-semibold text-primary-text"><ShieldCheck className="size-4" /> Fairness guardrail</h2>
           <p className="mt-3 text-sm text-secondary-text">
-            {intelligence.coldStart.isColdStart ? intelligence.coldStart.recommendations[0] : "Guidance balances performance history with listing quality, stock readiness, and fulfillment reliability."}
+            {fairnessGuidance}
           </p>
         </div>
       </section>

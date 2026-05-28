@@ -10,8 +10,8 @@ export default function NotFound() {
       <EmptyState
         icon={Compass}
         title="This route is not available"
-        description="VendorHub kept the session intact. Continue with the demo path or return to marketplace discovery."
-        action={<Button asChild><Link href="/demo">Open demo path</Link></Button>}
+        description="VendorHub kept the session intact. Return to marketplace discovery or continue through the available workspace."
+        action={<Button asChild><Link href="/">Return to marketplace</Link></Button>}
       />
     </PageContainer>
   );

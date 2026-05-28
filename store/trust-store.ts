@@ -25,7 +25,7 @@ export const useTrustStore = create<TrustState>()(
   persist(
     (set) => ({
       profiles: sellerKycProfiles,
-      selectedSellerId: sellerKycProfiles[0].sellerId,
+      selectedSellerId: sellerKycProfiles[0]?.sellerId ?? "",
       complianceFilter: "all",
       uploadState: "idle",
       setSelectedSeller: (selectedSellerId) => set({ selectedSellerId }),

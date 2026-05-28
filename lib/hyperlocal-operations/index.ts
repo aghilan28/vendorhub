@@ -469,8 +469,8 @@ export function buildGeoCommerceProfile(products: Product[], inventory: Operatio
   const basePoint = {
     locality: context.locality,
     city: context.city,
-    latitude: products[0]?.vendor.latitude,
-    longitude: products[0]?.vendor.longitude,
+    latitude: products.find((product) => product.vendor.latitude !== undefined)?.vendor.latitude,
+    longitude: products.find((product) => product.vendor.longitude !== undefined)?.vendor.longitude,
   };
 
   return {

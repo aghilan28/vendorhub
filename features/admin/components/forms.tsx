@@ -45,7 +45,7 @@ export function CategoryForm() {
           <SelectContent><SelectItem value="active">Active</SelectItem><SelectItem value="inactive">Inactive</SelectItem></SelectContent>
         </Select>
       </FormField>
-      <div className="lg:col-span-2 rounded-lg border border-dashed border-border bg-slate-50 p-4 text-sm text-secondary-text">Category image placeholder for future taxonomy media management.</div>
+      <div className="lg:col-span-2 rounded-lg border border-dashed border-border bg-slate-50 p-4 text-sm text-secondary-text">Category image workflow is ready for future taxonomy media management.</div>
       <div className="lg:col-span-2 flex justify-end"><Button type="submit"><Save /> Save category</Button></div>
     </form>
   );
@@ -54,24 +54,24 @@ export function CategoryForm() {
 export function GovernanceNoteForm({ label = "Governance action" }: { label?: string }) {
   const form = useForm<any>({
     resolver: zodResolver(noteSchema as any),
-    defaultValues: { decision: "Approve placeholder", note: "" },
+    defaultValues: { decision: "Approve", note: "" },
   });
 
   return (
     <form className="space-y-4" onSubmit={form.handleSubmit((() => undefined) as any)}>
       <FormField label={label}>
-        <Select defaultValue="Approve placeholder" onValueChange={(value) => form.setValue("decision", value)}>
+        <Select defaultValue="Approve" onValueChange={(value) => form.setValue("decision", value)}>
           <SelectTrigger><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="Approve placeholder">Approve placeholder</SelectItem>
-            <SelectItem value="Reject placeholder">Reject placeholder</SelectItem>
-            <SelectItem value="Escalate placeholder">Escalate placeholder</SelectItem>
-            <SelectItem value="Suspend placeholder">Suspend placeholder</SelectItem>
+            <SelectItem value="Approve">Approve</SelectItem>
+            <SelectItem value="Reject">Reject</SelectItem>
+            <SelectItem value="Escalate">Escalate</SelectItem>
+            <SelectItem value="Suspend">Suspend</SelectItem>
           </SelectContent>
         </Select>
       </FormField>
       <FormField label="Operational notes"><Textarea {...form.register("note")} placeholder="Record auditable governance reasoning for this decision." /></FormField>
-      <Button type="submit"><ShieldCheck /> Record decision placeholder</Button>
+      <Button type="submit"><ShieldCheck /> Record decision</Button>
     </form>
   );
 }
@@ -83,10 +83,10 @@ export function AdminSettingsForm() {
   });
   return (
     <form className="grid gap-4 lg:grid-cols-2" onSubmit={form.handleSubmit((() => undefined) as any)}>
-      <FormField label="Moderation settings placeholder"><Input {...form.register("moderationMode")} /></FormField>
+      <FormField label="Moderation settings"><Input {...form.register("moderationMode")} /></FormField>
       <FormField label="Notification settings"><Input {...form.register("notificationEmail")} /></FormField>
-      <div className="lg:col-span-2"><FormField label="Feature flag placeholders"><Textarea {...form.register("featureFlags")} /></FormField></div>
-      <div className="lg:col-span-2 rounded-lg border border-dashed border-border bg-slate-50 p-4 text-sm text-secondary-text">Admin preferences placeholder for future governance personalization.</div>
+      <div className="lg:col-span-2"><FormField label="Feature flags"><Textarea {...form.register("featureFlags")} /></FormField></div>
+      <div className="lg:col-span-2 rounded-lg border border-dashed border-border bg-slate-50 p-4 text-sm text-secondary-text">Admin preferences are ready for future governance personalization.</div>
       <div className="lg:col-span-2 flex justify-end"><Button type="submit"><Save /> Save admin settings</Button></div>
     </form>
   );

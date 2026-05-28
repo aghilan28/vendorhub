@@ -14,16 +14,16 @@ export default async function HomePage() {
       <SectionWrapper title="Categories">
         <CategoryRail />
       </SectionWrapper>
-      <SectionWrapper title="Nearby products" description="Fresh picks available around you.">
+      <SectionWrapper title="Marketplace catalog" description="Real verified products will appear after ingestion.">
         <ProductGrid products={products.slice(0, 8)} />
       </SectionWrapper>
-      <SectionWrapper title="Morning essentials" description="Idli batter, coffee, bananas, and fresh breakfast picks from local stores.">
-        <ProductGrid products={products.filter((product) => /breakfast|coffee|banana|batter|loaf|croissant/i.test(`${product.name} ${product.tags?.join(" ")}`)).slice(0, 4)} />
+      <SectionWrapper title="Regional ingestion queue" description="Breakfast, fresh, pooja, fish, pharmacy, and kirana catalogs are ready to be populated from real sources.">
+        <ProductGrid products={products.filter((product) => /breakfast|coffee|banana|batter|loaf|fresh|pooja|fish|pharmacy|kirana/i.test(`${product.name} ${product.tags?.join(" ")}`)).slice(0, 4)} />
       </SectionWrapper>
       <SectionWrapper title="Popular nearby sellers" description="Trusted shops serving your neighbourhood.">
         <VendorRail />
       </SectionWrapper>
-      <SectionWrapper title="Evening snacks" description="Tea-time favourites and quick meal picks for tonight.">
+      <SectionWrapper title="Discovery graph" description="Recommendations will stay empty until verified product and behavior signals exist.">
         <ProductGrid products={products.filter((product) => /snack|puff|wrap|meal|makhana|biryani/i.test(`${product.name} ${product.tags?.join(" ")}`)).slice(0, 4)} />
       </SectionWrapper>
       <SectionWrapper title="Recommended for you">

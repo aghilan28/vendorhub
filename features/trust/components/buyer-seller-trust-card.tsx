@@ -6,6 +6,7 @@ import { TrustLevelBadge, VerificationStateBadge } from "./trust-badges";
 
 export function BuyerSellerTrustCard({ vendor }: { vendor: Vendor }) {
   const profile = getTrustProfileForVendor(vendor.id);
+  if (!profile) return null;
 
   return (
     <section className="rounded-lg border border-border bg-surface p-4 shadow-sm">

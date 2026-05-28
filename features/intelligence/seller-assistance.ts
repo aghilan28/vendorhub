@@ -18,7 +18,7 @@ export function buildSellerListingGuidance(product: Pick<SellerProduct, "name" |
     qualityScore,
     titleSuggestions: [
       hasSize ? product.name : `${product.name} ${product.category === "Dairy" ? "200g" : "Pack"}`,
-      `${product.name} - ${product.category} from Freshline Local`,
+      `${product.name} - ${product.category} from your verified store`,
       `${product.name} for same-day local delivery`,
     ],
     descriptionSuggestions: [
@@ -34,7 +34,7 @@ export function buildSellerListingGuidance(product: Pick<SellerProduct, "name" |
     ],
     pricingSignals: [
       product.stock <= product.lowStockThreshold ? "Low stock: avoid aggressive discounting until replenished." : "Stock is healthy enough for a small visibility promotion.",
-      "Pricing guidance is a placeholder and should be reviewed against seller margin.",
+      "Review pricing guidance against seller margin before publishing.",
     ],
   } satisfies SellerListingGuidance;
 }

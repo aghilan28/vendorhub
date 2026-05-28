@@ -67,13 +67,13 @@ export function InventoryScreen() {
     { key: "reserved", header: "Reserved", render: (item) => `${item.reserved} units` },
     { key: "location", header: "Location", render: (item) => <div><p>{item.aisle}</p><p className="text-xs text-secondary-text">Batch {item.batch}</p></div> },
     { key: "expiry", header: "Expiry", render: (item) => item.expiry },
-    { key: "movement", header: "Movement placeholder", render: (item) => <div className="max-w-64 text-sm text-secondary-text">{item.lastMovement}</div> },
+    { key: "movement", header: "Movement", render: (item) => <div className="max-w-64 text-sm text-secondary-text">{item.lastMovement}</div> },
   ];
 
   return (
     <OperationalTable
       title="Inventory management"
-      description="Reliable stock control with low-stock indicators, reserved stock placeholders, and movement-ready architecture."
+      description="Reliable stock control with low-stock indicators, reserved stock, and movement-ready architecture."
       rows={rows}
       columns={columns}
       searchValue={search}

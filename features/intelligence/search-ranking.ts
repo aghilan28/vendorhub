@@ -9,36 +9,21 @@ import { applyDiversityBalancing, rankingPipelineDiagnostics, scoreHybridRank } 
 import type { MarketplaceSearchResult, RankedProduct, RecommendationContext, SearchFilters, SearchMode } from "./types";
 
 const typoCorrections: Record<string, string> = {
-  hedphones: "headphones",
-  headphnes: "headphones",
-  "iph ne": "iphone",
-  iphne: "iphone",
-  snikers: "sneakers",
-  snkrs: "sneakers",
   vegitable: "vegetable",
   coffe: "coffee",
   bananna: "banana",
-  ofice: "office",
 };
 
 const queryExpansions: Record<string, string[]> = {
   cheap: ["budget", "deal", "affordable", "discount"],
   healthy: ["millet", "banana", "makhana", "fresh", "low oil", "breakfast"],
   snacks: ["puffs", "makhana", "ready meals", "tea-time"],
-  gaming: ["gaming", "mouse", "accessories", "keyboard"],
-  accessories: ["case", "mouse", "headphones", "wireless"],
-  comfortable: ["ergonomic", "cushion", "adjustable", "office"],
-  office: ["desk", "chair", "work", "ergonomic"],
-  wireless: ["bluetooth", "wireless", "headphones"],
   tamatar: ["tomato", "fresh produce"],
 };
 
 const transliterationExpansions: Record<string, string[]> = {
-  mobile: ["phone", "case", "electronics"],
-  cover: ["case", "phone cover"],
   chips: ["snacks", "ready meals"],
   samosa: ["snacks", "ready meals"],
-  chair: ["office chair", "ergonomic", "lifestyle"],
   tomato: ["tamatar", "fresh produce"],
   idli: ["breakfast", "batter"],
   dosa: ["breakfast", "batter"],
@@ -102,10 +87,10 @@ function buildSuggestions(query: string, products: Product[], locale: AppLocale 
   const expanded = tokens.flatMap((token) => [...(queryExpansions[token] ?? []), ...(transliterationExpansions[token] ?? [])]);
   const localeDefaults =
     locale === "ta"
-      ? ["mobile cover", "snacks", "idli batter", "nearby store"]
+      ? ["verified products", "nearby seller", "regional catalog"]
       : locale === "hi"
-        ? ["mobile cover", "chair", "samosa near me", "nearby seller"]
-        : ["healthy snacks", "wireless headphones", "office chair", "breakfast deals", "popular nearby"];
+        ? ["verified products", "nearby seller", "regional catalog"]
+        : ["verified products", "nearby seller", "regional catalog"];
   return [...new Set([...direct, ...expanded, ...localeDefaults])].slice(0, 7);
 }
 

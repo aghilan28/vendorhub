@@ -4,7 +4,7 @@ const latinAliases: Record<string, string[]> = {
   tamatar: ["tomato", "fresh produce"],
   sabzi: ["vegetables", "fresh produce"],
   phal: ["fruits"],
-  kursi: ["chair", "office chair"],
+  kursi: ["chair"],
   mobile: ["phone", "electronics"],
   cover: ["case", "phone cover"],
   samosa: ["snacks", "ready meals"],
@@ -16,12 +16,12 @@ const latinAliases: Record<string, string[]> = {
 const scriptAliases: Record<string, string[]> = {
   "टमाटर": ["tomato", "tamatar", "fresh produce"],
   "सब्ज़ी": ["vegetables", "sabzi", "fresh produce"],
-  "कुर्सी": ["chair", "office chair"],
+  "कुर्सी": ["chair"],
   "समोसा": ["samosa", "snacks"],
   "மொபைல்": ["mobile", "phone", "electronics"],
   "தக்காளி": ["tomato", "tamatar", "fresh produce"],
   "காய்கறி": ["vegetables", "fresh produce"],
-  "நாற்காலி": ["chair", "office chair"],
+  "நாற்காலி": ["chair"],
   "இட்லி": ["idli", "breakfast"],
   "தோசை": ["dosa", "breakfast"],
 };

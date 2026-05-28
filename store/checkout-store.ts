@@ -96,7 +96,7 @@ export const useCheckoutStore = create<CheckoutState>()(
   persist(
     (set, get) => ({
       step: "address",
-      selectedAddressId: savedAddresses[0].id,
+      selectedAddressId: savedAddresses[0]?.id ?? "",
       deliverySlot: "Fastest available",
       paymentMethod: "upi",
       upiApp: "gpay",

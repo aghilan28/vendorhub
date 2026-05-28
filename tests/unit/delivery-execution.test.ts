@@ -2,11 +2,48 @@ import { describe, expect, it, vi } from "vitest";
 import { deliveryFeasibility, estimateDeliveryEta, estimateHyperlocalDistanceKm } from "@/features/logistics/eta";
 import { advanceDeliveryLifecycle, canStartDispatch, deriveDeliverySignals, scheduleDeliveryRecovery } from "@/features/logistics/orchestrator";
 import { canTransitionDelivery, orderStatusForDelivery } from "@/features/logistics/status-engine";
-import { seedDeliveries } from "@/features/logistics/data";
 import { chooseLogisticsProvider, evaluateLogisticsBackpressure, normalizeProviderStatus, updateProviderHealthAfterAttempt } from "@/features/logistics/providers";
 import { assessDeliverySla } from "@/features/logistics/sla";
 import { simulateDispatchBacklog, simulateTrackingReplay } from "@/tests/utils/failure-simulator";
 import { OrderStatus, PaymentStatus } from "@/types";
+import type { Delivery } from "@/features/logistics/types";
+
+const deliveryFixture = (index: number, overrides: Partial<Delivery> = {}): Delivery => ({
+  id: `test-delivery-${index}`,
+  orderId: `test-order-${index}`,
+  orderCode: `TEST-${index}`,
+  buyerName: "Test Buyer",
+  buyerPhone: "+91 90000 00000",
+  vendorId: "test-vendor",
+  vendorName: "Test Seller",
+  deliveryAddress: "Test Address, Chennai",
+  mode: "seller_self",
+  status: "IN_TRANSIT",
+  partner: { id: "partner-self", name: "Seller self-delivery", mode: "seller_self", serviceLevel: "hyperlocal", rating: 4.7, integrationStatus: "manual" },
+  distanceKm: 3.2,
+  prepMinutes: 18,
+  etaMinutes: 24,
+  etaWindow: "24-32 min",
+  etaConfidence: "high",
+  promisedAt: "2026-05-26T12:30:00.000Z",
+  createdAt: "2026-05-26T10:00:00.000Z",
+  updatedAt: "2026-05-26T10:30:00.000Z",
+  shipment: { provider: "seller_self", syncStatus: "not_required" },
+  events: [],
+  etaLogs: [],
+  verification: { state: "pending" },
+  ...overrides,
+});
+
+const seedDeliveries = [
+  deliveryFixture(1),
+  deliveryFixture(2, { status: "DELIVERY_PENDING", etaConfidence: "medium" }),
+  deliveryFixture(3, {
+    status: "FAILED",
+    etaConfidence: "low",
+    recovery: { reason: "unreachable_customer", action: "customer_contact", runAfter: "2026-05-26T09:13:00.000Z", attempts: 1, status: "pending" },
+  }),
+];
 
 describe("phase 24 delivery execution", () => {
   it("enforces deterministic canonical shipment transitions", () => {

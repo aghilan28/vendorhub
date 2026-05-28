@@ -35,15 +35,15 @@ export function useDeliveries() {
 export function useDeliveryTracking(orderId?: string) {
   return useQuery({
     queryKey: ["logistics", "tracking", orderId],
-    initialData: seedDeliveries.find((delivery) => delivery.orderId === orderId || delivery.orderCode === orderId) ?? seedDeliveries[0],
+    initialData: seedDeliveries.find((delivery) => delivery.orderId === orderId || delivery.orderCode === orderId),
     queryFn: async () => {
-      if (!orderId) return seedDeliveries[0];
+      if (!orderId) return undefined;
       try {
         const response = await fetchJson<ApiEnvelope<Delivery>>(`/api/logistics/deliveries/${orderId}`);
         return response.data;
       } catch {
         await delay();
-        return seedDeliveries.find((delivery) => delivery.orderId === orderId || delivery.orderCode === orderId) ?? seedDeliveries[0];
+        return seedDeliveries.find((delivery) => delivery.orderId === orderId || delivery.orderCode === orderId);
       }
     },
     refetchInterval: 20000,

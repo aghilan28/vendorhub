@@ -69,7 +69,7 @@ export async function listLiveCartItems(): Promise<CartItem[]> {
 }
 
 function fallbackCartItems(): CartItem[] {
-  return marketplaceProducts.slice(0, 2).map((product, index) => ({
+  return marketplaceProducts.slice(0, 0).map((product, index) => ({
     id: `fallback-cart-${product.id}`,
     product,
     quantity: index + 1,

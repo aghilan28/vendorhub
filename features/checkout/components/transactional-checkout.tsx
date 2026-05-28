@@ -77,16 +77,22 @@ export function TransactionalCheckout() {
     failAtomicCheckout,
   } = useCheckoutStore();
   const atomicCheckout = useAtomicCheckoutMutation();
-  const selectedAddress = addresses.find((address) => address.id === selectedAddressId) ?? addresses[0];
+  const selectedAddress = addresses.find((address) => address.id === selectedAddressId) ?? addresses[0] ?? null;
   const pricing = calculateOrderPricing(items);
-  const codEligibility = checkCodEligibility({ items, total: pricing.total, pincode: selectedAddress.pincode });
+  const codEligibility = selectedAddress
+    ? checkCodEligibility({ items, total: pricing.total, pincode: selectedAddress.pincode })
+    : { eligible: false, reason: "Add a delivery address before using COD.", maxAmount: 0, verificationState: "blocked" as const };
   const form = useForm<any>({
     resolver: zodResolver(CheckoutSchema as any),
-    values: { addressId: selectedAddress.id, deliverySlot, paymentMethod, upiApp, orderNote: "" },
+    values: { addressId: selectedAddress?.id ?? "", deliverySlot, paymentMethod, upiApp, orderNote: "" },
   });
 
   async function onSubmit(values: any) {
     const address = addresses.find((item) => item.id === values.addressId) ?? selectedAddress;
+    if (!address) {
+      failAtomicCheckout("Add a delivery address before placing an order.");
+      return;
+    }
     const result = await atomicCheckout.mutateAsync({ address, deliverySlot: values.deliverySlot, paymentMethod: values.paymentMethod, orderNote: values.orderNote });
 
     if (values.paymentMethod === "cod") {
@@ -220,7 +226,7 @@ export function TransactionalCheckout() {
         <section className="rounded-lg border border-border bg-surface p-4 shadow-sm">
           <h2 className="flex items-center gap-2 font-semibold text-primary-text"><Home className="size-4" /> Delivery address</h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            {addresses.map((address) => (
+            {addresses.length ? addresses.map((address) => (
               <label key={address.id} className="min-h-24 rounded-lg border border-border p-3 text-sm focus-within:ring-2 focus-within:ring-brand">
                 <input
                   type="radio"
@@ -231,7 +237,11 @@ export function TransactionalCheckout() {
                 <span className="font-medium text-primary-text">{address.label}</span>
                 <span className="mt-2 block break-words text-secondary-text">{address.recipient}, {address.line1}, {address.locality}, {address.city} {address.pincode}</span>
               </label>
-            ))}
+            )) : (
+              <div className="rounded-lg border border-dashed border-border bg-slate-50 p-4 text-sm text-secondary-text sm:col-span-2">
+                No saved delivery addresses are available. Real buyer addresses can be added once onboarding and live account data are connected.
+              </div>
+            )}
           </div>
         </section>
 
@@ -308,7 +318,7 @@ export function TransactionalCheckout() {
 
       <div className="space-y-3">
         <TransactionSummary pricing={pricing} itemCount={items.length} />
-        <Button className="min-h-12 w-full" type="submit" disabled={!items.length || isProcessing || atomicCheckout.isPending || !isOnline}>
+        <Button className="min-h-12 w-full" type="submit" disabled={!items.length || !selectedAddress || isProcessing || atomicCheckout.isPending || !isOnline}>
           <span data-testid="checkout-btn" className="contents">
           {isProcessing || atomicCheckout.isPending ? <Loader2 className="animate-spin" /> : paymentMethod === "cod" ? <WalletCards /> : <CreditCard />}
           {!isOnline ? t("error.offline") : isProcessing || atomicCheckout.isPending ? "Placing order" : paymentMethod === "cod" ? t("payment.cod") : paymentMethod === "upi" ? t("payment.upi") : t("payment.pay_now")}

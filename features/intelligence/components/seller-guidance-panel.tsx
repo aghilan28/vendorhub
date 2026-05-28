@@ -9,7 +9,7 @@ import type { SellerProduct } from "@/features/seller/types";
 
 export function SellerGuidancePanel({ product }: { product: Pick<SellerProduct, "name" | "category" | "price" | "stock" | "lowStockThreshold"> & { description?: string; vendorId?: string } }) {
   const guidance = buildSellerListingGuidance(product);
-  const sellerId = product.vendorId ?? marketplaceProducts.find((item) => item.category.name === product.category)?.vendor.id ?? marketplaceProducts[0]?.vendor.id;
+  const sellerId = product.vendorId ?? marketplaceProducts.find((item) => item.category.name === product.category)?.vendor.id;
   const insights = sellerId ? getSellerDiscoverabilityInsights(marketplaceProducts, sellerId) : null;
 
   return (

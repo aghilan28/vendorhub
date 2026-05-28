@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Archive, Copy, PackagePlus, Plus } from "lucide-react";
+import { Archive, Copy, Lightbulb, PackagePlus, Plus } from "lucide-react";
 import { EmptyState } from "@/components/feedback/empty-state";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/formatting/currency";
@@ -52,10 +52,18 @@ export function ProductsScreen() {
 
   return (
     <div className="space-y-6">
-      <SellerGuidancePanel product={{ ...data[0], description: "Fresh paneer prepared for same-day local fulfillment with pack size, freshness, and delivery context." }} />
+      {data[0] ? (
+        <SellerGuidancePanel product={{ ...data[0], description: "Seller catalog item ready for listing quality guidance." }} />
+      ) : (
+        <EmptyState
+          icon={Lightbulb}
+          title="Listing intelligence ready"
+          description="Search, pricing, and conversion guidance will appear after the first real catalog item is created."
+        />
+      )}
       <OperationalTable
         title="Product management"
-        description="Catalog table with search, statuses, listing quality context, duplication, and archive placeholders."
+        description="Catalog table with search, statuses, listing quality context, duplication, and archive actions."
         rows={rows}
         columns={columns}
         searchValue={search}

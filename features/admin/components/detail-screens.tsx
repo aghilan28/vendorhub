@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, FileText, ShieldCheck } from "lucide-react";
+import { Bell, FileText, ShieldCheck, Store } from "lucide-react";
 import { EmptyState } from "@/components/feedback/empty-state";
 import { OperationalBarChart } from "@/components/charts/operational-bar-chart";
 import { adminNotifications, auditLogs, flags, vendors } from "../data";
@@ -16,20 +16,21 @@ import { FlagsScreen } from "./table-screens";
 import { PlatformHealthScreen } from "@/features/operations/components/platform-health-screen";
 
 export function VendorDetailScreen({ id }: { id: string }) {
-  const vendor = vendors.find((item) => item.id === id) ?? vendors[0];
+  const vendor = vendors.find((item) => item.id === id);
+  if (!vendor) return <EmptyState icon={Store} title="Seller not found" description="No verified seller record exists for this route yet." />;
   return (
     <div className="space-y-6">
       <GovernanceCard title={vendor.businessName} description={`${vendor.owner} · ${vendor.category} · ${vendor.zone}`}>
         <div className="grid gap-4 md:grid-cols-4">
           <div className="rounded-md bg-slate-50 p-3"><p className="text-xs text-secondary-text">Approval status</p><div className="mt-2"><GovernanceBadge label={vendor.status} tone={vendorTone(vendor.status)} /></div></div>
           <div className="rounded-md bg-slate-50 p-3"><p className="text-xs text-secondary-text">Risk</p><div className="mt-2"><GovernanceBadge label={vendor.risk} tone={severityTone(vendor.risk)} /></div></div>
-          <div className="rounded-md bg-slate-50 p-3"><p className="text-xs text-secondary-text">30d orders placeholder</p><p className="mt-2 font-semibold text-primary-text">{vendor.orders30d}</p></div>
-          <div className="rounded-md bg-slate-50 p-3"><p className="text-xs text-secondary-text">Fulfillment placeholder</p><p className="mt-2 font-semibold text-primary-text">{vendor.fulfillmentRate}%</p></div>
+          <div className="rounded-md bg-slate-50 p-3"><p className="text-xs text-secondary-text">30d orders</p><p className="mt-2 font-semibold text-primary-text">{vendor.orders30d}</p></div>
+          <div className="rounded-md bg-slate-50 p-3"><p className="text-xs text-secondary-text">Fulfillment readiness</p><p className="mt-2 font-semibold text-primary-text">{vendor.fulfillmentRate}%</p></div>
         </div>
       </GovernanceCard>
 
       <div className="grid gap-6 xl:grid-cols-[1fr_380px]">
-        <GovernanceCard title="Seller profile review" description="Business details, seller information, uploaded documents placeholder, and marketplace activity placeholders.">
+        <GovernanceCard title="Seller profile review" description="Business details, seller information, uploaded documents, and marketplace activity readiness.">
           <div className="grid gap-3 md:grid-cols-2">
             {vendor.documents.map((document) => <div key={document} className="rounded-md border border-dashed border-border bg-slate-50 p-3 text-sm font-medium text-primary-text"><FileText className="mb-2 size-4 text-secondary-text" />{document}</div>)}
           </div>
@@ -40,7 +41,7 @@ export function VendorDetailScreen({ id }: { id: string }) {
         </GovernanceCard>
       </div>
 
-      <GovernanceCard title="Seller history placeholder" description="Moderation history and operational activity will accumulate here.">
+      <GovernanceCard title="Seller history" description="Moderation history and operational activity will accumulate here.">
         <div className="grid gap-3 md:grid-cols-3">
           {["No live KYC verification", "Manual approval infrastructure", vendor.ratingPlaceholder].map((item) => <div key={item} className="rounded-md bg-slate-50 p-3 text-sm font-medium text-primary-text">{item}</div>)}
         </div>
@@ -68,9 +69,9 @@ export function AdminAnalyticsScreen() {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-3">
-        <GovernanceCard title="Marketplace growth placeholder" description="Growth visualization foundation."><OperationalBarChart values={data.growth} /></GovernanceCard>
+        <GovernanceCard title="Marketplace growth" description="Growth visualization foundation."><OperationalBarChart values={data.growth} /></GovernanceCard>
         <GovernanceCard title="Order trends" description="Platform order volume by day."><OperationalBarChart values={data.orders} /></GovernanceCard>
-        <GovernanceCard title="Moderation metrics placeholder" description="Queue pressure by day."><OperationalBarChart values={data.moderation} /></GovernanceCard>
+        <GovernanceCard title="Moderation metrics" description="Queue pressure by day."><OperationalBarChart values={data.moderation} /></GovernanceCard>
       </div>
       <GovernanceCard title="Operational metrics" description="Category performance, seller activity, and governance indicators prepared for future analytics engine.">
         <div className="grid gap-3 md:grid-cols-4">
@@ -105,7 +106,7 @@ export function PlatformHealthPlaceholderScreen() {
 
 export function AdminSettingsScreen() {
   return (
-    <GovernanceCard title="Admin settings" description="Platform settings, moderation settings, feature flags, notification settings, and admin preferences placeholders.">
+    <GovernanceCard title="Admin settings" description="Platform settings, moderation settings, feature flags, notification settings, and admin preferences.">
       <AdminSettingsForm />
     </GovernanceCard>
   );

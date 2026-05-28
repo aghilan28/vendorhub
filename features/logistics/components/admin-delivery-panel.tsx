@@ -26,10 +26,10 @@ export function AdminDeliveryPanel() {
       <div className="grid gap-4 xl:grid-cols-[1fr_380px]">
         <div className="rounded-md border border-border bg-slate-50 p-4">
           <div className="flex items-center justify-between gap-3">
-            <p className="font-medium text-primary-text">Dispatch performance placeholder</p>
+            <p className="font-medium text-primary-text">Dispatch performance</p>
             <Badge variant="secondary">ETA accuracy foundation</Badge>
           </div>
-          <OperationalBarChart values={[28, 31, 34, 26, 42, 38, 30, 35, 29, 33, 41, 36]} />
+          <OperationalBarChart values={all.length ? all.map((delivery) => delivery.etaMinutes) : [0]} />
         </div>
         <div className="space-y-2">
           {all.map((delivery) => (

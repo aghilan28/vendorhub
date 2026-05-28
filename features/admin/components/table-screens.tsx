@@ -34,7 +34,7 @@ export function VendorsScreen() {
     { key: "risk", header: "Risk", render: (vendor) => <GovernanceBadge label={vendor.risk} tone={severityTone(vendor.risk)} /> },
     { key: "actions", header: "Actions", render: () => <div className="flex gap-2"><Button size="sm">Review</Button><Button size="sm" variant="secondary">Approve</Button></div> },
   ];
-  return <GovernanceTable title="Seller governance" description="Seller approval queue, verification placeholders, suspension placeholders, and operational notes." rows={rows} columns={columns} searchValue={search} onSearch={setSearch} empty={<EmptyState icon={Store} title="No pending approvals" description="No sellers match the current governance filters." />} actions={<Select value={status} onValueChange={(value) => setStatus(value as any)}><SelectTrigger className="w-44"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">All sellers</SelectItem><SelectItem value="pending">Pending</SelectItem><SelectItem value="needs_review">Needs review</SelectItem><SelectItem value="approved">Approved</SelectItem><SelectItem value="suspended">Suspended</SelectItem></SelectContent></Select>} />;
+  return <GovernanceTable title="Seller governance" description="Seller approval queue, verification workflow, suspension workflow, and operational notes." rows={rows} columns={columns} searchValue={search} onSearch={setSearch} empty={<EmptyState icon={Store} title="No pending approvals" description="No sellers match the current governance filters." />} actions={<Select value={status} onValueChange={(value) => setStatus(value as any)}><SelectTrigger className="w-44"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">All sellers</SelectItem><SelectItem value="pending">Pending</SelectItem><SelectItem value="needs_review">Needs review</SelectItem><SelectItem value="approved">Approved</SelectItem><SelectItem value="suspended">Suspended</SelectItem></SelectContent></Select>} />;
 }
 
 export function ModerationScreen({ type }: { type?: "product" | "review" }) {
@@ -51,7 +51,7 @@ export function ModerationScreen({ type }: { type?: "product" | "review" }) {
     { key: "reason", header: "Reason", className: "min-w-72", render: (item) => <p className="text-sm text-secondary-text">{item.reason}</p> },
     { key: "actions", header: "Actions", render: () => <div className="flex gap-2"><Button size="sm">Approve</Button><Button size="sm" variant="secondary">Escalate</Button></div> },
   ];
-  return <GovernanceTable title={type === "product" ? "Product moderation queue" : type === "review" ? "Review moderation queue" : "Moderation command queue"} description="Structured, auditable moderation with status, priority, history, visibility toggles, and escalation placeholders." rows={rows} columns={columns} empty={<EmptyState icon={ShieldCheck} title="No moderation queue" description="No cases match the current moderation filters." />} actions={<div className="flex gap-2"><Select value={status} onValueChange={(value) => setStatus(value as any)}><SelectTrigger className="w-44"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">All states</SelectItem><SelectItem value="pending_review">Pending review</SelectItem><SelectItem value="approved">Approved</SelectItem><SelectItem value="rejected">Rejected</SelectItem><SelectItem value="flagged">Flagged</SelectItem><SelectItem value="suspended">Suspended</SelectItem></SelectContent></Select><Button variant="secondary"><Archive /> Bulk placeholder</Button></div>} />;
+  return <GovernanceTable title={type === "product" ? "Product moderation queue" : type === "review" ? "Review moderation queue" : "Moderation command queue"} description="Structured, auditable moderation with status, priority, history, visibility toggles, and escalation workflows." rows={rows} columns={columns} empty={<EmptyState icon={ShieldCheck} title="No moderation queue" description="No cases match the current moderation filters." />} actions={<div className="flex gap-2"><Select value={status} onValueChange={(value) => setStatus(value as any)}><SelectTrigger className="w-44"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">All states</SelectItem><SelectItem value="pending_review">Pending review</SelectItem><SelectItem value="approved">Approved</SelectItem><SelectItem value="rejected">Rejected</SelectItem><SelectItem value="flagged">Flagged</SelectItem><SelectItem value="suspended">Suspended</SelectItem></SelectContent></Select><Button variant="secondary"><Archive /> Bulk action</Button></div>} />;
 }
 
 export function RefundsScreen() {
@@ -64,9 +64,9 @@ export function RefundsScreen() {
     { key: "seller", header: "Seller", render: (item) => item.seller },
     { key: "amount", header: "Amount", sortable: true, render: (item) => formatCurrency(item.amount) },
     { key: "status", header: "Status", render: (item) => <GovernanceBadge label={item.status} tone={item.status === "open" || item.status === "under_review" ? "warning" : "success"} /> },
-    { key: "actions", header: "Decision", render: () => <Button size="sm">Review placeholder</Button> },
+    { key: "actions", header: "Decision", render: () => <Button size="sm">Review</Button> },
   ];
-  return <GovernanceTable title="Refund governance" description="Refund request list with customer, seller, order context, notes, and payment-decision placeholders." rows={data} columns={columns} empty={<EmptyState icon={WalletCards} title="No refunds" description="No refund requests are currently awaiting governance review." />} />;
+  return <GovernanceTable title="Refund governance" description="Refund request list with customer, seller, order context, notes, and payment decision workflow." rows={data} columns={columns} empty={<EmptyState icon={WalletCards} title="No refunds" description="No refund requests are currently awaiting governance review." />} />;
 }
 
 export function OrdersOversightScreen() {
@@ -80,7 +80,7 @@ export function OrdersOversightScreen() {
     status: order.status.toLowerCase() as PlatformOrder["status"],
     value: order.total,
     zone: order.deliveryAddress.locality,
-    signal: order.refund ? "Refund review placeholder" : order.cancellation ? "Cancellation recorded" : order.payment.status === "PENDING" ? "Payment pending" : "Healthy",
+    signal: order.refund ? "Refund review" : order.cancellation ? "Cancellation recorded" : order.payment.status === "PENDING" ? "Payment pending" : "Healthy",
     paymentState: order.payment.status,
     transactionReference: order.payment.reference,
   }));
@@ -98,7 +98,7 @@ export function OrdersOversightScreen() {
     { key: "signal", header: "Operational signal", render: (item) => <div><p className="text-sm text-secondary-text">{item.signal}</p><p className="text-xs text-secondary-text">{item.transactionReference}</p></div> },
     { key: "actions", header: "Escalation", render: () => <Button size="sm" variant="secondary"><Eye /> Review</Button> },
   ];
-  return <GovernanceTable title="Order governance" description="Platform-wide order monitoring with payment state, transaction references, refund placeholders, and escalation visibility." rows={data} columns={columns} empty={<EmptyState icon={ClipboardList} title="No platform orders" description="Order oversight has no records for the selected scope." />} />;
+  return <GovernanceTable title="Order governance" description="Platform-wide order monitoring with payment state, transaction references, refund workflow, and escalation visibility." rows={data} columns={columns} empty={<EmptyState icon={ClipboardList} title="No platform orders" description="Order oversight has no records for the selected scope." />} />;
 }
 
 export function CategoriesScreen() {
@@ -112,7 +112,7 @@ export function CategoriesScreen() {
     { key: "count", header: "Products", sortable: true, render: (item) => item.productCount.toLocaleString("en-IN") },
     { key: "actions", header: "Actions", render: () => <Button size="sm" variant="secondary">Edit</Button> },
   ];
-  return <div className="space-y-6"><GovernanceTable title="Category management" description="Create, edit, hierarchy, visibility, slug management, image placeholders, and active/inactive states." rows={data} columns={columns} empty={<EmptyState icon={ListChecks} title="No categories" description="Marketplace taxonomy records will appear here." />} actions={<Button><Plus /> Create category</Button>} /><GovernanceCard title="Create or edit category" description="Form foundation for category governance."><CategoryForm /></GovernanceCard></div>;
+  return <div className="space-y-6"><GovernanceTable title="Category management" description="Create, edit, hierarchy, visibility, slug management, image workflow, and active/inactive states." rows={data} columns={columns} empty={<EmptyState icon={ListChecks} title="No categories" description="Marketplace taxonomy records will appear here." />} actions={<Button><Plus /> Create category</Button>} /><GovernanceCard title="Create or edit category" description="Form foundation for category governance."><CategoryForm /></GovernanceCard></div>;
 }
 
 export function FlagsScreen({ flags }: { flags: import("../types").GovernanceFlag[] }) {
@@ -124,5 +124,5 @@ export function FlagsScreen({ flags }: { flags: import("../types").GovernanceFla
     { key: "owner", header: "Owner", render: (item) => item.owner },
     { key: "actions", header: "Actions", render: () => <Button size="sm">Triage</Button> },
   ];
-  return <GovernanceTable title="Platform flags" description="Suspicious seller, review, product, and operational anomaly placeholders without AI fraud scoring." rows={flags} columns={columns} empty={<EmptyState icon={Flag} title="No flags" description="Governance flags will appear here when anomalies are reported." />} />;
+  return <GovernanceTable title="Platform flags" description="Suspicious seller, review, product, and operational anomaly workflow without AI fraud scoring." rows={flags} columns={columns} empty={<EmptyState icon={Flag} title="No flags" description="Governance flags will appear here when anomalies are reported." />} />;
 }

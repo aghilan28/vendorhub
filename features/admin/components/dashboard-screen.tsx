@@ -35,13 +35,13 @@ export function AdminDashboardScreen() {
           <div>
             <p className="text-xs font-medium uppercase text-secondary-text">Marketplace-wide governance</p>
             <h1 className="mt-1 text-2xl font-semibold tracking-normal text-primary-text">VendorHub command center</h1>
-            <p className="mt-2 max-w-3xl text-sm text-secondary-text">Operational oversight for seller approvals, moderation pressure, refunds, category governance, and platform health placeholders.</p>
+            <p className="mt-2 max-w-3xl text-sm text-secondary-text">Operational oversight for seller approvals, moderation pressure, refunds, category governance, and platform health.</p>
             <div className="mt-3">
               <LiveStateBadge />
             </div>
           </div>
           <div className="grid gap-2 sm:grid-cols-3">
-            {["Audit-ready actions", "Manual moderation", "Health placeholder 94%"].map((item) => (
+            {["Audit-ready actions", "Manual moderation", "Health monitoring ready"].map((item) => (
               <div key={item} className="rounded-md border border-border bg-slate-50 px-3 py-2 text-sm font-medium text-primary-text">{item}</div>
             ))}
           </div>
@@ -86,9 +86,9 @@ export function AdminDashboardScreen() {
 
       <div className="grid gap-6 xl:grid-cols-[1fr_390px]">
         <GovernanceCard title="Marketplace activity" description="Platform-wide activity with realtime cache synchronization.">
-          <OperationalBarChart values={[80, 72, 84, 91, 88, 96, 102, 97, 108, 116, 109, 121]} />
+          <OperationalBarChart values={[0]} />
           <div className="mt-4 grid gap-3 md:grid-cols-3">
-            {["4,892 orders", "342 active sellers", "23 flagged records"].map((item) => <div key={item} className="rounded-md bg-slate-50 p-3 text-sm font-medium text-primary-text">{item}</div>)}
+            {["0 orders", "0 active sellers", "0 flagged records"].map((item) => <div key={item} className="rounded-md bg-slate-50 p-3 text-sm font-medium text-primary-text">{item}</div>)}
           </div>
         </GovernanceCard>
 
@@ -104,7 +104,7 @@ export function AdminDashboardScreen() {
         </GovernanceCard>
       </div>
 
-      <GovernanceCard title="Marketplace intelligence" description="Search relevance, recommendation readiness, and demand signal placeholders.">
+      <GovernanceCard title="Marketplace intelligence" description="Search relevance, recommendation readiness, and demand signal readiness.">
         <AdminIntelligencePanel />
       </GovernanceCard>
 
@@ -141,11 +141,11 @@ export function AdminDashboardScreen() {
           </div>
         </GovernanceCard>
 
-        <GovernanceCard title="Trust metrics placeholder" description="Authoritative trust language without fraud AI.">
+        <GovernanceCard title="Trust metrics" description="Authoritative trust language without fabricated seller metrics.">
           <div className="space-y-3">
-            <div className="rounded-md bg-emerald-50 p-3"><ShieldCheck className="size-4 text-success" /><p className="mt-2 text-sm font-medium text-primary-text">Seller verification placeholders reviewed manually</p></div>
-            <div className="rounded-md bg-amber-50 p-3"><Flag className="size-4 text-warning" /><p className="mt-2 text-sm font-medium text-primary-text">4 critical escalation indicators</p></div>
-            <div className="rounded-md bg-slate-50 p-3"><Store className="size-4 text-secondary-text" /><p className="mt-2 text-sm font-medium text-primary-text">Category insights placeholder ready</p></div>
+            <div className="rounded-md bg-emerald-50 p-3"><ShieldCheck className="size-4 text-success" /><p className="mt-2 text-sm font-medium text-primary-text">Seller verification queue is empty</p></div>
+            <div className="rounded-md bg-amber-50 p-3"><Flag className="size-4 text-warning" /><p className="mt-2 text-sm font-medium text-primary-text">0 critical escalation indicators</p></div>
+            <div className="rounded-md bg-slate-50 p-3"><Store className="size-4 text-secondary-text" /><p className="mt-2 text-sm font-medium text-primary-text">Category insights ready for ingestion</p></div>
           </div>
         </GovernanceCard>
       </div>

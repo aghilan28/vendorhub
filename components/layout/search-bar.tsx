@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-export function SearchBar({ className, placeholder = "Search tomatoes, dosa batter, jasmine flowers..." }: { className?: string; placeholder?: string }) {
+export function SearchBar({ className, placeholder = "Search will activate after verified products are ingested" }: { className?: string; placeholder?: string }) {
   const { t } = useTranslation();
 
   return (

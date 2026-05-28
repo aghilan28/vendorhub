@@ -3,6 +3,7 @@ import { z } from "zod";
 import { marketplaceProducts } from "@/features/marketplace/lib/data";
 import { searchLiveMarketplaceProducts } from "@/lib/ai/commerce-intelligence";
 import { env } from "@/lib/env";
+import { AppError } from "@/lib/errors";
 import type { AppLocale } from "@/lib/i18n/config";
 import { recordOperationalEvent } from "@/lib/production/observability";
 import { securityRateLimits } from "@/lib/security/rate-limit";
@@ -31,8 +32,8 @@ export async function POST(request: Request) {
     try {
       body = await withSecurity(request, { name: "intelligence.search.post", rateLimit: securityRateLimits.aiSearch }, async () => request.json().catch(() => ({})));
     } catch (error) {
-      if (process.env.NODE_ENV !== "development") throw error;
-      recordOperationalEvent("warn", "ai.search.demo_safe_security_context", { route: "intelligence.search.post" }, { domain: "ai" });
+      if (!(error instanceof AppError) || error.code !== "AUTH_REQUIRED") throw error;
+      recordOperationalEvent("warn", "ai.search.anonymous_security_context", { route: "intelligence.search.post" }, { domain: "ai" });
       body = await request.json().catch(() => ({}));
     }
   } else {

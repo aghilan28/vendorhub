@@ -2,7 +2,7 @@ import { rankingPipelineDiagnostics } from "./hybrid-ranking";
 import { buildLocalTrendLabels, inventoryHealthScore, sellerQualityScore, trendingVelocityScore } from "./marketplace-signals";
 import type { Product } from "@/types";
 
-export const trendingSearches = ["healthy snacks", "wireless headphones", "office chair", "breakfast deals", "gaming accessories", "fresh tomatoes"];
+export const trendingSearches: string[] = [];
 
 export function getMarketplaceIntelligence(products: Product[]) {
   const available = products.filter((product) => product.stockCount > 0);
