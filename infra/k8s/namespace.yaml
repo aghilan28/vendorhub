@@ -1,0 +1,54 @@
+# KARTEX Phase B — runtime namespace + default-deny network isolation.
+# Apply: kubectl apply -f infra/k8s/namespace.yaml
+# This is the security baseline for self-hosted runtimes: nothing talks to the
+# runtime namespace unless explicitly allowed.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kartex-runtime
+  labels:
+    app.kubernetes.io/part-of: kartex
+    kartex.io/tier: runtime
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: kartex-runtime
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-app-to-runtime
+  namespace: kartex-runtime
+spec:
+  podSelector: {}
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kartex.io/tier: application
+      ports:
+        - { protocol: TCP, port: 6379 } # redis
+        - { protocol: TCP, port: 9092 } # kafka
+        - { protocol: TCP, port: 7687 } # neo4j bolt
+        - { protocol: TCP, port: 6333 } # qdrant http
+        - { protocol: TCP, port: 8081 } # flink rest
+---
+# Intra-namespace allow (broker quorum, schema registry, flink jm<->tm).
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-intra-namespace
+  namespace: kartex-runtime
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]
+  ingress:
+    - from: [{ podSelector: {} }]
+  egress:
+    - to: [{ podSelector: {} }]

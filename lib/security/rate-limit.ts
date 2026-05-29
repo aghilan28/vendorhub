@@ -43,3 +43,43 @@ export function checkRateLimit(key: string, policy: RateLimitPolicy) {
 export function clearRateLimitBucketsForTests() {
   buckets.clear();
 }
+
+
+// ---------------------------------------------------------------------------
+// Phase B: distributed rate limiting.
+// `checkRateLimit` above is per-instance (in-memory Map) and is NOT correct
+// across multiple serverless instances. `checkRateLimitDistributed` uses Redis
+// when RUNTIME_REDIS_ENABLED=true, and transparently falls back to the
+// in-memory limiter when Redis is disabled or unreachable. The sync API is
+// retained for callers that cannot await.
+// ---------------------------------------------------------------------------
+
+export type RateLimitResult = {
+  allowed: boolean;
+  remaining: number;
+  resetAt: number;
+  backend: "redis" | "memory";
+};
+
+export async function checkRateLimitDistributed(key: string, policy: RateLimitPolicy): Promise<RateLimitResult> {
+  try {
+    const { redisRuntime } = await import("@/lib/runtime/redis");
+    if (redisRuntime.isEnabled()) {
+      const windowed = await redisRuntime.incrementWindow(`ratelimit:${key}`, policy.windowMs);
+      if (windowed) {
+        const allowed = windowed.count <= policy.limit;
+        return {
+          allowed,
+          remaining: Math.max(0, policy.limit - windowed.count),
+          resetAt: Date.now() + windowed.ttlMs,
+          backend: "redis",
+        };
+      }
+    }
+  } catch {
+    // fall through to in-memory
+  }
+
+  const fallback = checkRateLimit(key, policy);
+  return { ...fallback, backend: "memory" };
+}

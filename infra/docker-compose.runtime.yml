@@ -1,0 +1,155 @@
+# KARTEX Phase B — Distributed Runtime (local / staging-equivalent)
+# Brings up all five runtime subsystems so the application's lib/runtime/* adapters
+# can connect to REAL services. Production uses managed equivalents (see infra/terraform).
+#
+#   docker compose -f infra/docker-compose.runtime.yml up -d
+#   docker compose -f infra/docker-compose.runtime.yml ps
+#   bash infra/kafka/register-topics.sh
+#   docker compose -f infra/docker-compose.runtime.yml down -v   # destroy
+#
+# Default credentials below are LOCAL-ONLY and must never be reused in staging/production.
+name: kartex-runtime
+
+services:
+  # ----------------------------------------------------------------- Redis (cache / locks / rate-limit / idempotency)
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    ports: ["6379:6379"]
+    volumes:
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-localdevredis}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ----------------------------------------------------------------- Kafka (event fabric) — KRaft, no ZooKeeper
+  kafka:
+    image: bitnami/kafka:3.7
+    ports: ["9092:9092", "9094:9094"]
+    environment:
+      KAFKA_CFG_NODE_ID: "1"
+      KAFKA_CFG_PROCESS_ROLES: "broker,controller"
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"
+      KAFKA_CFG_LISTENERS: "PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094"
+      KAFKA_CFG_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094"
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT"
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: "PLAINTEXT"
+      KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
+      KAFKA_CFG_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: "1"
+      KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR: "1"
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_CFG_LOG_RETENTION_HOURS: "168"
+    volumes:
+      - kafka-data:/bitnami/kafka
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics.sh --bootstrap-server localhost:9092 --list || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+    restart: unless-stopped
+
+  # ----------------------------------------------------------------- Schema Registry (Avro/JSON contracts)
+  schema-registry:
+    image: bitnami/schema-registry:7.6
+    ports: ["8081:8081"]
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      SCHEMA_REGISTRY_KAFKA_BROKERS: "PLAINTEXT://kafka:9092"
+      SCHEMA_REGISTRY_LISTENERS: "http://0.0.0.0:8081"
+      SCHEMA_REGISTRY_COMPATIBILITY_LEVEL: "BACKWARD"
+    restart: unless-stopped
+
+  # ----------------------------------------------------------------- Kafka UI (operability: lag, topics, consumers)
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    ports: ["8085:8080"]
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      KAFKA_CLUSTERS_0_NAME: "kartex-local"
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:9092"
+      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: "http://schema-registry:8081"
+      DYNAMIC_CONFIG_ENABLED: "true"
+    restart: unless-stopped
+
+  # ----------------------------------------------------------------- Neo4j (relationship runtime)
+  neo4j:
+    image: neo4j:5.23-community
+    ports: ["7474:7474", "7687:7687"]
+    environment:
+      NEO4J_AUTH: "neo4j/${NEO4J_PASSWORD:-localdevneo4j}"
+      NEO4J_server_memory_heap_max__size: "1G"
+      NEO4J_server_memory_pagecache_size: "512M"
+      NEO4J_dbms_security_procedures_unrestricted: "apoc.*"
+      NEO4J_PLUGINS: '["apoc"]'
+    volumes:
+      - neo4j-data:/data
+      - ./neo4j/init:/var/lib/neo4j/import:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:7474 >/dev/null 2>&1 || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+    restart: unless-stopped
+
+  # ----------------------------------------------------------------- Qdrant (vector runtime)
+  qdrant:
+    image: qdrant/qdrant:v1.12.1
+    ports: ["6333:6333", "6334:6334"]
+    environment:
+      QDRANT__SERVICE__API_KEY: "${QDRANT_API_KEY:-localdevqdrant}"
+      QDRANT__LOG_LEVEL: "INFO"
+    volumes:
+      - qdrant-data:/qdrant/storage
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c ':> /dev/tcp/127.0.0.1/6333' || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+    restart: unless-stopped
+
+  # ----------------------------------------------------------------- Flink (stream runtime): JobManager + TaskManager
+  flink-jobmanager:
+    image: flink:1.20-java17
+    command: jobmanager
+    ports: ["8082:8081"]
+    environment:
+      FLINK_PROPERTIES: |
+        jobmanager.rpc.address: flink-jobmanager
+        state.backend: rocksdb
+        state.checkpoints.dir: file:///flink-checkpoints
+        execution.checkpointing.interval: 10s
+        execution.checkpointing.mode: EXACTLY_ONCE
+    volumes:
+      - flink-checkpoints:/flink-checkpoints
+      - ./flink/jobs:/opt/flink/kartex-jobs:ro
+    restart: unless-stopped
+
+  flink-taskmanager:
+    image: flink:1.20-java17
+    command: taskmanager
+    depends_on: [flink-jobmanager]
+    environment:
+      FLINK_PROPERTIES: |
+        jobmanager.rpc.address: flink-jobmanager
+        taskmanager.numberOfTaskSlots: 4
+        state.backend: rocksdb
+        state.checkpoints.dir: file:///flink-checkpoints
+    volumes:
+      - flink-checkpoints:/flink-checkpoints
+    restart: unless-stopped
+
+volumes:
+  redis-data:
+  kafka-data:
+  neo4j-data:
+  qdrant-data:
+  flink-checkpoints:
