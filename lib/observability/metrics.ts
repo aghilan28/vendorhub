@@ -170,6 +170,11 @@ export const M = {
   aiPredictionScore: define({ name: "kartex_ai_prediction_score", help: "Last prediction/confidence score by model (gauge)", kind: "gauge", owner: "ai-platform" }),
   aiDriftStatus: define({ name: "kartex_ai_drift_status", help: "Drift status by model/kind: 0 ok,1 warn,2 drift", kind: "gauge", owner: "ai-platform" }),
   aiModelInfo: define({ name: "kartex_ai_model_info", help: "Model registry info (1 per model+state+version+risk label set)", kind: "gauge", owner: "ai-platform" }),
+
+  // ---- Commerce intelligence operations (Phase F) ----
+  intelDecisions: define({ name: "kartex_intelligence_decisions_total", help: "Commerce-intelligence decisions by domain/action", kind: "counter", owner: "commerce-intelligence" }),
+  pricingProposals: define({ name: "kartex_pricing_proposals_total", help: "Pricing proposals by strategy/status", kind: "counter", owner: "commerce-intelligence" }),
+  intelDecisionAgeSeconds: define({ name: "kartex_intelligence_last_decision_age_seconds", help: "Age of the last decision per domain (gauge; staleness = domain not operating)", kind: "gauge", owner: "commerce-intelligence" }),
 } as const;
 
 export function recordInference(model: string, durationMs: number, ok: boolean, opts?: { fallback?: boolean; reason?: string; score?: number }) {
