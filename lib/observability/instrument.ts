@@ -9,6 +9,8 @@ import { recordApiRequest, recordDependency } from "./metrics";
 import { exportSpan, newSpanId, newTraceId, parseTraceparent, toTraceparent } from "./otlp";
 import { recordOperationalEvent } from "./core";
 import type { ObservabilityDomain } from "./types";
+import { faultInjector } from "@/lib/reliability/fault-injection";
+import { getCircuitBreaker, type CircuitBreakerOptions } from "@/lib/reliability/circuit-breaker";
 
 function statusFromResponse(res: unknown): number {
   if (res && typeof res === "object" && "status" in res && typeof (res as any).status === "number") {
@@ -71,20 +73,42 @@ export async function withApiObservability(
 
 /**
  * Wrap a dependency call (redis/kafka/neo4j/qdrant/flink/supabase/provider).
- * Records dependency latency + error metrics and a client span.
+ * Records dependency latency + error metrics and a client span, and applies
+ * Phase D resilience: optional fault injection (chaos) + a shared circuit
+ * breaker per dependency (fail fast when the dependency is unhealthy). Pass
+ * `{ breaker: false }` to opt out (e.g. for already-degrade-safe adapters).
  */
 export async function instrumentDependency<T>(
   dependency: string,
   operation: string,
   fn: () => Promise<T>,
   parent?: { traceId?: string; spanId?: string },
+  options?: { breaker?: CircuitBreakerOptions | false },
 ): Promise<T> {
   const traceId = parent?.traceId ?? newTraceId();
   const spanId = newSpanId();
   const startedAt = Date.now();
   let ok = true;
+
+  const guarded = async () => {
+    await faultInjector.maybeInject(dependency);
+    return fn();
+  };
+  const run =
+    options?.breaker === false
+      ? guarded
+      : () =>
+          getCircuitBreaker(`dep:${dependency}`, {
+            ...(typeof options?.breaker === "object" ? options.breaker : {}),
+            onStateChange: (name, from, to) =>
+              recordOperationalEvent(to === "open" ? "error" : "warn", "reliability.circuit.transition", { name, from, to }, {
+                domain: "system",
+                trace: { traceId, spanId },
+              }),
+          }).execute(guarded);
+
   try {
-    return await fn();
+    return await run();
   } catch (error) {
     ok = false;
     throw error;
