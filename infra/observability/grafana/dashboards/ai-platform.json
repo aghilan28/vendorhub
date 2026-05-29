@@ -1,0 +1,44 @@
+{
+  "uid": "kartex-ai",
+  "title": "KARTEX — AI Platform",
+  "tags": ["kartex", "ai"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "refresh": "30s",
+  "time": { "from": "now-6h", "to": "now" },
+  "panels": [
+    {
+      "id": 1, "type": "timeseries", "title": "Inference p95 latency by model",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "fieldConfig": { "defaults": { "unit": "s" } },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [{ "refId": "A", "expr": "histogram_quantile(0.95, sum(rate(kartex_ai_inference_duration_seconds_bucket[5m])) by (le, model))", "legendFormat": "{{model}}" }]
+    },
+    {
+      "id": 2, "type": "timeseries", "title": "Inference error rate by model",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "fieldConfig": { "defaults": { "unit": "percentunit" } },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [{ "refId": "A", "expr": "sum(rate(kartex_ai_inference_errors_total[5m])) by (model) / clamp_min(sum(rate(kartex_ai_inference_requests_total[5m])) by (model),1)", "legendFormat": "{{model}}" }]
+    },
+    {
+      "id": 3, "type": "timeseries", "title": "Fallback rate by model",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "fieldConfig": { "defaults": { "unit": "percentunit" } },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [{ "refId": "A", "expr": "sum(rate(kartex_ai_inference_fallback_total[15m])) by (model) / clamp_min(sum(rate(kartex_ai_inference_requests_total[15m])) by (model),1)", "legendFormat": "{{model}}" }]
+    },
+    {
+      "id": 4, "type": "stat", "title": "Drift status by model/kind (0 ok,1 warn,2 drift)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [{ "refId": "A", "expr": "kartex_ai_drift_status", "legendFormat": "{{model}}/{{kind}}" }]
+    },
+    {
+      "id": 5, "type": "timeseries", "title": "Prediction/confidence score by model",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 16 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [{ "refId": "A", "expr": "kartex_ai_prediction_score", "legendFormat": "{{model}}" }]
+    }
+  ]
+}

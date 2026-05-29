@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-05-29T19:38:22.001Z",
+  "total": 10,
+  "byState": {
+    "production": 7,
+    "staging": 1,
+    "development": 2
+  },
+  "byRisk": {
+    "high": 4,
+    "medium": 5,
+    "low": 1
+  },
+  "unevaluatedProduction": [
+    "commerce-embedding",
+    "semantic-search",
+    "hybrid-ranking",
+    "recommendation-engine",
+    "personalization-profile",
+    "inventory-intelligence",
+    "feedback-learning"
+  ],
+  "highRiskProduction": [
+    "commerce-embedding",
+    "semantic-search",
+    "hybrid-ranking"
+  ],
+  "violations": []
+}
