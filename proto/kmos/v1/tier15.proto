@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package kmos.v1;
+
+service Tier15MetaKnowledgeService {
+  rpc GetTier15Catalog(Tier15CatalogRequest) returns (Tier15CatalogResponse);
+  rpc TransitionKnowledgeUnit(KnowledgeTransitionRequest) returns (KnowledgeTransitionResponse);
+}
+
+message Tier15CatalogRequest {}
+
+message Tier15CatalogResponse {
+  uint32 tier = 1;
+  uint32 traceability_rows = 2;
+  bool accepted = 3;
+}
+
+message KnowledgeTransitionRequest {
+  string id = 1;
+  string from_state = 2;
+  string to_state = 3;
+  string actor = 4;
+  double evidence_score = 5;
+  double security_score = 6;
+  double governance_score = 7;
+  double tau = 8;
+}
+
+message KnowledgeTransitionResponse {
+  bool accepted = 1;
+  string event_type = 2;
+  string audit_hash = 3;
+}

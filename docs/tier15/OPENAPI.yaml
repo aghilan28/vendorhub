@@ -1,0 +1,52 @@
+openapi: 3.1.0
+info:
+  title: KMOS Tier 15 Meta-Knowledge Systems API
+  version: 15.0.0
+paths:
+  /api/tier15:
+    get:
+      summary: Tier 15 acceptance, UMKO, package, and traceability catalog
+      responses:
+        "200":
+          description: Tier 15 executable implementation catalog
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [tier, traceability, packages, umko, matrix, packageManifests]
+                properties:
+                  tier:
+                    type: integer
+                    const: 15
+                  traceability:
+                    type: object
+                  packages:
+                    type: object
+                  umko:
+                    type: object
+                  matrix:
+                    type: array
+                    items:
+                      type: object
+                  packageManifests:
+                    type: array
+                    items:
+                      type: object
+  /api/tier15/knowledge-units:
+    post:
+      summary: Execute an auditable knowledge-unit transition
+      responses:
+        "200":
+          description: Immutable replayable transition event
+  /api/tier15/validation:
+    post:
+      summary: Evaluate forecast, calibration, conformal, Venn-Abers, and e-value metrics
+      responses:
+        "200":
+          description: Validation protocol result
+  /api/tier15/security:
+    post:
+      summary: Assess epistemic corruption, narrative warfare, poisoning, and forgetting risk
+      responses:
+        "200":
+          description: Epistemic threat registry event

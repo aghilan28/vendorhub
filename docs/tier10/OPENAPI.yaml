@@ -1,0 +1,70 @@
+openapi: 3.1.0
+info:
+  title: KARTEX Tier 10 Civilizational Systems APIs
+  version: 1.0.0
+paths:
+  /api/tier10/governance:
+    post:
+      summary: Compile governance rules or validate constitutional amendments.
+      operationId: tier10Governance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [kind]
+              properties:
+                kind:
+                  enum: [compile_rule, validate_amendment]
+      responses:
+        "200":
+          description: Replay-safe governance result.
+  /api/tier10/knowledge:
+    post:
+      summary: Reconcile evidence, revise beliefs, or score preservation.
+      operationId: tier10Knowledge
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [kind]
+              properties:
+                kind:
+                  enum: [reconcile_evidence, revise_belief, score_preservation]
+      responses:
+        "200":
+          description: Epistemic or preservation result.
+  /api/tier10/simulation:
+    post:
+      summary: Execute structural demographic, civilizational, technology, or strategic simulation kernels.
+      operationId: tier10Simulation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [kind]
+              properties:
+                kind:
+                  enum:
+                    - structural_demography
+                    - civilizational_projection
+                    - historical_calibration
+                    - bass_diffusion
+                    - polya_urn
+                    - technology_competition
+                    - strategic_competition
+      responses:
+        "200":
+          description: Deterministic simulation result.
+  /api/tier10/alignment:
+    post:
+      summary: Detect alignment drift against constitutional epsilon bounds.
+      operationId: tier10Alignment
+      responses:
+        "200":
+          description: Alignment drift assessment.

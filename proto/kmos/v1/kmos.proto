@@ -1,0 +1,369 @@
+syntax = "proto3";
+
+package kmos.v1;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/kartex/kmos/proto/kmos/v1;kmosv1";
+
+message CommandEnvelope {
+  string command_id = 1;
+  string idempotency_key = 2;
+  string actor_did = 3;
+  string constitution_version = 4;
+  string signature = 5;
+  google.protobuf.Timestamp issued_at = 6;
+  oneof payload {
+    SubmitAmendmentCommand submit_amendment = 20;
+    CastBallotCommand cast_ballot = 21;
+    ExecutePolicyCommand execute_policy = 22;
+    RegisterDIDCommand register_did = 23;
+    GrantDelegationCommand grant_delegation = 24;
+    SolveAllocationCommand solve_allocation = 25;
+    AssertBeliefCommand assert_belief = 26;
+    StartSimulationCommand start_simulation = 27;
+    OpenIncidentCommand open_incident = 28;
+    ExecuteRollbackCommand execute_rollback = 29;
+    ProposeEvolutionCommand propose_evolution = 30;
+  }
+}
+
+message EventEnvelope {
+  string event_id = 1;
+  string event_type = 2;
+  string aggregate_id = 3;
+  string causation_id = 4;
+  string correlation_id = 5;
+  string constitution_version = 6;
+  uint64 sequence = 7;
+  google.protobuf.Timestamp occurred_at = 8;
+  oneof payload {
+    AmendmentSubmitted amendment_submitted = 20;
+    AmendmentValidated amendment_validated = 21;
+    AmendmentActivated amendment_activated = 22;
+    AmendmentRolledBack amendment_rolled_back = 23;
+    ProposalCreated proposal_created = 24;
+    VoteFinalized vote_finalized = 25;
+    PolicyExecuted policy_executed = 26;
+    DIDRegistered did_registered = 27;
+    DelegationGranted delegation_granted = 28;
+    PowerSnapshotComputed power_snapshot_computed = 29;
+    AllocationCommitted allocation_committed = 30;
+    BeliefAsserted belief_asserted = 31;
+    ContradictionDetected contradiction_detected = 32;
+    SimulationCompleted simulation_completed = 33;
+    MetricComputed metric_computed = 34;
+    IncidentOpened incident_opened = 35;
+    RollbackVerified rollback_verified = 36;
+    EvolutionCandidateGenerated evolution_candidate_generated = 37;
+  }
+}
+
+message SubmitAmendmentCommand {
+  string amendment_key = 1;
+  string target_version = 2;
+  string proposer_did = 3;
+  string source_hash = 4;
+  QuorumSpec quorum = 5;
+  RollbackManifest rollback_manifest = 6;
+  repeated string evidence_refs = 7;
+}
+
+message CastBallotCommand {
+  string proposal_id = 1;
+  string voter_did = 2;
+  string authority_scope = 3;
+  BallotChoice choice = 4;
+  string signature = 5;
+}
+
+message ExecutePolicyCommand {
+  string proposal_id = 1;
+  string command_bundle_uri = 2;
+  string compensation_bundle_uri = 3;
+}
+
+message RegisterDIDCommand {
+  string did = 1;
+  google.protobuf.Struct did_document = 2;
+  string document_hash = 3;
+}
+
+message GrantDelegationCommand {
+  string delegator_did = 1;
+  string delegate_did = 2;
+  string capability = 3;
+  string scope = 4;
+  google.protobuf.Struct constraints = 5;
+  google.protobuf.Timestamp valid_until = 6;
+}
+
+message SolveAllocationCommand {
+  string problem_id = 1;
+  string resource_snapshot_hash = 2;
+  google.protobuf.Struct objective = 3;
+  repeated AllocationConstraint constraints = 4;
+}
+
+message AssertBeliefCommand {
+  string belief_id = 1;
+  string claim = 2;
+  string situation_id = 3;
+  repeated string evidence_refs = 4;
+  double trust_score = 5;
+}
+
+message StartSimulationCommand {
+  string scenario_id = 1;
+  string scenario_hash = 2;
+  uint64 seed = 3;
+  uint32 horizon_ticks = 4;
+  bool monte_carlo = 5;
+}
+
+message OpenIncidentCommand {
+  string incident_key = 1;
+  FailureClass failure_class = 2;
+  Severity severity = 3;
+  repeated string affected_layers = 4;
+  google.protobuf.Struct detection_payload = 5;
+}
+
+message ExecuteRollbackCommand {
+  string incident_id = 1;
+  string checkpoint_id = 2;
+  string rollback_manifest_uri = 3;
+}
+
+message ProposeEvolutionCommand {
+  string candidate_id = 1;
+  string subject_type = 2;
+  string subject_id = 3;
+  string fitness_snapshot_id = 4;
+  string scenario_id = 5;
+}
+
+message AmendmentSubmitted {
+  string amendment_id = 1;
+  string amendment_key = 2;
+  string target_version = 3;
+  string proposer_did = 4;
+}
+
+message AmendmentValidated {
+  string amendment_id = 1;
+  ValidationStatus status = 2;
+  string validation_run_id = 3;
+  repeated string proof_obligations = 4;
+}
+
+message AmendmentActivated {
+  string amendment_id = 1;
+  string constitution_version = 2;
+  string artifact_merkle_root = 3;
+  string activation_checkpoint_id = 4;
+}
+
+message AmendmentRolledBack {
+  string amendment_id = 1;
+  string restored_constitution_version = 2;
+  string rollback_verification_id = 3;
+}
+
+message ProposalCreated {
+  string proposal_id = 1;
+  string proposal_key = 2;
+  ProposalType proposal_type = 3;
+  string proposer_did = 4;
+  Impact impact = 5;
+}
+
+message VoteFinalized {
+  string proposal_id = 1;
+  double eligible_power = 2;
+  double participating_power = 3;
+  double yes_power = 4;
+  bool quorum_pass = 5;
+  bool threshold_pass = 6;
+  bool capture_pass = 7;
+}
+
+message PolicyExecuted {
+  string proposal_id = 1;
+  string execution_id = 2;
+  string workflow_id = 3;
+  ExecutionStatus status = 4;
+}
+
+message DIDRegistered {
+  string did = 1;
+  string document_hash = 2;
+}
+
+message DelegationGranted {
+  string delegation_id = 1;
+  string delegator_did = 2;
+  string delegate_did = 3;
+  string capability = 4;
+  string scope = 5;
+}
+
+message PowerSnapshotComputed {
+  string snapshot_id = 1;
+  string scope = 2;
+  string snapshot_hash = 3;
+  double max_control_share = 4;
+  bool capture_pass = 5;
+}
+
+message AllocationCommitted {
+  string plan_id = 1;
+  string resource_snapshot_hash = 2;
+  string solution_hash = 3;
+  double objective_value = 4;
+}
+
+message BeliefAsserted {
+  string belief_id = 1;
+  string situation_id = 2;
+  string truth_label = 3;
+  double trust_score = 4;
+}
+
+message ContradictionDetected {
+  string contradiction_id = 1;
+  repeated string belief_ids = 2;
+  string repair_case_id = 3;
+}
+
+message SimulationCompleted {
+  string simulation_run_id = 1;
+  string scenario_id = 2;
+  string result_digest = 3;
+  bool certified = 4;
+}
+
+message MetricComputed {
+  string metric_key = 1;
+  string scope = 2;
+  double value = 3;
+  AlertLevel alert_level = 4;
+}
+
+message IncidentOpened {
+  string incident_id = 1;
+  string incident_key = 2;
+  FailureClass failure_class = 3;
+  Severity severity = 4;
+}
+
+message RollbackVerified {
+  string rollback_id = 1;
+  string incident_id = 2;
+  string checkpoint_id = 3;
+  string verification_hash = 4;
+}
+
+message EvolutionCandidateGenerated {
+  string candidate_id = 1;
+  string subject_type = 2;
+  string subject_id = 3;
+  double fitness_score = 4;
+}
+
+message QuorumSpec {
+  double minimum_participation = 1;
+  double approval_threshold = 2;
+  double capture_threshold = 3;
+}
+
+message RollbackManifest {
+  double coverage = 1;
+  string checkpoint_policy = 2;
+  string inverse_migration_bundle_uri = 3;
+}
+
+message AllocationConstraint {
+  string constraint_id = 1;
+  string expression = 2;
+  bool constitutional = 3;
+}
+
+message DeadLetterEvent {
+  EventEnvelope original_event = 1;
+  string failure_reason = 2;
+  string consumer_group = 3;
+  uint32 attempt_count = 4;
+  google.protobuf.Timestamp failed_at = 5;
+}
+
+enum BallotChoice {
+  BALLOT_CHOICE_UNSPECIFIED = 0;
+  BALLOT_CHOICE_YES = 1;
+  BALLOT_CHOICE_NO = 2;
+  BALLOT_CHOICE_ABSTAIN = 3;
+  BALLOT_CHOICE_CHALLENGE = 4;
+}
+
+enum ValidationStatus {
+  VALIDATION_STATUS_UNSPECIFIED = 0;
+  VALIDATION_STATUS_PASSED = 1;
+  VALIDATION_STATUS_FAILED = 2;
+  VALIDATION_STATUS_CANCELLED = 3;
+}
+
+enum ProposalType {
+  PROPOSAL_TYPE_UNSPECIFIED = 0;
+  PROPOSAL_TYPE_POLICY = 1;
+  PROPOSAL_TYPE_CONSTITUTIONAL_AMENDMENT = 2;
+  PROPOSAL_TYPE_BUDGET = 3;
+  PROPOSAL_TYPE_RESOURCE_ALLOCATION = 4;
+  PROPOSAL_TYPE_RECOVERY = 5;
+  PROPOSAL_TYPE_EVOLUTION = 6;
+}
+
+enum Impact {
+  IMPACT_UNSPECIFIED = 0;
+  IMPACT_LOW = 1;
+  IMPACT_MEDIUM = 2;
+  IMPACT_HIGH = 3;
+  IMPACT_CIVILIZATIONAL = 4;
+}
+
+enum ExecutionStatus {
+  EXECUTION_STATUS_UNSPECIFIED = 0;
+  EXECUTION_STATUS_SCHEDULED = 1;
+  EXECUTION_STATUS_RUNNING = 2;
+  EXECUTION_STATUS_COMPLETED = 3;
+  EXECUTION_STATUS_FAILED = 4;
+  EXECUTION_STATUS_COMPENSATING = 5;
+  EXECUTION_STATUS_ROLLED_BACK = 6;
+}
+
+enum FailureClass {
+  FAILURE_CLASS_UNSPECIFIED = 0;
+  FAILURE_CLASS_GOVERNANCE = 1;
+  FAILURE_CLASS_KNOWLEDGE = 2;
+  FAILURE_CLASS_ALIGNMENT = 3;
+  FAILURE_CLASS_ECONOMIC = 4;
+  FAILURE_CLASS_COORDINATION = 5;
+  FAILURE_CLASS_SECURITY = 6;
+}
+
+enum Severity {
+  SEVERITY_UNSPECIFIED = 0;
+  SEVERITY_SEV4 = 1;
+  SEVERITY_SEV3 = 2;
+  SEVERITY_SEV2 = 3;
+  SEVERITY_SEV1 = 4;
+  SEVERITY_CIVILIZATIONAL = 5;
+}
+
+enum AlertLevel {
+  ALERT_LEVEL_UNSPECIFIED = 0;
+  ALERT_LEVEL_OK = 1;
+  ALERT_LEVEL_WARN = 2;
+  ALERT_LEVEL_CRITICAL = 3;
+}
+

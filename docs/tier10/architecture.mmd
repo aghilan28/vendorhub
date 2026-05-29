@@ -1,0 +1,18 @@
+flowchart TD
+  Research["Tier 10 Research Corpus"] --> Migration["Supabase Tier 10 Migration"]
+  Migration --> Governance["Meta Governance Engine"]
+  Migration --> Epistemic["Epistemic Integrity Engine"]
+  Migration --> Preservation["Knowledge Preservation Layer"]
+  Migration --> Alignment["Alignment Persistence Engine"]
+  Migration --> Simulation["Civilizational Simulation Engine"]
+
+  Governance --> Formal["TLA+ / Alloy / SMT Verification"]
+  Formal --> AmendmentGate["Amendment Activation Gate"]
+  Epistemic --> Neo4j["Neo4j Tier 10 Knowledge Graph"]
+  Simulation --> Kafka["Kafka Tier 10 Event Topics"]
+  Kafka --> Flink["Flink Dashboard Pipelines"]
+  Alignment --> APIs["/api/tier10 APIs"]
+  Simulation --> APIs
+  Preservation --> APIs
+  Governance --> APIs
+  Flink --> Dashboards["Institution, Governance, Alignment, Epistemic, Simulation Dashboards"]

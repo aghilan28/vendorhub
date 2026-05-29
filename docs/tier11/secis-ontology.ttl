@@ -1,0 +1,53 @@
+@prefix kartex: <https://kartex.ai/ontology/secis#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix evi: <https://w3id.org/evi#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+kartex:SECISOntology a owl:Ontology ;
+  rdfs:label "KARTEX Tier 11 SECIS Knowledge Graph Ontology" ;
+  owl:versionInfo "11.0.0" .
+
+kartex:ScientificClaim a owl:Class ; rdfs:subClassOf prov:Entity .
+kartex:ReplicationContract a owl:Class ; rdfs:subClassOf prov:Plan .
+kartex:ValidationMarket a owl:Class ; rdfs:subClassOf prov:Activity .
+kartex:MarketParticipant a owl:Class ; rdfs:subClassOf prov:Agent .
+kartex:ForecastPosition a owl:Class ; rdfs:subClassOf prov:Entity .
+kartex:ClaimSettlement a owl:Class ; rdfs:subClassOf prov:Activity .
+kartex:VerificationEvidence a owl:Class ; rdfs:subClassOf evi:Evidence .
+kartex:ConsensusSession a owl:Class ; rdfs:subClassOf prov:Activity .
+kartex:ReputationNode a owl:Class ; rdfs:subClassOf prov:Entity .
+kartex:KnowledgeAsset a owl:Class ; rdfs:subClassOf prov:Entity .
+kartex:SimulationWorld a owl:Class ; rdfs:subClassOf prov:Collection .
+kartex:SimulationTick a owl:Class ; rdfs:subClassOf prov:Activity .
+kartex:Hypothesis a owl:Class ; rdfs:subClassOf prov:Entity .
+kartex:Experiment a owl:Class ; rdfs:subClassOf prov:Activity .
+kartex:PolicyManifest a owl:Class ; rdfs:subClassOf prov:Plan .
+kartex:CompiledPolicy a owl:Class ; rdfs:subClassOf prov:Entity .
+kartex:VerificationProof a owl:Class ; rdfs:subClassOf evi:Evidence .
+kartex:Contradiction a owl:Class ; rdfs:subClassOf prov:Entity .
+kartex:QuarantineRecord a owl:Class ; rdfs:subClassOf prov:Activity .
+kartex:LegitimacySignal a owl:Class ; rdfs:subClassOf prov:Entity .
+kartex:ResearchProblem a owl:Class ; rdfs:subClassOf prov:Entity .
+
+kartex:hasReplicationContract a owl:ObjectProperty ; rdfs:domain kartex:ScientificClaim ; rdfs:range kartex:ReplicationContract .
+kartex:validatedByMarket a owl:ObjectProperty ; rdfs:domain kartex:ScientificClaim ; rdfs:range kartex:ValidationMarket .
+kartex:submittedPosition a owl:ObjectProperty ; rdfs:domain kartex:MarketParticipant ; rdfs:range kartex:ForecastPosition ; rdfs:subPropertyOf prov:wasAttributedTo .
+kartex:supportsClaim a owl:ObjectProperty ; rdfs:domain kartex:VerificationEvidence ; rdfs:range kartex:ScientificClaim ; rdfs:subPropertyOf evi:supports .
+kartex:contradictsClaim a owl:ObjectProperty ; rdfs:domain kartex:VerificationEvidence ; rdfs:range kartex:ScientificClaim ; rdfs:subPropertyOf evi:challenges .
+kartex:wasSettledBy a owl:ObjectProperty ; rdfs:domain kartex:ScientificClaim ; rdfs:range kartex:ClaimSettlement ; rdfs:subPropertyOf prov:wasGeneratedBy .
+kartex:wasDerivedFromAsset a owl:ObjectProperty ; rdfs:domain kartex:KnowledgeAsset ; rdfs:range kartex:KnowledgeAsset ; rdfs:subPropertyOf prov:wasDerivedFrom .
+kartex:wasAttributedToOwner a owl:ObjectProperty ; rdfs:domain kartex:KnowledgeAsset ; rdfs:range kartex:MarketParticipant ; rdfs:subPropertyOf prov:wasAttributedTo .
+kartex:usedEvidence a owl:ObjectProperty ; rdfs:domain kartex:ClaimSettlement ; rdfs:range kartex:VerificationEvidence ; rdfs:subPropertyOf prov:used .
+kartex:generatedProof a owl:ObjectProperty ; rdfs:domain kartex:CompiledPolicy ; rdfs:range kartex:VerificationProof ; rdfs:subPropertyOf prov:wasGeneratedBy .
+
+kartex:claimId a owl:DatatypeProperty ; rdfs:domain kartex:ScientificClaim ; rdfs:range xsd:string .
+kartex:lifecycleState a owl:DatatypeProperty ; rdfs:domain kartex:ScientificClaim ; rdfs:range xsd:string .
+kartex:confidence a owl:DatatypeProperty ; rdfs:domain kartex:ScientificClaim ; rdfs:range xsd:decimal .
+kartex:contentHash a owl:DatatypeProperty ; rdfs:domain kartex:KnowledgeAsset ; rdfs:range xsd:string .
+kartex:version a owl:DatatypeProperty ; rdfs:domain kartex:PolicyManifest ; rdfs:range xsd:string .
+kartex:evidenceIntegrityScore a owl:DatatypeProperty ; rdfs:domain kartex:VerificationEvidence ; rdfs:range xsd:decimal .
+kartex:psi a owl:DatatypeProperty ; rdfs:domain kartex:SimulationTick ; rdfs:range xsd:decimal .
+kartex:gini a owl:DatatypeProperty ; rdfs:domain kartex:SimulationTick ; rdfs:range xsd:decimal .
+kartex:trust a owl:DatatypeProperty ; rdfs:domain kartex:SimulationTick ; rdfs:range xsd:decimal .

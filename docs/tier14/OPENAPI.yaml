@@ -1,0 +1,32 @@
+openapi: 3.1.0
+info:
+  title: KMOS Tier 14 Universal Intelligence API
+  version: 14.0.0
+paths:
+  /api/tier14:
+    get:
+      summary: Tier 14 acceptance, package, and traceability catalog
+      responses:
+        "200":
+          description: Tier 14 executable implementation catalog
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [tier, traceability, packages, matrix, packageManifests]
+                properties:
+                  tier:
+                    type: integer
+                    const: 14
+                  traceability:
+                    type: object
+                  packages:
+                    type: object
+                  matrix:
+                    type: array
+                    items:
+                      type: object
+                  packageManifests:
+                    type: array
+                    items:
+                      type: object

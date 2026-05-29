@@ -1,0 +1,137 @@
+topics:
+  - name: secis.claim.events
+    partitions: 36
+    replicationFactor: 3
+    cleanupPolicy: compact,delete
+    retentionMs: -1
+    key: claim_id
+    producers: [claim-api, immune-auditor, discovery-engine]
+    consumers: [validation-market-orchestrator, graph-projector, observability-sink]
+    dlq: secis.claim.events.dlq
+  - name: secis.market.events
+    partitions: 36
+    replicationFactor: 3
+    cleanupPolicy: compact,delete
+    retentionMs: -1
+    key: market_id
+    producers: [validation-market-orchestrator, settlement-engine]
+    consumers: [forecast-ledger, reputation-engine, graph-projector]
+    dlq: secis.market.events.dlq
+  - name: secis.forecast.events
+    partitions: 48
+    replicationFactor: 3
+    cleanupPolicy: delete
+    retentionMs: -1
+    key: market_id
+    producers: [forecast-api, agent-orchestrator]
+    consumers: [settlement-engine, reputation-engine, audit-projector]
+    dlq: secis.forecast.events.dlq
+  - name: secis.evidence.events
+    partitions: 48
+    replicationFactor: 3
+    cleanupPolicy: compact,delete
+    retentionMs: -1
+    key: claim_id
+    producers: [replication-runner, evidence-verifier, immune-system]
+    consumers: [settlement-engine, knowledge-graph-projector, quarantine-worker]
+    dlq: secis.evidence.events.dlq
+  - name: secis.consensus.events
+    partitions: 36
+    replicationFactor: 3
+    cleanupPolicy: delete
+    retentionMs: -1
+    key: session_id
+    producers: [consensus-engine, swarm-protocol, peer-prediction-engine]
+    consumers: [reputation-engine, graph-projector, observability-sink]
+    dlq: secis.consensus.events.dlq
+  - name: secis.reputation.events
+    partitions: 36
+    replicationFactor: 3
+    cleanupPolicy: compact,delete
+    retentionMs: -1
+    key: subject_id
+    producers: [reputation-engine, settlement-engine, slashing-worker]
+    consumers: [trust-aggregator, governance-engine, vector-feature-sync]
+    dlq: secis.reputation.events.dlq
+  - name: secis.economics.events
+    partitions: 24
+    replicationFactor: 3
+    cleanupPolicy: compact,delete
+    retentionMs: -1
+    key: asset_id
+    producers: [royalty-engine, citation-router]
+    consumers: [ledger-sink, graph-projector, audit-projector]
+    dlq: secis.economics.events.dlq
+  - name: secis.simulation.events
+    partitions: 48
+    replicationFactor: 3
+    cleanupPolicy: delete
+    retentionMs: -1
+    key: world_id
+    producers: [cliodynamic-simulator]
+    consumers: [legitimacy-engine, checkpoint-writer, observability-sink]
+    dlq: secis.simulation.events.dlq
+  - name: secis.discovery.events
+    partitions: 36
+    replicationFactor: 3
+    cleanupPolicy: compact,delete
+    retentionMs: -1
+    key: hypothesis_id
+    producers: [hypothesis-generator, experiment-executor, symbolic-regression-engine]
+    consumers: [validation-market-orchestrator, graph-projector, research-registry]
+    dlq: secis.discovery.events.dlq
+  - name: secis.policy.events
+    partitions: 24
+    replicationFactor: 5
+    cleanupPolicy: compact,delete
+    retentionMs: -1
+    key: policy_key
+    producers: [constitutional-compiler, verification-worker]
+    consumers: [governance-engine, agent-guardrail-sync, audit-projector]
+    dlq: secis.policy.events.dlq
+  - name: secis.immune.events
+    partitions: 36
+    replicationFactor: 3
+    cleanupPolicy: compact,delete
+    retentionMs: -1
+    key: claim_id
+    producers: [claim-auditor, contradiction-detector, quarantine-worker]
+    consumers: [knowledge-graph-projector, governance-engine, observability-sink]
+    dlq: secis.immune.events.dlq
+  - name: secis.legitimacy.events
+    partitions: 24
+    replicationFactor: 3
+    cleanupPolicy: compact,delete
+    retentionMs: -1
+    key: scope
+    producers: [legitimacy-engine]
+    consumers: [policy-actuator, governance-engine, observability-sink]
+    dlq: secis.legitimacy.events.dlq
+  - name: secis.registry.events
+    partitions: 24
+    replicationFactor: 3
+    cleanupPolicy: compact,delete
+    retentionMs: -1
+    key: problem_id
+    producers: [research-registry, discovery-engine]
+    consumers: [planning-indexer, graph-projector, governance-engine]
+    dlq: secis.registry.events.dlq
+
+replay:
+  sourceOfTruth: postgres_outbox
+  ordering: aggregate_id_then_sequence
+  idempotencyKey: replay_key
+  replayTopics:
+    - secis.claim.events
+    - secis.market.events
+    - secis.forecast.events
+    - secis.evidence.events
+    - secis.consensus.events
+    - secis.reputation.events
+    - secis.economics.events
+    - secis.simulation.events
+    - secis.discovery.events
+    - secis.policy.events
+    - secis.immune.events
+    - secis.legitimacy.events
+    - secis.registry.events

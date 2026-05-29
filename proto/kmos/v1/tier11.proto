@@ -1,0 +1,205 @@
+syntax = "proto3";
+
+package kmos.v1;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/kartex/kmos/proto/kmos/v1;kmosv1";
+
+message Tier11EventEnvelope {
+  string event_id = 1;
+  string event_type = 2;
+  string aggregate_id = 3;
+  string causation_id = 4;
+  string correlation_id = 5;
+  string constitution_version = 6;
+  uint64 sequence = 7;
+  string replay_key = 8;
+  google.protobuf.Timestamp occurred_at = 9;
+  oneof payload {
+    ScientificClaimSubmitted scientific_claim_submitted = 20;
+    ValidationMarketCreated validation_market_created = 21;
+    ForecastPositionSubmitted forecast_position_submitted = 22;
+    ReplicationContractActivated replication_contract_activated = 23;
+    VerificationEvidenceRegistered verification_evidence_registered = 24;
+    ClaimSettled claim_settled = 25;
+    ReputationAdjusted reputation_adjusted = 26;
+    ConsensusRoundClosed consensus_round_closed = 27;
+    KnowledgeRoyaltyRouted knowledge_royalty_routed = 28;
+    SimulationTickCompleted simulation_tick_completed = 29;
+    HypothesisValidated hypothesis_validated = 30;
+    PolicyCompiled policy_compiled = 31;
+    ClaimQuarantined claim_quarantined = 32;
+    LegitimacyTriggerEmitted legitimacy_trigger_emitted = 33;
+    ResearchProblemUpdated research_problem_updated = 34;
+  }
+}
+
+message ScientificClaimSubmitted {
+  string claim_id = 1;
+  string submitter_did = 2;
+  string field = 3;
+  string hypothesis_hash = 4;
+  string preregistration_uri = 5;
+  double confidence = 6;
+}
+
+message ValidationMarketCreated {
+  string market_id = 1;
+  string claim_id = 2;
+  string contract_id = 3;
+  ScoringRule scoring_rule = 4;
+  double liquidity_pool = 5;
+  google.protobuf.Timestamp opens_at = 6;
+  google.protobuf.Timestamp closes_at = 7;
+}
+
+message ForecastPositionSubmitted {
+  string position_id = 1;
+  string market_id = 2;
+  string participant_id = 3;
+  double probability = 4;
+  double stake = 5;
+  ScoringRule scoring_rule = 6;
+  string rationale_hash = 7;
+}
+
+message ReplicationContractActivated {
+  string contract_id = 1;
+  string claim_id = 2;
+  string protocol_hash = 3;
+  uint32 minimum_replications = 4;
+  double required_power = 5;
+  double alpha_threshold = 6;
+  double effect_size_threshold = 7;
+  string settlement_rule = 8;
+}
+
+message VerificationEvidenceRegistered {
+  string evidence_id = 1;
+  string claim_id = 2;
+  string evidence_type = 3;
+  string source_uri = 4;
+  string content_hash = 5;
+  double integrity_score = 6;
+  string verified_by = 7;
+}
+
+message ClaimSettled {
+  string settlement_id = 1;
+  string market_id = 2;
+  string claim_id = 3;
+  SettlementOutcome outcome = 4;
+  double posterior_probability = 5;
+  double brier_total = 6;
+  double log_total = 7;
+  double quadratic_total = 8;
+  string evidence_digest = 9;
+  google.protobuf.Struct payout_manifest = 10;
+}
+
+message ReputationAdjusted {
+  string adjustment_id = 1;
+  string participant_id = 2;
+  string adjustment_type = 3;
+  double delta = 4;
+  double previous_score = 5;
+  double next_score = 6;
+  string reason_code = 7;
+  string audit_hash = 8;
+}
+
+message ConsensusRoundClosed {
+  string session_id = 1;
+  string round_id = 2;
+  string protocol = 3;
+  double aggregate_estimate = 4;
+  double max_deviation = 5;
+  bool converged = 6;
+}
+
+message KnowledgeRoyaltyRouted {
+  string revenue_id = 1;
+  string asset_id = 2;
+  double gross_amount = 3;
+  double protocol_fee = 4;
+  string ledger_txn_ref = 5;
+  google.protobuf.Struct route_manifest = 6;
+}
+
+message SimulationTickCompleted {
+  string world_id = 1;
+  uint64 tick_number = 2;
+  double psi = 3;
+  double mmp = 4;
+  double emp = 5;
+  double sfd = 6;
+  double gini = 7;
+  double trust = 8;
+  double debt = 9;
+  double elite_density = 10;
+  string checkpoint_hash = 11;
+}
+
+message HypothesisValidated {
+  string hypothesis_id = 1;
+  bool accepted = 2;
+  repeated string failed_checks = 3;
+  string evidence_digest = 4;
+}
+
+message PolicyCompiled {
+  string manifest_id = 1;
+  string policy_key = 2;
+  string target_runtime = 3;
+  string artifact_hash = 4;
+  string proof_id = 5;
+  VerificationStatus status = 6;
+}
+
+message ClaimQuarantined {
+  string quarantine_id = 1;
+  string claim_id = 2;
+  string reason_code = 3;
+  string state = 4;
+  google.protobuf.Struct release_requirements = 5;
+}
+
+message LegitimacyTriggerEmitted {
+  string signal_id = 1;
+  string scope = 2;
+  double stress_score = 3;
+  string trigger_type = 4;
+  string actuation_contract = 5;
+}
+
+message ResearchProblemUpdated {
+  string problem_id = 1;
+  string previous_status = 2;
+  string next_status = 3;
+  string priority = 4;
+  string reason = 5;
+}
+
+enum ScoringRule {
+  SCORING_RULE_UNSPECIFIED = 0;
+  SCORING_RULE_BRIER = 1;
+  SCORING_RULE_LOG = 2;
+  SCORING_RULE_QUADRATIC = 3;
+}
+
+enum SettlementOutcome {
+  SETTLEMENT_OUTCOME_UNSPECIFIED = 0;
+  SETTLEMENT_OUTCOME_REPLICATED = 1;
+  SETTLEMENT_OUTCOME_NOT_REPLICATED = 2;
+  SETTLEMENT_OUTCOME_INCONCLUSIVE = 3;
+  SETTLEMENT_OUTCOME_INVALID = 4;
+}
+
+enum VerificationStatus {
+  VERIFICATION_STATUS_UNSPECIFIED = 0;
+  VERIFICATION_STATUS_PENDING = 1;
+  VERIFICATION_STATUS_PASSED = 2;
+  VERIFICATION_STATUS_FAILED = 3;
+}

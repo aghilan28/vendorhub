@@ -1,0 +1,49 @@
+topics:
+  - name: institution.events
+    partitions: 24
+    replicationFactor: 3
+    cleanupPolicy: compact,delete
+    retentionMs: -1
+    key: institution_id
+  - name: governance.events
+    partitions: 24
+    replicationFactor: 3
+    cleanupPolicy: compact,delete
+    retentionMs: -1
+    key: aggregate_id
+  - name: constitution.events
+    partitions: 24
+    replicationFactor: 5
+    cleanupPolicy: compact,delete
+    retentionMs: -1
+    key: constitution_version
+  - name: knowledge.events
+    partitions: 36
+    replicationFactor: 3
+    cleanupPolicy: delete
+    retentionMs: -1
+    key: claim_id
+  - name: epistemic.events
+    partitions: 36
+    replicationFactor: 3
+    cleanupPolicy: delete
+    retentionMs: -1
+    key: claim_id
+  - name: alignment.events
+    partitions: 24
+    replicationFactor: 3
+    cleanupPolicy: delete
+    retentionMs: -1
+    key: principle_id
+  - name: civilization.events
+    partitions: 36
+    replicationFactor: 3
+    cleanupPolicy: delete
+    retentionMs: -1
+    key: simulation_run_id
+  - name: simulation.events
+    partitions: 36
+    replicationFactor: 3
+    cleanupPolicy: delete
+    retentionMs: -1
+    key: simulation_run_id

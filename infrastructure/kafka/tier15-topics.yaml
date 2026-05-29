@@ -1,0 +1,23 @@
+topics:
+  - name: tier15.knowledge-units.events.v1
+    immutable: true
+    replayable: true
+    events:
+      - KnowledgeCreated
+      - KnowledgeValidated
+      - KnowledgeVerified
+      - KnowledgeDrifted
+      - KnowledgeRuptured
+      - KnowledgeHealed
+      - KnowledgeArchived
+  - name: tier15.epistemic-security.events.v1
+    immutable: true
+    replayable: true
+    events:
+      - ThreatDetected
+  - name: tier15.discovery.events.v1
+    immutable: true
+    replayable: true
+    events:
+      - HypothesisGenerated
+      - DiscoveryValidated

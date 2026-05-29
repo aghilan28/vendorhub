@@ -1,0 +1,11 @@
+(set-logic QF_LIA)
+(declare-const proofPassed Bool)
+(declare-const alloyPassed Bool)
+(declare-const smtPassed Bool)
+(declare-const simulationPassed Bool)
+(declare-const rollbackAvailable Bool)
+(declare-const active Bool)
+
+(assert active)
+(assert (not (and proofPassed alloyPassed smtPassed simulationPassed rollbackAvailable)))
+(check-sat)

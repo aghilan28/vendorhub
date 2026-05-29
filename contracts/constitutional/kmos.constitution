@@ -1,0 +1,111 @@
+constitution kartex_kmos version 9.0.0 {
+  source: "kartex-tier9-implementation-pack";
+  jurisdiction: "global";
+  activation_mode: "governance_approved";
+}
+
+principle human_legitimacy {
+  text = "High-impact authority changes require accountable human-governed legitimacy.";
+  scope = governance.authority;
+  priority = 100;
+}
+
+principle epistemic_integrity {
+  text = "Active knowledge claims require provenance, trust scoring, contradiction handling, and repair paths.";
+  scope = knowledge.integrity;
+  priority = 95;
+}
+
+role constitutional_council {
+  grants = ["constitution.compile", "constitution.validate", "constitution.activate"];
+  inherits = [];
+  constraints = ["capture_threshold", "controller_quorum"];
+}
+
+role formal_methods_guild {
+  grants = ["proof.validate", "model.check", "counterexample.register"];
+  inherits = [];
+  constraints = ["independent_review"];
+}
+
+domain identity {
+  owner = identity_council;
+  datastores = ["postgres", "neo4j"];
+  events = ["DIDRegistered", "DelegationGranted", "PowerSnapshotComputed"];
+}
+
+domain governance {
+  owner = governance_council;
+  datastores = ["postgres", "neo4j", "lakehouse"];
+  events = ["ProposalCreated", "VoteFinalized", "PolicyExecuted"];
+}
+
+rule amendment_requires_proof {
+  scope = constitution.amendment;
+  when amendment.impact in ["HIGH", "CIVILIZATIONAL"];
+  require proof.status == "PASSED" and simulation.confidence >= 0.95;
+  effect deny;
+  proof = tla("KMOSConstitution", ["TypeOK", "Safety", "RollbackAvailable"]);
+  rollback = manifest("constitution.rollback.v1");
+  audit = append_only("constitutional_audit_log");
+}
+
+rule emergency_override_expires {
+  scope = governance.override;
+  when override.kind == "EMERGENCY";
+  require override.duration <= 72h and override.independent_controller_quorum >= 0.75;
+  effect deny;
+  proof = tla("KMOSEmergencyOverride", ["BoundedEmergency"]);
+  rollback = manifest("emergency_override_expiry.v1");
+  audit = append_only("override_audit_log");
+}
+
+invariant capture_threshold {
+  scope = identity.power;
+  formula = always max_control_share(actor_or_coalition) < theta_capture;
+  severity = CIVILIZATIONAL;
+  verifier = service("power-distribution-service.ComputePower");
+  rollback = manifest("identity_power_recompute.v1");
+}
+
+invariant epistemic_provenance {
+  scope = knowledge.belief;
+  formula = always active_belief.provenance_chain != null and active_belief.trust_score >= tau;
+  severity = BLOCKING;
+  verifier = service("epistemic-integrity-service.VerifyEvidence");
+  rollback = manifest("belief_retraction.v1");
+}
+
+metric CHI {
+  formula = weighted_mean([constitutional_integrity, rollback_coverage, legitimacy_score, proof_pass_rate]);
+  inputs = ["constitutional_integrity", "rollback_coverage", "legitimacy_score", "proof_pass_rate"];
+  cadence = 5m;
+  thresholds = { warn: 0.85; critical: 0.75; };
+}
+
+metric CTI {
+  formula = 1 - max_control_share(actor_or_coalition);
+  inputs = ["power_snapshot", "coalition_graph"];
+  cadence = 1m;
+  thresholds = { warn: 0.72; critical: 0.67; };
+}
+
+workflow amendment_lifecycle {
+  states = ["DRAFT", "SUBMITTED", "EVIDENCE_REVIEW", "FORMAL_VALIDATION", "SIMULATION_VALIDATION", "DELIBERATION", "VOTING", "APPROVED", "SCHEDULED", "ACTIVATING", "ACTIVE", "REJECTED", "ROLLBACK_PENDING", "ROLLED_BACK"];
+  transitions = ["DRAFT->SUBMITTED", "SUBMITTED->EVIDENCE_REVIEW", "EVIDENCE_REVIEW->FORMAL_VALIDATION", "FORMAL_VALIDATION->SIMULATION_VALIDATION", "SIMULATION_VALIDATION->DELIBERATION", "DELIBERATION->VOTING", "VOTING->APPROVED", "APPROVED->SCHEDULED", "SCHEDULED->ACTIVATING", "ACTIVATING->ACTIVE", "ACTIVATING->ROLLBACK_PENDING", "ROLLBACK_PENDING->ROLLED_BACK"];
+  timeouts = { deliberation_min: 14d; activation_max: 1h; rollback_max: 4h; };
+  compensations = ["ACTIVATING->ROLLBACK_PENDING", "ACTIVE->ROLLBACK_PENDING"];
+}
+
+amendment capture_threshold_refinement {
+  target = capture_threshold;
+  change = { theta_capture: 0.33; detector: "coalition_graph_v2"; };
+  rationale = "Maintain capture resistance under delegated power aggregation.";
+  evidence = ["kg:ent-elite-capture", "sim:elite-capture-baseline", "proof:fa-capture-threshold"];
+  quorum = { minimum_participation: 0.6; approval_threshold: 0.67; capture_threshold: 0.33; };
+  simulation = { scenarios: ["elite_capture", "coalition_attack", "rollback_recovery"]; confidence: 0.95; };
+  proof = tla("KMOSConstitution", ["TypeOK", "CaptureResistance", "RollbackAvailable"]);
+  activation = { mode: "scheduled"; lock: "constitutional_activation_lock"; };
+  rollback = manifest("identity_power_recompute.v1");
+}
+
