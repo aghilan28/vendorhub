@@ -1,0 +1,109 @@
+# KARTEX Phase C — Prometheus alerting rules.
+# Severity model: P1 (page now / revenue or data-loss), P2 (page business hours),
+# P3 (ticket), P4 (informational). Routed by Alertmanager (alertmanager.yml).
+groups:
+  - name: kartex-commerce-critical
+    rules:
+      - alert: PaymentFailureRateHigh
+        expr: |
+          sum(rate(kartex_payments_failed_total[5m]))
+            / clamp_min(sum(rate(kartex_payments_authorized_total[5m])) + sum(rate(kartex_payments_failed_total[5m])), 1) > 0.10
+        for: 5m
+        labels: { severity: P1, domain: payments, owner: payments }
+        annotations:
+          summary: "Payment failure rate > 10% (5m)"
+          runbook: "docs/operations/PHASE_30_PRODUCTION_RUNBOOK.md#payments"
+
+      - alert: CheckoutSuccessRateLow
+        expr: |
+          sum(rate(kartex_checkout_success_total[10m]))
+            / clamp_min(sum(rate(kartex_checkout_attempts_total[10m])), 1) < 0.85
+        for: 10m
+        labels: { severity: P1, domain: commerce, owner: commerce }
+        annotations:
+          summary: "Checkout success rate < 85% (10m)"
+
+      - alert: NoOrdersCreated
+        expr: sum(increase(kartex_orders_created_total[30m])) == 0
+        for: 30m
+        labels: { severity: P2, domain: commerce, owner: commerce }
+        annotations:
+          summary: "No orders created in 30m — possible silent commerce outage"
+
+  - name: kartex-api
+    rules:
+      - alert: ApiErrorRateHigh
+        expr: |
+          sum(rate(kartex_api_errors_total[5m]))
+            / clamp_min(sum(rate(kartex_api_requests_total[5m])), 1) > 0.05
+        for: 5m
+        labels: { severity: P2, domain: api, owner: platform }
+        annotations:
+          summary: "API 5xx error rate > 5% (5m)"
+
+      - alert: ApiLatencyP95High
+        expr: |
+          histogram_quantile(0.95, sum(rate(kartex_api_request_duration_seconds_bucket[5m])) by (le, route)) > 1.5
+        for: 10m
+        labels: { severity: P3, domain: api, owner: platform }
+        annotations:
+          summary: "API p95 latency > 1.5s for {{ $labels.route }}"
+
+  - name: kartex-runtime
+    rules:
+      - alert: RuntimeDegraded
+        expr: kartex_runtime_up == 0
+        for: 3m
+        labels: { severity: P1, domain: infrastructure, owner: platform }
+        annotations:
+          summary: "Runtime {{ $labels.runtime }} enabled but unreachable (fallback active)"
+
+      - alert: KafkaConsumerLagHigh
+        expr: kartex_kafka_consumer_lag > 10000
+        for: 10m
+        labels: { severity: P2, domain: infrastructure, owner: platform }
+        annotations:
+          summary: "Kafka lag > 10k for {{ $labels.group }}/{{ $labels.topic }}"
+
+      - alert: QueueDepthHigh
+        expr: kartex_queue_depth > 5000
+        for: 10m
+        labels: { severity: P2, domain: infrastructure, owner: platform }
+        annotations:
+          summary: "Queue depth > 5000 for {{ $labels.queue }}"
+
+      - alert: DependencyErrorsHigh
+        expr: sum(rate(kartex_dependency_errors_total[5m])) by (dependency) > 1
+        for: 5m
+        labels: { severity: P2, domain: infrastructure, owner: platform }
+        annotations:
+          summary: "Dependency errors elevated for {{ $labels.dependency }}"
+
+  - name: kartex-engagement
+    rules:
+      - alert: NotificationFailureRateHigh
+        expr: |
+          sum(rate(kartex_notifications_failed_total[15m]))
+            / clamp_min(sum(rate(kartex_notifications_sent_total[15m])) + sum(rate(kartex_notifications_failed_total[15m])), 1) > 0.20
+        for: 15m
+        labels: { severity: P3, domain: engagement, owner: engagement }
+        annotations:
+          summary: "Notification failure rate > 20% (15m)"
+
+      - alert: SearchZeroResultRateHigh
+        expr: |
+          sum(rate(kartex_search_zero_results_total[15m]))
+            / clamp_min(sum(rate(kartex_search_queries_total[15m])), 1) > 0.30
+        for: 15m
+        labels: { severity: P3, domain: discovery, owner: discovery }
+        annotations:
+          summary: "Search zero-result rate > 30% (15m)"
+
+  - name: kartex-heartbeat
+    rules:
+      - alert: AppMetricsMissing
+        expr: up{job="kartex-app"} == 0
+        for: 5m
+        labels: { severity: P2, domain: api, owner: platform }
+        annotations:
+          summary: "App metrics endpoint not scrapeable (no operational truth)"

@@ -1,0 +1,73 @@
+# KARTEX Phase C — Observability stack (local / staging-equivalent).
+# Pairs with infra/docker-compose.runtime.yml (Phase B). Run both, then point the
+# app at the collector + Prometheus at the app's /api/metrics.
+#
+#   docker compose -f infra/observability/docker-compose.observability.yml up -d
+#
+#   Grafana       http://localhost:3001  (admin / localdevgrafana)
+#   Prometheus    http://localhost:9090
+#   Jaeger UI     http://localhost:16686
+#   Alertmanager  http://localhost:9093
+#   OTLP ingest   http://localhost:4318  (set OTEL_EXPORTER_OTLP_ENDPOINT)
+name: kartex-observability
+
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.111.0
+    command: ["--config=/etc/otel/config.yaml"]
+    volumes:
+      - ./otel-collector.yaml:/etc/otel/config.yaml:ro
+    ports:
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP (app exports here)
+      - "8889:8889"   # Prometheus exporter (collector-derived metrics)
+    depends_on: [jaeger]
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.retention.time=15d"
+      - "--web.enable-lifecycle"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./alerts.rules.yml:/etc/prometheus/alerts.rules.yml:ro
+      - prometheus-data:/prometheus
+    ports: ["9090:9090"]
+    restart: unless-stopped
+
+  alertmanager:
+    image: prom/alertmanager:v0.27.0
+    command: ["--config.file=/etc/alertmanager/alertmanager.yml"]
+    volumes:
+      - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+    ports: ["9093:9093"]
+    restart: unless-stopped
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.62.0
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
+    ports:
+      - "16686:16686"  # UI
+      - "14268:14268"  # collector
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:11.3.0
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_PASSWORD:-localdevgrafana}"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_FEATURE_TOGGLES_ENABLE: "traceqlEditor"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    ports: ["3001:3000"]
+    depends_on: [prometheus, jaeger]
+    restart: unless-stopped
+
+volumes:
+  prometheus-data:
+  grafana-data:
