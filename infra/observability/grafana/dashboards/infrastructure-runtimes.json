@@ -1,0 +1,56 @@
+{
+  "uid": "kartex-infra",
+  "title": "KARTEX — Infrastructure & Runtimes",
+  "tags": ["kartex", "infrastructure"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "refresh": "30s",
+  "time": { "from": "now-6h", "to": "now" },
+  "panels": [
+    {
+      "id": 1, "type": "timeseries", "title": "API p95 latency by route",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "fieldConfig": { "defaults": { "unit": "s" } },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [{ "refId": "A", "expr": "histogram_quantile(0.95, sum(rate(kartex_api_request_duration_seconds_bucket[5m])) by (le, route))", "legendFormat": "{{route}}" }]
+    },
+    {
+      "id": 2, "type": "timeseries", "title": "Dependency latency p95",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "fieldConfig": { "defaults": { "unit": "s" } },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [{ "refId": "A", "expr": "histogram_quantile(0.95, sum(rate(kartex_dependency_duration_seconds_bucket[5m])) by (le, dependency))", "legendFormat": "{{dependency}}" }]
+    },
+    {
+      "id": 3, "type": "timeseries", "title": "Kafka consumer lag",
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 8 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [{ "refId": "A", "expr": "kartex_kafka_consumer_lag", "legendFormat": "{{group}}/{{topic}}" }]
+    },
+    {
+      "id": 4, "type": "timeseries", "title": "Queue depth",
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 8 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [{ "refId": "A", "expr": "kartex_queue_depth", "legendFormat": "{{queue}}" }]
+    },
+    {
+      "id": 5, "type": "timeseries", "title": "Redis cache hit ratio",
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 8 },
+      "fieldConfig": { "defaults": { "unit": "percentunit" } },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [{ "refId": "A", "expr": "sum(rate(kartex_redis_cache_hits_total[5m])) / clamp_min(sum(rate(kartex_redis_cache_hits_total[5m]))+sum(rate(kartex_redis_cache_misses_total[5m])),1)" }]
+    },
+    {
+      "id": 6, "type": "timeseries", "title": "Dependency error rate",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [{ "refId": "A", "expr": "sum(rate(kartex_dependency_errors_total[5m])) by (dependency)", "legendFormat": "{{dependency}}" }]
+    },
+    {
+      "id": 7, "type": "stat", "title": "Runtime up",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [{ "refId": "A", "expr": "kartex_runtime_up", "legendFormat": "{{runtime}}" }]
+    }
+  ]
+}

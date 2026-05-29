@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { AppError, toAppError } from "@/lib/errors";
 import { recordOperationalEvent } from "@/lib/production/observability";
+import { M } from "@/lib/observability/metrics";
 import { getSecurityContext, type RequestSecurityContext } from "./authorization";
 import { checkRateLimit, type RateLimitPolicy } from "./rate-limit";
 import { recordSecurityAudit } from "./audit";
@@ -34,19 +35,33 @@ export async function withSecurity<T>(
     }
   }
 
-  const result = await handler(context);
+  const startedAt = Date.now();
+  let outcome: "ok" | "error" = "ok";
+  try {
+    const result = await handler(context);
 
-  if (options.audit) {
-    await recordSecurityAudit({
-      actorId: context.actor?.id,
-      action: `api.${options.name}.allowed`,
-      entityTable: "api_route",
-      entityId: options.name,
-      metadata: { requestId: context.requestId, ip: context.ip },
-    });
+    if (options.audit) {
+      await recordSecurityAudit({
+        actorId: context.actor?.id,
+        action: `api.${options.name}.allowed`,
+        entityTable: "api_route",
+        entityId: options.name,
+        metadata: { requestId: context.requestId, ip: context.ip },
+      });
+    }
+
+    return result;
+  } catch (error) {
+    outcome = "error";
+    throw error;
+  } finally {
+    try {
+      M.apiLatency.observe((Date.now() - startedAt) / 1000, { route: options.name });
+      M.apiRequests.inc({ route: options.name, method: request.method ?? "GET", status: outcome === "ok" ? "2xx" : "5xx" });
+    } catch {
+      /* telemetry must never break the guarded handler */
+    }
   }
-
-  return result;
 }
 
 export function securityErrorJson(error: unknown) {
