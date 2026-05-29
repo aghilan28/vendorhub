@@ -161,7 +161,36 @@ export const M = {
   notificationsSent: define({ name: "kartex_notifications_sent_total", help: "Notifications dispatched by channel", kind: "counter", owner: "engagement" }),
   notificationsFailed: define({ name: "kartex_notifications_failed_total", help: "Notification dispatch failures by channel", kind: "counter", owner: "engagement" }),
   inventoryDrift: define({ name: "kartex_inventory_drift", help: "Observed inventory drift (gauge)", kind: "gauge", owner: "commerce" }),
+
+  // ---- AI platform (Phase E) ----
+  aiInferenceLatency: define({ name: "kartex_ai_inference_duration_seconds", help: "Model inference latency by model", kind: "histogram", owner: "ai-platform" }),
+  aiInferenceRequests: define({ name: "kartex_ai_inference_requests_total", help: "Model inferences by model/outcome", kind: "counter", owner: "ai-platform" }),
+  aiInferenceErrors: define({ name: "kartex_ai_inference_errors_total", help: "Model inference errors by model/reason", kind: "counter", owner: "ai-platform" }),
+  aiFallbacks: define({ name: "kartex_ai_inference_fallback_total", help: "Inference fallbacks served by model", kind: "counter", owner: "ai-platform" }),
+  aiPredictionScore: define({ name: "kartex_ai_prediction_score", help: "Last prediction/confidence score by model (gauge)", kind: "gauge", owner: "ai-platform" }),
+  aiDriftStatus: define({ name: "kartex_ai_drift_status", help: "Drift status by model/kind: 0 ok,1 warn,2 drift", kind: "gauge", owner: "ai-platform" }),
+  aiModelInfo: define({ name: "kartex_ai_model_info", help: "Model registry info (1 per model+state+version+risk label set)", kind: "gauge", owner: "ai-platform" }),
 } as const;
+
+export function recordInference(model: string, durationMs: number, ok: boolean, opts?: { fallback?: boolean; reason?: string; score?: number }) {
+  try {
+    M.aiInferenceLatency.observe(durationMs / 1000, { model });
+    M.aiInferenceRequests.inc({ model, outcome: ok ? "ok" : "error" });
+    if (!ok) M.aiInferenceErrors.inc({ model, reason: opts?.reason ?? "error" });
+    if (opts?.fallback) M.aiFallbacks.inc({ model });
+    if (typeof opts?.score === "number") M.aiPredictionScore.set(opts.score, { model });
+  } catch {
+    /* never throw */
+  }
+}
+
+export function setDriftStatus(model: string, kind: string, status: 0 | 1 | 2) {
+  try {
+    M.aiDriftStatus.set(status, { model, kind });
+  } catch {
+    /* never throw */
+  }
+}
 
 export function recordApiRequest(route: string, method: string, status: number, durationMs: number) {
   try {
