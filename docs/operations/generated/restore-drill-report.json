@@ -1,0 +1,35 @@
+{
+  "generatedAt": "2026-05-29T19:26:10.912Z",
+  "rehearsalEnvironment": "staging",
+  "requiredBeforeProductionMigration": true,
+  "restoreDrillRequired": true,
+  "maxRestoreDrillAgeHours": 168,
+  "lastRestoreDrillAt": null,
+  "drillAgeHours": null,
+  "stale": true,
+  "integrityChecks": [
+    "critical table row count comparison",
+    "financial ledger debit/credit balance validation",
+    "settlement state count comparison",
+    "governance case and dispute count comparison",
+    "RLS smoke validation on sensitive tables",
+    "readiness and health endpoint smoke validation"
+  ],
+  "procedures": {
+    "database": "Supabase PITR / snapshot restore into staging; then run integrity checks + ops:consistency-check --enforce",
+    "redis": "Restore AOF/RDB or re-warm from source of truth; cache loss tolerated (degrade-safe)",
+    "kafka": "Replay from offset/timestamp into rebuilt topics (register-topics.sh)",
+    "neo4j": "Restore Aura backup OR rebuild projection by replaying kartex.knowledge.graph.mutations",
+    "qdrant": "Restore snapshot OR reindex from catalog (register-collections.sh + embedding pipeline)",
+    "flink": "Restore from latest savepoint; resume from last checkpoint",
+    "config": "Re-apply config/* + environment secrets from secret store",
+    "secrets": "Rotate + re-inject from secret store (no secrets in repo)"
+  },
+  "verification": [
+    "critical table row-count comparison vs pre-restore baseline",
+    "financial ledger debit/credit balance validation",
+    "RLS smoke validation on sensitive tables",
+    "/api/health + /api/readiness + /api/runtime/health smoke"
+  ],
+  "status": "ACTION_REQUIRED"
+}

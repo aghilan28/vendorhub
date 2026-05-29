@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "name": "KARTEX Service Level Objectives",
+    "phase": "D",
+    "window": "28d rolling",
+    "note": "SLIs derive from Phase C metrics (lib/observability/metrics.ts). Burn-rate alerts: infra/observability/slo.rules.yml. Error budget = (1 - objective) over the window.",
+    "policy": "Budget exhausted => freeze risky deploys (release-safety kill switches) until burn recovers."
+  },
+  "services": [
+    {
+      "service": "marketplace", "owner": "platform", "tier": "critical",
+      "sli": "availability = 1 - (5xx / total) on user-facing routes",
+      "availabilityObjective": 0.999, "latencyObjective": { "p95Ms": 800, "metric": "kartex_api_request_duration_seconds" },
+      "errorBudget": "0.1% (~40m/28d)", "recoveryTarget": { "rtoMinutes": 15, "rpoMinutes": 5 }
+    },
+    {
+      "service": "orders", "owner": "commerce", "tier": "critical",
+      "sli": "order create success = created / (created + failed)",
+      "availabilityObjective": 0.999, "latencyObjective": { "p95Ms": 1200 },
+      "errorBudget": "0.1%", "recoveryTarget": { "rtoMinutes": 15, "rpoMinutes": 0 }
+    },
+    {
+      "service": "payments", "owner": "payments", "tier": "critical",
+      "sli": "payment success = authorized / (authorized + failed); integrity = reconciled within 10m",
+      "availabilityObjective": 0.999, "latencyObjective": { "p95Ms": 1500 },
+      "errorBudget": "0.1%", "recoveryTarget": { "rtoMinutes": 10, "rpoMinutes": 0 }
+    },
+    {
+      "service": "search", "owner": "discovery", "tier": "high",
+      "sli": "query success = non-error responses; quality = 1 - zero_result_rate",
+      "availabilityObjective": 0.995, "latencyObjective": { "p95Ms": 600 },
+      "errorBudget": "0.5%", "recoveryTarget": { "rtoMinutes": 30, "rpoMinutes": 60, "degradeTo": "pgvector + FTS" }
+    },
+    {
+      "service": "inventory", "owner": "commerce", "tier": "critical",
+      "sli": "stock accuracy = 1 - drift; propagation < 5s",
+      "availabilityObjective": 0.999, "latencyObjective": { "p95Ms": 500 },
+      "errorBudget": "0.1%", "recoveryTarget": { "rtoMinutes": 15, "rpoMinutes": 0 }
+    },
+    {
+      "service": "notifications", "owner": "engagement", "tier": "medium",
+      "sli": "delivery success = sent / (sent + failed)",
+      "availabilityObjective": 0.99, "latencyObjective": { "p95Ms": 5000 },
+      "errorBudget": "1%", "recoveryTarget": { "rtoMinutes": 60, "rpoMinutes": 30, "degradeTo": "retry queue + digest" }
+    },
+    {
+      "service": "kafka", "owner": "platform", "tier": "critical",
+      "sli": "consumer lag < threshold; broker availability",
+      "availabilityObjective": 0.999, "latencyObjective": { "maxLag": 10000 },
+      "errorBudget": "0.1%", "recoveryTarget": { "rtoMinutes": 15, "rpoMinutes": 0, "note": "replay from offset" }
+    },
+    {
+      "service": "redis", "owner": "platform", "tier": "high",
+      "sli": "reachability; hit ratio > 0.8",
+      "availabilityObjective": 0.999, "latencyObjective": { "p95Ms": 10 },
+      "errorBudget": "0.1%", "recoveryTarget": { "rtoMinutes": 5, "rpoMinutes": 1, "degradeTo": "in-memory fallback" }
+    },
+    {
+      "service": "neo4j", "owner": "knowledge", "tier": "medium",
+      "sli": "reachability; query p95",
+      "availabilityObjective": 0.99, "latencyObjective": { "p95Ms": 300 },
+      "errorBudget": "1%", "recoveryTarget": { "rtoMinutes": 60, "rpoMinutes": 60, "degradeTo": "relational queries" }
+    },
+    {
+      "service": "qdrant", "owner": "discovery", "tier": "high",
+      "sli": "reachability; query p95",
+      "availabilityObjective": 0.995, "latencyObjective": { "p95Ms": 200 },
+      "errorBudget": "0.5%", "recoveryTarget": { "rtoMinutes": 30, "rpoMinutes": 60, "degradeTo": "pgvector" }
+    },
+    {
+      "service": "flink", "owner": "platform", "tier": "medium",
+      "sli": "running jobs == expected; checkpoint success",
+      "availabilityObjective": 0.99, "latencyObjective": { "processingLagSeconds": 30 },
+      "errorBudget": "1%", "recoveryTarget": { "rtoMinutes": 30, "rpoMinutes": 0, "note": "restore from savepoint" }
+    },
+    {
+      "service": "workers", "owner": "platform", "tier": "critical",
+      "sli": "queue drain rate >= arrival; no starvation",
+      "availabilityObjective": 0.999, "latencyObjective": { "queueDepthMax": 5000 },
+      "errorBudget": "0.1%", "recoveryTarget": { "rtoMinutes": 15, "rpoMinutes": 0 }
+    },
+    {
+      "service": "cron", "owner": "platform", "tier": "critical",
+      "sli": "scheduled run freshness (last success age)",
+      "availabilityObjective": 0.999, "latencyObjective": { "maxStalenessMinutes": 15 },
+      "errorBudget": "0.1%", "recoveryTarget": { "rtoMinutes": 15, "rpoMinutes": 0, "note": "BLOCKER: no scheduler configured (D-C1)" }
+    }
+  ]
+}
