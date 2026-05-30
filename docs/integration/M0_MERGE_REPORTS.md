@@ -39,3 +39,34 @@ Integration branch: `integration/phase-m0-unified-platform`. Strategy: `git merg
 - **Decision:** stable to proceed (compile clean; test failure is config-only, pre-diagnosed, resolves at L).
 
 ---
+
+## Merge H — phase-h/enterprise-readiness-audit
+- **Files changed:** 1 added (`docs/phase-h/PHASE_H_ENTERPRISE_READINESS_AUDIT.md`).
+- **Conflicts:** none. **Risk:** none (docs).
+
+## Merge I — phase-i/production-certification
+- **Files changed:** 1 added (`docs/phase-i/PHASE_I_PRODUCTION_CERTIFICATION.md`); the H doc was already present (no conflict).
+- **Conflicts:** none. **Risk:** none (docs).
+
+## Merge I.5 — stage-1/production-readiness-remediation
+- **Files changed:** 12 added + 9 modified (`package.json`, `package-lock.json`, `next.config.ts`, `middleware.ts`, `vercel.json`, `app/api/readiness/route.ts`, `lib/tier14/index.ts`, `scripts/ops-secret-scan.mjs`, `.github/workflows/reliability.yml`).
+- **Conflicts:** **3** — `package.json` (content), `scripts/ops-restore-drill.mjs` (add/add), `docs/operations/generated/restore-drill-report.json` (add/add). See Conflict Resolution Registry C1–C3.
+- **Resolution:** package.json union; took stage-1 versions for the two add/add files. **Risk:** Low.
+- **Build/Test:** typecheck ✅ after merge; lockfile reconciled (`npm install`, 0 vulns).
+
+## Merge J — phase-j/tier-realization-audit
+- **Files changed:** 1 added (`docs/phase-j/PHASE_J_TIER_REALIZATION_AUDIT.md`).
+- **Conflicts:** none. **Risk:** none (docs).
+
+## Merge K — phase-k/commerce-intelligence-productization
+- **Files changed:** 23 added (14 `(intelligence)` pages + `features/commerce-intelligence/components/*` + doc) + 3 modified (`lib/constants/navigation.ts`, `lib/constants/marketplace.ts`, `lib/tier14/index.ts`).
+- **Conflicts:** **none** — `ort` auto-merged the `lib/tier14`/constants edits (non-overlapping with stage-1). **Risk:** Low.
+- **Build/Test:** typecheck ✅; 13 intelligence pages confirmed in tree.
+
+## Merge L — phase-l-finalization
+- **Files changed:** 27 added (`docs/baseline/*` + screenshots) + 1 modified (`vitest.config.ts` — Windows path-alias fix).
+- **Conflicts:** none. **Risk:** Low.
+- **Build/Test:** **full gate suite after L** — typecheck ✅, lint ✅ (0 warn), test ✅ (44 suites / 268), build ✅ (96/96 pages). Risk R1 (test alias) **resolved** as predicted.
+
+## Final state
+All 13 branches integrated into `integration/phase-m0-unified-platform`. Gates green. Stable.
