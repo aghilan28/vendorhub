@@ -1,0 +1,27 @@
+{
+  "type": "record",
+  "name": "OrderLifecycleEvent",
+  "namespace": "kartex.orders",
+  "doc": "Order state transitions. Keyed by orderId. Owner: commerce-platform.",
+  "fields": [
+    { "name": "eventId", "type": "string", "doc": "ULID; consumer dedupe key" },
+    { "name": "eventSequence", "type": "long", "doc": "Monotonic per orderId for ordering" },
+    { "name": "orderId", "type": "string" },
+    { "name": "buyerId", "type": "string" },
+    { "name": "sellerId", "type": ["null", "string"], "default": null },
+    {
+      "name": "status",
+      "type": {
+        "type": "enum",
+        "name": "OrderStatus",
+        "symbols": ["CREATED", "PAID", "CONFIRMED", "PACKED", "DISPATCHED", "DELIVERED", "CANCELLED", "REFUNDED"]
+      }
+    },
+    { "name": "previousStatus", "type": ["null", "OrderStatus"], "default": null },
+    { "name": "amountMinor", "type": "long", "doc": "Total in paise" },
+    { "name": "currency", "type": "string", "default": "INR" },
+    { "name": "occurredAt", "type": { "type": "long", "logicalType": "timestamp-millis" } },
+    { "name": "producer", "type": "string", "doc": "service/version that emitted the event" },
+    { "name": "traceId", "type": ["null", "string"], "default": null }
+  ]
+}

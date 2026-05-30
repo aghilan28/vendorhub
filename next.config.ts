@@ -1,13 +1,25 @@
 import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
+import { securityHeaders } from "./lib/security/headers";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   typescript: {
-    ignoreBuildErrors: true,
+    // Stage 1 (R-M1): type errors must fail the build. `npm run typecheck` is clean,
+    // so this makes the build gate enforce what CI already verifies.
+    ignoreBuildErrors: false,
   },
   images: {
     remotePatterns: [{ protocol: "https", hostname: "images.unsplash.com" }],
+  },
+  async headers() {
+    return [
+      {
+        // Apply hardened security headers to every route.
+        source: "/:path*",
+        headers: securityHeaders.map((header) => ({ key: header.key, value: header.value })),
+      },
+    ];
   },
 };
 

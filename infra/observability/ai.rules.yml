@@ -1,0 +1,37 @@
+# KARTEX Phase E — AI platform alert rules (on Phase C/E metrics).
+groups:
+  - name: kartex-ai-platform
+    rules:
+      - alert: AIInferenceErrorRateHigh
+        expr: |
+          sum(rate(kartex_ai_inference_errors_total[5m])) by (model)
+            / clamp_min(sum(rate(kartex_ai_inference_requests_total[5m])) by (model), 1) > 0.05
+        for: 10m
+        labels: { severity: P2, domain: ai, owner: ai-platform }
+        annotations: { summary: "Model {{ $labels.model }} inference error rate > 5% (5m)" }
+
+      - alert: AIInferenceLatencyP95High
+        expr: histogram_quantile(0.95, sum(rate(kartex_ai_inference_duration_seconds_bucket[5m])) by (le, model)) > 2
+        for: 10m
+        labels: { severity: P3, domain: ai, owner: ai-platform }
+        annotations: { summary: "Model {{ $labels.model }} inference p95 > 2s" }
+
+      - alert: AIFallbackRateHigh
+        expr: |
+          sum(rate(kartex_ai_inference_fallback_total[15m])) by (model)
+            / clamp_min(sum(rate(kartex_ai_inference_requests_total[15m])) by (model), 1) > 0.20
+        for: 15m
+        labels: { severity: P2, domain: ai, owner: ai-platform }
+        annotations: { summary: "Model {{ $labels.model }} serving >20% fallbacks (degraded intelligence)" }
+
+      - alert: AIModelDriftDetected
+        expr: kartex_ai_drift_status >= 2
+        for: 30m
+        labels: { severity: P2, domain: ai, owner: ai-platform }
+        annotations: { summary: "Drift detected for {{ $labels.model }} ({{ $labels.kind }}) — re-evaluate / refresh" }
+
+      - alert: AIModelDriftWarning
+        expr: kartex_ai_drift_status == 1
+        for: 1h
+        labels: { severity: P3, domain: ai, owner: ai-platform }
+        annotations: { summary: "Drift warning for {{ $labels.model }} ({{ $labels.kind }})" }

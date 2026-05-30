@@ -19,6 +19,8 @@ jobs:
       - run: npm run typecheck
       - run: npm run test
       - run: npm run ops:preflight
+      - run: npm run ops:audit
+      - run: npm run ops:restore-drill
       - run: npm run build
 
   migration-safety:

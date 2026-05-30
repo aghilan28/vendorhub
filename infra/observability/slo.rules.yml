@@ -1,0 +1,65 @@
+# KARTEX Phase D — multi-window, multi-burn-rate SLO alerts (config/slo.json).
+# Fast burn (page): budget consumed quickly over short+long windows.
+# Slow burn (ticket): sustained moderate burn. Pattern per Google SRE workbook.
+groups:
+  - name: kartex-slo-payments
+    rules:
+      - record: slo:payments_error_ratio:rate5m
+        expr: sum(rate(kartex_payments_failed_total[5m])) / clamp_min(sum(rate(kartex_payments_authorized_total[5m])) + sum(rate(kartex_payments_failed_total[5m])), 1)
+      - record: slo:payments_error_ratio:rate1h
+        expr: sum(rate(kartex_payments_failed_total[1h])) / clamp_min(sum(rate(kartex_payments_authorized_total[1h])) + sum(rate(kartex_payments_failed_total[1h])), 1)
+      - alert: PaymentsSLOFastBurn
+        # 14.4x burn of a 0.1% budget => page. (error ratio > 1.44% on both windows)
+        expr: slo:payments_error_ratio:rate5m > 0.0144 and slo:payments_error_ratio:rate1h > 0.0144
+        for: 2m
+        labels: { severity: P1, domain: payments, owner: payments, slo: payments }
+        annotations: { summary: "Payments SLO fast burn (14.4x) — error budget depleting", runbook: "docs/operations/INCIDENT_RESPONSE_EXERCISES.md#payment-provider-outage" }
+      - alert: PaymentsSLOSlowBurn
+        expr: slo:payments_error_ratio:rate1h > 0.006
+        for: 1h
+        labels: { severity: P2, domain: payments, owner: payments, slo: payments }
+        annotations: { summary: "Payments SLO slow burn (6x) — investigate before budget exhausts" }
+
+  - name: kartex-slo-marketplace
+    rules:
+      - record: slo:api_error_ratio:rate5m
+        expr: sum(rate(kartex_api_errors_total[5m])) / clamp_min(sum(rate(kartex_api_requests_total[5m])), 1)
+      - record: slo:api_error_ratio:rate1h
+        expr: sum(rate(kartex_api_errors_total[1h])) / clamp_min(sum(rate(kartex_api_requests_total[1h])), 1)
+      - alert: MarketplaceSLOFastBurn
+        expr: slo:api_error_ratio:rate5m > 0.0144 and slo:api_error_ratio:rate1h > 0.0144
+        for: 2m
+        labels: { severity: P1, domain: api, owner: platform, slo: marketplace }
+        annotations: { summary: "Marketplace availability SLO fast burn — error budget depleting" }
+      - alert: MarketplaceLatencySLOBreach
+        expr: histogram_quantile(0.95, sum(rate(kartex_api_request_duration_seconds_bucket[30m])) by (le)) > 0.8
+        for: 30m
+        labels: { severity: P2, domain: api, owner: platform, slo: marketplace }
+        annotations: { summary: "Marketplace p95 latency SLO (800ms) breached over 30m" }
+
+  - name: kartex-slo-orders
+    rules:
+      - record: slo:orders_failure_ratio:rate30m
+        expr: sum(rate(kartex_orders_failed_total[30m])) / clamp_min(sum(rate(kartex_orders_created_total[30m])) + sum(rate(kartex_orders_failed_total[30m])), 1)
+      - alert: OrdersSLOBurn
+        expr: slo:orders_failure_ratio:rate30m > 0.01
+        for: 15m
+        labels: { severity: P1, domain: commerce, owner: commerce, slo: orders }
+        annotations: { summary: "Order success SLO burning (>1% failure / 30m)" }
+
+  - name: kartex-slo-runtime
+    rules:
+      - alert: RuntimeSLOUnavailable
+        expr: kartex_runtime_up == 0
+        for: 5m
+        labels: { severity: P1, domain: infrastructure, owner: platform, slo: runtime }
+        annotations: { summary: "Runtime {{ $labels.runtime }} below availability SLO (fallback active — confirm degradation is graceful)" }
+
+  - name: kartex-slo-cron
+    rules:
+      # Heartbeat: a successful scheduled worker run must be observed within 15m.
+      - alert: CronFreshnessSLOBreach
+        expr: (time() - max(kartex_cron_last_success_timestamp_seconds)) > 900
+        for: 5m
+        labels: { severity: P1, domain: infrastructure, owner: platform, slo: cron }
+        annotations: { summary: "No successful scheduled run in >15m (D-C1: scheduler must be configured + heartbeat metric emitted)" }

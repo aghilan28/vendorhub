@@ -1,0 +1,47 @@
+{
+  "uid": "kartex-commerce",
+  "title": "KARTEX — Commerce Operations",
+  "tags": ["kartex", "commerce"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "refresh": "30s",
+  "time": { "from": "now-6h", "to": "now" },
+  "panels": [
+    {
+      "id": 1, "type": "timeseries", "title": "Payments authorized vs failed",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        { "refId": "A", "expr": "sum(rate(kartex_payments_authorized_total[5m]))", "legendFormat": "authorized" },
+        { "refId": "B", "expr": "sum(rate(kartex_payments_failed_total[5m]))", "legendFormat": "failed" }
+      ]
+    },
+    {
+      "id": 2, "type": "timeseries", "title": "Refunds requested vs completed",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        { "refId": "A", "expr": "sum(rate(kartex_refunds_requested_total[15m]))", "legendFormat": "requested" },
+        { "refId": "B", "expr": "sum(rate(kartex_refunds_completed_total[15m]))", "legendFormat": "completed" }
+      ]
+    },
+    {
+      "id": 3, "type": "timeseries", "title": "Search: queries vs zero-results",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        { "refId": "A", "expr": "sum(rate(kartex_search_queries_total[5m]))", "legendFormat": "queries" },
+        { "refId": "B", "expr": "sum(rate(kartex_search_zero_results_total[5m]))", "legendFormat": "zero-results" }
+      ]
+    },
+    {
+      "id": 4, "type": "timeseries", "title": "Notifications sent vs failed (by channel)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        { "refId": "A", "expr": "sum(rate(kartex_notifications_sent_total[5m])) by (channel)", "legendFormat": "sent {{channel}}" },
+        { "refId": "B", "expr": "sum(rate(kartex_notifications_failed_total[5m])) by (channel)", "legendFormat": "failed {{channel}}" }
+      ]
+    }
+  ]
+}
