@@ -1,0 +1,27 @@
+{
+  "type": "record",
+  "name": "PaymentTransactionEvent",
+  "namespace": "kartex.payments",
+  "doc": "Payment + refund + payout transitions. Keyed by paymentId. Owner: payments-platform.",
+  "fields": [
+    { "name": "eventId", "type": "string", "doc": "Provider event id or ULID; dedupe key" },
+    { "name": "paymentId", "type": "string" },
+    { "name": "orderId", "type": ["null", "string"], "default": null },
+    { "name": "provider", "type": { "type": "enum", "name": "PaymentProvider", "symbols": ["RAZORPAY", "INTERNAL"] } },
+    {
+      "name": "kind",
+      "type": {
+        "type": "enum",
+        "name": "TxnKind",
+        "symbols": ["ORDER_CREATED", "AUTHORIZED", "CAPTURED", "FAILED", "REFUND_REQUESTED", "REFUNDED", "PAYOUT_INITIATED", "PAYOUT_SETTLED", "CHARGEBACK"]
+      }
+    },
+    { "name": "amountMinor", "type": "long" },
+    { "name": "currency", "type": "string", "default": "INR" },
+    { "name": "signatureVerified", "type": "boolean", "default": false },
+    { "name": "idempotencyKey", "type": "string" },
+    { "name": "occurredAt", "type": { "type": "long", "logicalType": "timestamp-millis" } },
+    { "name": "ledgerRef", "type": ["null", "string"], "default": null },
+    { "name": "traceId", "type": ["null", "string"], "default": null }
+  ]
+}
