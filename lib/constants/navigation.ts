@@ -1,12 +1,16 @@
 import {
+  Activity,
   BarChart3,
   Boxes,
+  BrainCircuit,
   ClipboardList,
   Bell,
   CircleHelp,
+  Gauge,
   Heart,
   Home,
   LayoutDashboard,
+  LineChart,
   ListChecks,
   PackageSearch,
   ReceiptText,
@@ -14,6 +18,7 @@ import {
   Settings2,
   ShieldCheck,
   ShoppingCart,
+  Sparkles,
   Tags,
   Truck,
   User,
@@ -37,6 +42,7 @@ export const buyerNavigation = [
 
 export const sellerNavigation = [
   { label: "Dashboard", href: "/seller/dashboard", icon: LayoutDashboard },
+  { label: "Commerce Intelligence", href: "/commerce-intelligence", icon: BrainCircuit },
   { label: "Products", href: "/seller/products", icon: PackageSearch },
   { label: "Inventory", href: "/seller/inventory", icon: Boxes },
   { label: "Orders", href: "/seller/orders", icon: ClipboardList },
@@ -45,6 +51,20 @@ export const sellerNavigation = [
   { label: "Notifications", href: "/seller/notifications", icon: Bell },
   { label: "Payouts", href: "/seller/payouts-placeholder", icon: WalletCards },
   { label: "Support", href: "/seller/support-placeholder", icon: CircleHelp },
+] as const;
+
+// Phase K — Commerce Intelligence product navigation.
+export const intelligenceNavigation = [
+  { label: "Command Center", href: "/commerce-intelligence", icon: Gauge },
+  { label: "Pricing Studio", href: "/pricing", icon: Tags },
+  { label: "Forecast Studio", href: "/forecasting", icon: LineChart },
+  { label: "Inventory Intelligence", href: "/inventory-intelligence", icon: Boxes },
+  { label: "Supply Intelligence", href: "/supply-intelligence", icon: PackageSearch },
+  { label: "Routing & Fulfillment", href: "/routing", icon: Truck },
+  { label: "Search Intelligence", href: "/search-intelligence", icon: Search },
+  { label: "Recommendations", href: "/recommendations", icon: Sparkles },
+  { label: "Telemetry", href: "/telemetry", icon: Activity },
+  { label: "Back to seller workspace", href: "/seller/dashboard", icon: LayoutDashboard },
 ] as const;
 
 export const adminNavigation = [
