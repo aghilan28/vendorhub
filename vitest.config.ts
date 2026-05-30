@@ -1,4 +1,8 @@
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { defineConfig } from "vitest/config";
+
+const rootDir = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   test: {
@@ -16,8 +20,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": new URL(".", import.meta.url).pathname,
-      "server-only": new URL("node_modules/next/dist/compiled/server-only/empty.js", import.meta.url).pathname,
+      "@": rootDir,
+      "server-only": resolve(rootDir, "node_modules/next/dist/compiled/server-only/empty.js"),
     },
   },
 });
