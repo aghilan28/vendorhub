@@ -49,6 +49,8 @@ import {
   FileWarning,
   FileBarChart,
   Network,
+  FolderKanban,
+  Inbox,
 } from "lucide-react";
 
 export const buyerNavigation = [
@@ -147,11 +149,29 @@ export const governanceNavigation = [
 
 
 export const intelligenceNavigation = [
+  { label: "My Workspace", href: "/workspace", icon: Home },
   { label: "Dashboard", href: "/intelligence", icon: LayoutDashboard },
   { label: "Workflows", href: "/intelligence/workflows", icon: Workflow },
   { label: "Lineage", href: "/intelligence/lineage", icon: Share2 },
   { label: "Provenance", href: "/intelligence/provenance", icon: ScrollText },
   { label: "Search", href: "/intelligence/search", icon: Search },
+  { label: "Simulation OS", href: "/simulations", icon: FlaskConical },
+  { label: "SECIS", href: "/secis", icon: Waypoints },
+  { label: "Governance OS", href: "/governance", icon: ShieldCheck },
+] as const;
+
+
+export const workspaceNavigation = [
+  { label: "Home", href: "/workspace", icon: Home },
+  { label: "Projects", href: "/workspace/projects", icon: FolderKanban },
+  { label: "Action Center", href: "/workspace/actions", icon: ListChecks },
+  { label: "Inbox", href: "/workspace/inbox", icon: Inbox },
+  { label: "Notifications", href: "/workspace/notifications", icon: Bell },
+  { label: "Search", href: "/workspace/search", icon: Search },
+  { label: "Activity", href: "/workspace/activity", icon: Activity },
+  { label: "Analytics", href: "/workspace/analytics", icon: BarChart3 },
+  { label: "Preferences", href: "/workspace/settings", icon: Settings2 },
+  { label: "Intelligence", href: "/intelligence", icon: Network },
   { label: "Simulation OS", href: "/simulations", icon: FlaskConical },
   { label: "SECIS", href: "/secis", icon: Waypoints },
   { label: "Governance OS", href: "/governance", icon: ShieldCheck },
