@@ -175,6 +175,12 @@ export const M = {
   intelDecisions: define({ name: "kartex_intelligence_decisions_total", help: "Commerce-intelligence decisions by domain/action", kind: "counter", owner: "commerce-intelligence" }),
   pricingProposals: define({ name: "kartex_pricing_proposals_total", help: "Pricing proposals by strategy/status", kind: "counter", owner: "commerce-intelligence" }),
   intelDecisionAgeSeconds: define({ name: "kartex_intelligence_last_decision_age_seconds", help: "Age of the last decision per domain (gauge; staleness = domain not operating)", kind: "gauge", owner: "commerce-intelligence" }),
+
+  // ---- Advanced intelligence & knowledge systems (Phase G) ----
+  advancedDecisions: define({ name: "kartex_advanced_decisions_total", help: "Advanced-systems decisions by domain/action (knowledge/ontology/research/simulation/governance/constitution)", kind: "counter", owner: "advanced-intelligence" }),
+  governanceEvaluations: define({ name: "kartex_governance_evaluations_total", help: "Governance policy evaluations by outcome", kind: "counter", owner: "advanced-intelligence" }),
+  simulationRuns: define({ name: "kartex_simulation_runs_total", help: "Simulation runs by model/status", kind: "counter", owner: "advanced-intelligence" }),
+  simulationLatency: define({ name: "kartex_simulation_duration_seconds", help: "Simulation run latency by model", kind: "histogram", owner: "advanced-intelligence" }),
 } as const;
 
 export function recordInference(model: string, durationMs: number, ok: boolean, opts?: { fallback?: boolean; reason?: string; score?: number }) {
