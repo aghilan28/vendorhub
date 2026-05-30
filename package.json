@@ -30,9 +30,11 @@
     "ops:migration-audit": "node scripts/ops-migration-audit.mjs",
     "ops:release-manifest": "node scripts/ops-release-manifest.mjs",
     "ops:backup-plan": "node scripts/ops-backup-plan.mjs",
+    "ops:restore-drill": "node scripts/ops-restore-drill.mjs",
+    "ops:audit": "npm audit --audit-level=high",
     "ops:smoke": "node scripts/ops-smoke.mjs",
     "ops:preflight": "npm run ops:env-audit && npm run ops:secret-scan && npm run ops:migration-audit && npm run ops:release-manifest && npm run ops:backup-plan",
-    "validate": "npm run lint && npm run typecheck && npm run test && npm run ops:preflight && npm run build",
+    "validate": "npm run lint && npm run typecheck && npm run test && npm run ops:preflight && npm run ops:audit && npm run build",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
@@ -68,6 +70,9 @@
     "web-push": "^3.6.7",
     "zod": "^4.4.3",
     "zustand": "^5.0.13"
+  },
+  "overrides": {
+    "postcss": "^8.5.10"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
