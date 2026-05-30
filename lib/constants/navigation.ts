@@ -25,6 +25,7 @@ import {
   Flag,
   HeartPulse,
   PackageCheck,
+  Compass,
 } from "lucide-react";
 
 export const buyerNavigation = [
@@ -50,6 +51,7 @@ export const sellerNavigation = [
 
 export const adminNavigation = [
   { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+  { label: "Platform", href: "/platform", icon: Compass },
   { label: "Execution", href: "/admin/execution", icon: Rocket },
   { label: "Vendors", href: "/admin/vendors", icon: Users },
   { label: "Moderation", href: "/admin/moderation", icon: ShieldCheck },
