@@ -1,35 +1,53 @@
 {
-  "generatedAt": "2026-05-29T19:26:10.912Z",
-  "rehearsalEnvironment": "staging",
-  "requiredBeforeProductionMigration": true,
-  "restoreDrillRequired": true,
-  "maxRestoreDrillAgeHours": 168,
-  "lastRestoreDrillAt": null,
-  "drillAgeHours": null,
-  "stale": true,
-  "integrityChecks": [
-    "critical table row count comparison",
-    "financial ledger debit/credit balance validation",
-    "settlement state count comparison",
-    "governance case and dispute count comparison",
-    "RLS smoke validation on sensitive tables",
-    "readiness and health endpoint smoke validation"
-  ],
-  "procedures": {
-    "database": "Supabase PITR / snapshot restore into staging; then run integrity checks + ops:consistency-check --enforce",
-    "redis": "Restore AOF/RDB or re-warm from source of truth; cache loss tolerated (degrade-safe)",
-    "kafka": "Replay from offset/timestamp into rebuilt topics (register-topics.sh)",
-    "neo4j": "Restore Aura backup OR rebuild projection by replaying kartex.knowledge.graph.mutations",
-    "qdrant": "Restore snapshot OR reindex from catalog (register-collections.sh + embedding pipeline)",
-    "flink": "Restore from latest savepoint; resume from last checkpoint",
-    "config": "Re-apply config/* + environment secrets from secret store",
-    "secrets": "Rotate + re-inject from secret store (no secrets in repo)"
+  "generatedAt": "2026-05-30T05:48:05.904Z",
+  "mode": "logical",
+  "startedAt": "2026-05-30T05:48:05.883Z",
+  "recoveryDurationMs": 12,
+  "recoveryAccuracy": {
+    "tables": 3,
+    "rowsRestored": 1910,
+    "rowsExpected": 1910,
+    "accuracyPct": 100
   },
-  "verification": [
-    "critical table row-count comparison vs pre-restore baseline",
-    "financial ledger debit/credit balance validation",
-    "RLS smoke validation on sensitive tables",
-    "/api/health + /api/readiness + /api/runtime/health smoke"
-  ],
-  "status": "ACTION_REQUIRED"
+  "verification": {
+    "checks": [
+      {
+        "name": "orders.rowCount",
+        "expected": 500,
+        "actual": 500,
+        "passed": true
+      },
+      {
+        "name": "orders.checksum",
+        "passed": true
+      },
+      {
+        "name": "payments.rowCount",
+        "expected": 500,
+        "actual": 500,
+        "passed": true
+      },
+      {
+        "name": "payments.checksum",
+        "passed": true
+      },
+      {
+        "name": "ledger_entries.rowCount",
+        "expected": 910,
+        "actual": 910,
+        "passed": true
+      },
+      {
+        "name": "ledger_entries.checksum",
+        "passed": true
+      },
+      {
+        "name": "ledger.debit_equals_credit",
+        "passed": true
+      }
+    ],
+    "passed": true
+  },
+  "passed": true,
+  "note": "Logical drill validating restore procedure + integrity verification on a representative dataset. Production data drill (Supabase PITR) is an operational task requiring production credentials."
 }

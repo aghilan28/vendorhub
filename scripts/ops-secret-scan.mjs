@@ -1,15 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
+import { scanContent } from "./lib/secret-scan-patterns.mjs";
 
 const root = process.cwd();
 const ignored = new Set(["node_modules", ".next", "playwright-report", "test-results", ".git"]);
 const fileAllowlist = new Set([".env.example"]);
-const suspiciousPatterns = [
-  { name: "Supabase service role JWT", pattern: /eyJ[a-zA-Z0-9_-]{20,}\.[a-zA-Z0-9_-]{20,}\.[a-zA-Z0-9_-]{20,}/ },
-  { name: "Razorpay live key", pattern: /rzp_live_[A-Za-z0-9]{10,}/ },
-  { name: "OpenAI key", pattern: /sk-[A-Za-z0-9_-]{20,}/ },
-  { name: "Private env assignment", pattern: /(?:SUPABASE_SERVICE_ROLE_KEY|RAZORPAY_SECRET|OPENAI_API_KEY|PAYMENT_WEBHOOK_SECRET)=\S+/ },
-];
 
 function walk(dir, files = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -26,14 +21,14 @@ for (const file of walk(root)) {
   const relative = path.relative(root, file).replaceAll("\\", "/");
   if (fileAllowlist.has(relative) || /\.(png|jpg|jpeg|webp|gif|ico|pdf|lock|tsbuildinfo)$/i.test(relative)) continue;
   const content = fs.readFileSync(file, "utf8");
-  for (const pattern of suspiciousPatterns) {
-    if (pattern.pattern.test(content)) findings.push({ file: relative, pattern: pattern.name });
+  for (const match of scanContent(content)) {
+    findings.push({ file: relative, pattern: match.pattern, line: match.line });
   }
 }
 
 if (findings.length) {
   console.error("Secret scan failed.");
-  for (const finding of findings) console.error(`${finding.file}: ${finding.pattern}`);
+  for (const finding of findings) console.error(`${finding.file}:${finding.line}: ${finding.pattern}`);
   process.exit(1);
 }
 
