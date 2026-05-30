@@ -1,0 +1,138 @@
+[
+  {
+    "name": "marketplace-home",
+    "path": "/",
+    "status": 200,
+    "expectExist": true,
+    "consoleErrors": 0,
+    "sampleError": null
+  },
+  {
+    "name": "commerce-intelligence-center",
+    "path": "/commerce-intelligence",
+    "status": 200,
+    "expectExist": true,
+    "consoleErrors": 2,
+    "sampleError": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  },
+  {
+    "name": "pricing-studio",
+    "path": "/pricing",
+    "status": 200,
+    "expectExist": true,
+    "consoleErrors": 2,
+    "sampleError": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  },
+  {
+    "name": "forecast-studio",
+    "path": "/forecasting",
+    "status": 200,
+    "expectExist": true,
+    "consoleErrors": 2,
+    "sampleError": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  },
+  {
+    "name": "inventory-intelligence",
+    "path": "/inventory-intelligence",
+    "status": 200,
+    "expectExist": true,
+    "consoleErrors": 2,
+    "sampleError": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  },
+  {
+    "name": "supply-intelligence",
+    "path": "/supply-intelligence",
+    "status": 200,
+    "expectExist": true,
+    "consoleErrors": 2,
+    "sampleError": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  },
+  {
+    "name": "routing-intelligence",
+    "path": "/routing",
+    "status": 200,
+    "expectExist": true,
+    "consoleErrors": 2,
+    "sampleError": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  },
+  {
+    "name": "telemetry-intelligence",
+    "path": "/telemetry",
+    "status": 200,
+    "expectExist": true,
+    "consoleErrors": 2,
+    "sampleError": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  },
+  {
+    "name": "search-intelligence",
+    "path": "/search-intelligence",
+    "status": 200,
+    "expectExist": true,
+    "consoleErrors": 2,
+    "sampleError": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  },
+  {
+    "name": "recommendations",
+    "path": "/recommendations",
+    "status": 200,
+    "expectExist": true,
+    "consoleErrors": 2,
+    "sampleError": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  },
+  {
+    "name": "research-center",
+    "path": "/research",
+    "status": 404,
+    "expectExist": false,
+    "consoleErrors": 1,
+    "sampleError": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  },
+  {
+    "name": "knowledge-os",
+    "path": "/knowledge",
+    "status": 404,
+    "expectExist": false,
+    "consoleErrors": 1,
+    "sampleError": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  },
+  {
+    "name": "knowledge-graph",
+    "path": "/knowledge-graph",
+    "status": 404,
+    "expectExist": false,
+    "consoleErrors": 1,
+    "sampleError": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  },
+  {
+    "name": "governance-center",
+    "path": "/governance",
+    "status": 404,
+    "expectExist": false,
+    "consoleErrors": 1,
+    "sampleError": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  },
+  {
+    "name": "simulation-studio",
+    "path": "/simulation",
+    "status": 404,
+    "expectExist": false,
+    "consoleErrors": 1,
+    "sampleError": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  },
+  {
+    "name": "secis-studio",
+    "path": "/secis",
+    "status": 404,
+    "expectExist": false,
+    "consoleErrors": 1,
+    "sampleError": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  },
+  {
+    "name": "meta-knowledge-center",
+    "path": "/meta-knowledge",
+    "status": 404,
+    "expectExist": false,
+    "consoleErrors": 1,
+    "sampleError": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  }
+]
