@@ -21,8 +21,21 @@ export const STORAGE_BUCKETS = {
   profileImages: "profile-images",
 } as const;
 
-export const PROTECTED_ROUTES = ["/home", "/cart", "/checkout", "/orders", "/wishlist", "/profile", "/seller", "/admin"] as const;
-export const SELLER_ROUTES = ["/seller"] as const;
+// Commerce Intelligence product surfaces (Phase K). Seller/operator scoped.
+export const INTELLIGENCE_ROUTES = [
+  "/commerce-intelligence",
+  "/pricing",
+  "/forecasting",
+  "/inventory-intelligence",
+  "/supply-intelligence",
+  "/routing",
+  "/search-intelligence",
+  "/recommendations",
+  "/telemetry",
+] as const;
+
+export const PROTECTED_ROUTES = ["/home", "/cart", "/checkout", "/orders", "/wishlist", "/profile", "/seller", "/admin", ...INTELLIGENCE_ROUTES] as const;
+export const SELLER_ROUTES = ["/seller", ...INTELLIGENCE_ROUTES] as const;
 export const ADMIN_ROUTES = ["/admin"] as const;
 
 export type AppRole = (typeof APP_ROLES)[number];

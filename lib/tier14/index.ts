@@ -18,7 +18,6 @@ import type {
   SimulationRuntimeInput,
   Tier14EntityEnvelope,
   Tier14PackageManifest,
-  Tier14ResearchConcept,
   UniversalIndexInput,
 } from "./types";
 
