@@ -9,6 +9,15 @@ export { useCases } from "./usecases";
 export { valueMetrics } from "./value";
 export { tours } from "./tours";
 export { docSections } from "./docs";
+export { platformGuides, type PlatformGuide, type GuideSection } from "./guides";
+export {
+  searchPlatform,
+  buildSearchIndex,
+  searchKindLabel,
+  SEARCH_DOMAINS,
+  type SearchKind,
+  type SearchResult,
+} from "./search";
 
 import { docSections } from "./docs";
 import { scenarios } from "./scenarios";
