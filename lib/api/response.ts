@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { AppError, toAppError } from "@/lib/errors";
 import { createTraceContext, headersForTrace, recordOperationalEvent } from "@/lib/production/observability";
+import { M } from "@/lib/observability/metrics";
 
 export function okJson<T>(data: T) {
   const trace = createTraceContext();
@@ -21,6 +22,12 @@ export function errorJson(error: unknown) {
     trace,
     error,
   });
+
+  try {
+    M.apiErrors.inc({ code: appError.code, status: `${Math.floor(status / 100)}xx` });
+  } catch {
+    /* telemetry must never break the error response */
+  }
 
   return NextResponse.json(
     {

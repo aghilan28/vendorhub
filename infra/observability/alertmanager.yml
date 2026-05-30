@@ -1,0 +1,50 @@
+# KARTEX Phase C — Alertmanager routing + escalation.
+# Severity -> receiver mapping encodes the escalation policy. Receiver URLs are
+# injected via env at deploy (PagerDuty routing keys, Slack webhooks); the
+# placeholders below keep the config valid for local validation.
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: default-ticket
+  group_by: ["alertname", "domain"]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  routes:
+    - matchers: ['severity="P1"']
+      receiver: pager-immediate
+      group_wait: 0s
+      repeat_interval: 30m
+      continue: true
+    - matchers: ['severity="P2"']
+      receiver: pager-businesshours
+      repeat_interval: 1h
+    - matchers: ['severity="P3"']
+      receiver: default-ticket
+    - matchers: ['severity="P4"']
+      receiver: info-feed
+
+receivers:
+  - name: pager-immediate
+    webhook_configs:
+      - url: "http://host.docker.internal:5001/p1"   # replace with PagerDuty/Opsgenie
+        send_resolved: true
+  - name: pager-businesshours
+    webhook_configs:
+      - url: "http://host.docker.internal:5001/p2"
+        send_resolved: true
+  - name: default-ticket
+    webhook_configs:
+      - url: "http://host.docker.internal:5001/ticket"
+        send_resolved: true
+  - name: info-feed
+    webhook_configs:
+      - url: "http://host.docker.internal:5001/info"
+        send_resolved: false
+
+inhibit_rules:
+  # A P1 for a domain silences lower-severity noise for the same domain.
+  - source_matchers: ['severity="P1"']
+    target_matchers: ['severity=~"P2|P3|P4"']
+    equal: ["domain"]
