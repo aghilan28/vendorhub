@@ -24,6 +24,15 @@ import {
   Flag,
   HeartPulse,
   PackageCheck,
+  FlaskConical,
+  SlidersHorizontal,
+  Play,
+  History,
+  GitCompare,
+  Lightbulb,
+  Sparkles,
+  Workflow,
+  ClipboardCheck,
 } from "lucide-react";
 
 export const buyerNavigation = [
@@ -65,4 +74,19 @@ export const adminNavigation = [
 export const buyerQuickActions = [
   { label: "Cart", href: "/cart", icon: ShoppingCart },
   { label: "Tracking", href: "/tracking", icon: Truck },
+] as const;
+
+export const simulationNavigation = [
+  { label: "Command Center", href: "/simulations", icon: LayoutDashboard },
+  { label: "Templates", href: "/simulations/templates", icon: FlaskConical },
+  { label: "Scenario Builder", href: "/simulations/scenarios", icon: SlidersHorizontal },
+  { label: "Execution", href: "/simulations/runs", icon: Play },
+  { label: "Results & Analysis", href: "/simulations/results", icon: BarChart3 },
+  { label: "Comparison", href: "/simulations/compare", icon: GitCompare },
+  { label: "Insights", href: "/simulations/insights", icon: Lightbulb },
+  { label: "Recommendations", href: "/simulations/recommendations", icon: Sparkles },
+  { label: "Workflows", href: "/simulations/workflows", icon: Workflow },
+  { label: "Reviews", href: "/simulations/reviews", icon: ClipboardCheck },
+  { label: "History", href: "/simulations/history", icon: History },
+  { label: "Settings", href: "/simulations/settings", icon: Settings2 },
 ] as const;
