@@ -48,6 +48,7 @@ import {
   ScrollText,
   FileWarning,
   FileBarChart,
+  Network,
 } from "lucide-react";
 
 export const buyerNavigation = [
@@ -92,6 +93,7 @@ export const buyerQuickActions = [
 ] as const;
 
 export const simulationNavigation = [
+  { label: "Intelligence Hub", href: "/intelligence", icon: Network },
   { label: "Command Center", href: "/simulations", icon: LayoutDashboard },
   { label: "Templates", href: "/simulations/templates", icon: FlaskConical },
   { label: "Scenario Builder", href: "/simulations/scenarios", icon: SlidersHorizontal },
@@ -107,6 +109,7 @@ export const simulationNavigation = [
 ] as const;
 
 export const secisNavigation = [
+  { label: "Intelligence Hub", href: "/intelligence", icon: Network },
   { label: "Command Center", href: "/secis", icon: LayoutDashboard },
   { label: "Entity Explorer", href: "/secis/entities", icon: Boxes },
   { label: "System Explorer", href: "/secis/systems", icon: Layers },
@@ -125,6 +128,7 @@ export const secisNavigation = [
 ] as const;
 
 export const governanceNavigation = [
+  { label: "Intelligence Hub", href: "/intelligence", icon: Network },
   { label: "Command Center", href: "/governance", icon: LayoutDashboard },
   { label: "Policies", href: "/governance/policies", icon: FileText },
   { label: "Decisions", href: "/governance/decisions", icon: Gavel },
@@ -139,4 +143,16 @@ export const governanceNavigation = [
   { label: "Reports", href: "/governance/reports", icon: FileBarChart },
   { label: "History", href: "/governance/history", icon: History },
   { label: "Settings", href: "/governance/settings", icon: Settings2 },
+] as const;
+
+
+export const intelligenceNavigation = [
+  { label: "Dashboard", href: "/intelligence", icon: LayoutDashboard },
+  { label: "Workflows", href: "/intelligence/workflows", icon: Workflow },
+  { label: "Lineage", href: "/intelligence/lineage", icon: Share2 },
+  { label: "Provenance", href: "/intelligence/provenance", icon: ScrollText },
+  { label: "Search", href: "/intelligence/search", icon: Search },
+  { label: "Simulation OS", href: "/simulations", icon: FlaskConical },
+  { label: "SECIS", href: "/secis", icon: Waypoints },
+  { label: "Governance OS", href: "/governance", icon: ShieldCheck },
 ] as const;
