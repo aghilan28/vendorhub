@@ -41,6 +41,13 @@ import {
   Gauge,
   ShieldAlert,
   GitBranch,
+  FileText,
+  Gavel,
+  Stamp,
+  XCircle,
+  ScrollText,
+  FileWarning,
+  FileBarChart,
 } from "lucide-react";
 
 export const buyerNavigation = [
@@ -115,4 +122,21 @@ export const secisNavigation = [
   { label: "History", href: "/secis/history", icon: History },
   { label: "Workflows", href: "/secis/workflows", icon: Workflow },
   { label: "Settings", href: "/secis/settings", icon: Settings2 },
+] as const;
+
+export const governanceNavigation = [
+  { label: "Command Center", href: "/governance", icon: LayoutDashboard },
+  { label: "Policies", href: "/governance/policies", icon: FileText },
+  { label: "Decisions", href: "/governance/decisions", icon: Gavel },
+  { label: "Reviews", href: "/governance/reviews", icon: ClipboardCheck },
+  { label: "Approvals", href: "/governance/approvals", icon: Stamp },
+  { label: "Rejections", href: "/governance/rejections", icon: XCircle },
+  { label: "Workflows", href: "/governance/workflows", icon: Workflow },
+  { label: "Audit", href: "/governance/audit", icon: ScrollText },
+  { label: "Compliance", href: "/governance/compliance", icon: ShieldCheck },
+  { label: "Risks", href: "/governance/risks", icon: ShieldAlert },
+  { label: "Exceptions", href: "/governance/exceptions", icon: FileWarning },
+  { label: "Reports", href: "/governance/reports", icon: FileBarChart },
+  { label: "History", href: "/governance/history", icon: History },
+  { label: "Settings", href: "/governance/settings", icon: Settings2 },
 ] as const;
