@@ -18,6 +18,7 @@ import { DemoScenarioCenter } from "./demo-scenario-center";
 import { UseCaseLibrary } from "./use-case-library";
 import { PlatformTour } from "./platform-tour";
 import { DocumentationHub } from "./documentation-hub";
+import { PlatformSearch } from "./platform-search";
 
 const AUDIENCES = ["Judges", "Investors", "Faculty", "Mentors", "Customers"];
 
@@ -29,6 +30,7 @@ const TABS = [
   { value: "usecases", label: "Use Cases" },
   { value: "value", label: "Business Value" },
   { value: "tour", label: "Guided Tours" },
+  { value: "search", label: "Search" },
   { value: "docs", label: "Documentation" },
 ] as const;
 
@@ -113,8 +115,23 @@ export function PlatformHub() {
         <TabsContent value="tour">
           <PlatformTour />
         </TabsContent>
+        <TabsContent value="search">
+          <PlatformSearch />
+        </TabsContent>
         <TabsContent value="docs">
-          <DocumentationHub />
+          <div className="space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="text-sm text-secondary-text">
+                Quick reference below, or open the full documentation hub with audience guides.
+              </p>
+              <Button asChild variant="secondary" size="sm">
+                <Link href="/platform/docs">
+                  Open full documentation <ArrowRight className="size-4" />
+                </Link>
+              </Button>
+            </div>
+            <DocumentationHub />
+          </div>
         </TabsContent>
       </Tabs>
     </div>
