@@ -1,0 +1,109 @@
+{
+  "generatedAt": "2026-05-29T19:26:11.034Z",
+  "criticalFeatureFlags": [
+    "atomic_checkout_rpc",
+    "payment_webhook_reconciliation",
+    "phase_28_financial_ledger_engine",
+    "phase_29_governance_operating_layer",
+    "live_ai_embeddings",
+    "scoped_realtime_subscriptions"
+  ],
+  "criticalTables": [
+    "orders",
+    "payment_attempts",
+    "financial_ledger_journals",
+    "financial_ledger_entries",
+    "settlement_records",
+    "governance_cases",
+    "marketplace_disputes",
+    "seller_intelligence_snapshots"
+  ],
+  "rollbackSmokeRequired": true,
+  "surfaces": [
+    {
+      "surface": "application",
+      "trigger": "elevated 5xx / SLO fast burn after deploy",
+      "steps": [
+        "Vercel previous production deployment"
+      ],
+      "verification": [
+        "/api/health",
+        "/api/readiness"
+      ],
+      "reversible": true,
+      "estMinutes": 5
+    },
+    {
+      "surface": "database",
+      "trigger": "migration corruption risk / data anomaly",
+      "steps": [
+        "Forward-only compensating migration",
+        "destructive ops are blocked: drop table, drop column, truncate table, alter type drop value, broad delete",
+        "if data loss suspected: restore drill path (ops:restore-drill) before any write resumes"
+      ],
+      "verification": [
+        "ops:consistency-check --enforce",
+        "ledger balance validation"
+      ],
+      "reversible": false,
+      "estMinutes": 30
+    },
+    {
+      "surface": "configuration",
+      "trigger": "config drift / bad config rollout",
+      "steps": [
+        "Disable scoped realtime subscriptions and rely on polling refresh",
+        "re-apply previous environment config"
+      ],
+      "verification": [
+        "/api/health",
+        "/api/readiness"
+      ],
+      "reversible": true,
+      "estMinutes": 5
+    },
+    {
+      "surface": "feature_flags",
+      "trigger": "feature regression",
+      "steps": [
+        "disable via kill switch (Supabase feature_flags)",
+        "kill switches: maintenanceMode=maintenance_mode, checkout=atomic_checkout_rpc, payments=payment_webhook_reconciliation, financialLedger=phase_28_financial_ledger_engine, governance=phase_29_governance_operating_layer, ai=live_ai_embeddings, realtime=scoped_realtime_subscriptions"
+      ],
+      "verification": [
+        "confirm flag state",
+        "smoke affected workflow"
+      ],
+      "reversible": true,
+      "estMinutes": 1
+    },
+    {
+      "surface": "schema",
+      "trigger": "incompatible schema change",
+      "steps": [
+        "expand/contract: keep backward-compatible columns; never drop in same release",
+        "deploy compensating migration"
+      ],
+      "verification": [
+        "ops:migration-audit",
+        "ops:consistency-check"
+      ],
+      "reversible": false,
+      "estMinutes": 30
+    },
+    {
+      "surface": "provider",
+      "trigger": "provider integration failure (Razorpay/Shiprocket/web-push)",
+      "steps": [
+        "Disable live embeddings and use fuzzy/keyword fallback",
+        "Razorpay: pause new captures, reconcile via webhook_ingestions",
+        "Shiprocket: switch to self-delivery mode"
+      ],
+      "verification": [
+        "reconciliation run",
+        "no orphan payments"
+      ],
+      "reversible": true,
+      "estMinutes": 10
+    }
+  ]
+}

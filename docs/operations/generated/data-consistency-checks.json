@@ -1,0 +1,66 @@
+{
+  "generatedAt": "2026-05-29T19:26:34.043Z",
+  "mode": "catalog",
+  "invariantCount": 10,
+  "anomalyClasses": [
+    "duplicate_processing",
+    "lost_events",
+    "partial_update",
+    "race_condition",
+    "orphan_data"
+  ],
+  "invariants": [
+    {
+      "id": "orders.no_paid_without_payment",
+      "domain": "order",
+      "anomaly": "partial_update"
+    },
+    {
+      "id": "payments.no_duplicate_capture",
+      "domain": "payment",
+      "anomaly": "duplicate_processing"
+    },
+    {
+      "id": "payments.ledger_balanced",
+      "domain": "payment",
+      "anomaly": "partial_update"
+    },
+    {
+      "id": "inventory.no_negative_available",
+      "domain": "inventory",
+      "anomaly": "race_condition"
+    },
+    {
+      "id": "orders.no_orphan_items",
+      "domain": "order",
+      "anomaly": "orphan_data"
+    },
+    {
+      "id": "events.no_stuck_pending",
+      "domain": "event",
+      "anomaly": "lost_events"
+    },
+    {
+      "id": "events.dead_letter_unreviewed",
+      "domain": "event",
+      "anomaly": "lost_events"
+    },
+    {
+      "id": "refunds.no_overrefund",
+      "domain": "payment",
+      "anomaly": "partial_update"
+    },
+    {
+      "id": "search.vector_orphans",
+      "domain": "vector",
+      "anomaly": "orphan_data"
+    },
+    {
+      "id": "graph.projection_lag",
+      "domain": "graph",
+      "anomaly": "lost_events"
+    }
+  ],
+  "liveResults": null,
+  "breaches": 0
+}
