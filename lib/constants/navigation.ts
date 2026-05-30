@@ -10,6 +10,7 @@ import {
   ListChecks,
   PackageSearch,
   ReceiptText,
+  Rocket,
   Search,
   Settings2,
   ShieldCheck,
@@ -49,6 +50,7 @@ export const sellerNavigation = [
 
 export const adminNavigation = [
   { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+  { label: "Execution", href: "/admin/execution", icon: Rocket },
   { label: "Vendors", href: "/admin/vendors", icon: Users },
   { label: "Moderation", href: "/admin/moderation", icon: ShieldCheck },
   { label: "Orders", href: "/admin/orders", icon: PackageCheck },
