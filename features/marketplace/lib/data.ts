@@ -1,12 +1,17 @@
 import { OrderStatus, PaymentStatus, type Category, type Order, type Product, type Vendor } from "@/types";
+import { buildStorefrontCatalog } from "@/lib/product-population";
 
-export const marketplaceVendors: Vendor[] = [];
+// PP-4 activation: the storefront fallback is populated from the PP-4 product universe so the
+// homepage / category / product / search pages render real products even without a database.
+const populatedCatalog = buildStorefrontCatalog();
 
-export const marketplaceCategories: Category[] = [];
+export const marketplaceVendors: Vendor[] = populatedCatalog.vendors;
 
-export const marketplaceProducts: Product[] = [];
+export const marketplaceCategories: Category[] = populatedCatalog.categories;
 
-export const featuredDeals: Product[] = [];
+export const marketplaceProducts: Product[] = populatedCatalog.products;
+
+export const featuredDeals: Product[] = populatedCatalog.featured;
 
 export const buyerOrders: Order[] = [];
 

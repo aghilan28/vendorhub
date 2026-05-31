@@ -1,0 +1,125 @@
+{
+  "generatedAt": "2026-05-31T17:50:06.032Z",
+  "wave": "PP-4",
+  "subject": "Product Universe Population System",
+  "population": {
+    "baseRealCatalog": 7650,
+    "populatedProducts": 50000,
+    "totalVariants": 110680,
+    "totalSkus": 110680,
+    "departmentsCovered": 20,
+    "brandsCovered": 1115,
+    "averageVariantsPerProduct": 2.21,
+    "productsPerDepartment": {
+      "groceries": 8390,
+      "beverages": 2665,
+      "stationery": 1304,
+      "snacks": 3475,
+      "bakery": 340,
+      "household": 3148,
+      "cleaning": 2570,
+      "regional-foods": 1210,
+      "local-specialties": 2310,
+      "health": 3445,
+      "medicine": 3060,
+      "dairy": 2947,
+      "electronics": 3305,
+      "kitchen": 2284,
+      "personal-care": 5235,
+      "beauty": 2736,
+      "baby-care": 804,
+      "pet-care": 708,
+      "pooja": 28,
+      "fresh-produce": 36
+    }
+  },
+  "integrity": {
+    "valid": true,
+    "errors": 0,
+    "warnings": 0
+  },
+  "coverage": {
+    "departmentsTargeted": 20,
+    "departmentsCovered": 20,
+    "emptyDepartments": [],
+    "departmentCoveragePct": 100,
+    "brandsCovered": 1115,
+    "searchableProducts": 50000,
+    "searchCoveragePct": 100,
+    "discoverableProducts": 50000,
+    "discoveryCoveragePct": 100
+  },
+  "quality": {
+    "averageScore": 100,
+    "attributeCompletenessPct": 100,
+    "incompleteProducts": 0,
+    "duplicateProducts": 0,
+    "brokenBrandMappings": 0,
+    "brokenTaxonomyMappings": 0
+  },
+  "storefrontActivation": {
+    "products": 600,
+    "categories": 17,
+    "featured": 12
+  },
+  "scaleCertification": [
+    {
+      "targetProducts": 10000,
+      "generatedProducts": 10000,
+      "totalVariants": 22166,
+      "totalSkus": 22166,
+      "valid": true,
+      "errorCount": 0,
+      "skuCollisions": 0,
+      "departmentsCovered": 20,
+      "brandsCovered": 1115,
+      "searchCoveragePct": 100,
+      "discoveryCoveragePct": 100,
+      "traversalOk": true,
+      "performanceOk": true,
+      "buildMs": 269
+    },
+    {
+      "targetProducts": 50000,
+      "generatedProducts": 50000,
+      "totalVariants": 110680,
+      "totalSkus": 110680,
+      "valid": true,
+      "errorCount": 0,
+      "skuCollisions": 0,
+      "departmentsCovered": 20,
+      "brandsCovered": 1115,
+      "searchCoveragePct": 100,
+      "discoveryCoveragePct": 100,
+      "traversalOk": true,
+      "performanceOk": true,
+      "buildMs": 1600
+    },
+    {
+      "targetProducts": 100000,
+      "generatedProducts": 76500,
+      "totalVariants": 169270,
+      "totalSkus": 169270,
+      "valid": true,
+      "errorCount": 0,
+      "skuCollisions": 0,
+      "departmentsCovered": 20,
+      "brandsCovered": 1115,
+      "searchCoveragePct": 100,
+      "discoveryCoveragePct": 100,
+      "traversalOk": true,
+      "performanceOk": true,
+      "buildMs": 2832
+    }
+  ],
+  "completionCriteria": {
+    "populatedUniverse": true,
+    "homepageNotEmpty": true,
+    "searchReturnsProducts": true,
+    "categoriesContainProducts": true,
+    "brandsContainProducts": true,
+    "discoverySurfacesContainProducts": true,
+    "scaleCertified": true,
+    "qualityAcceptable": true
+  }
+}

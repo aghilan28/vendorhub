@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-31T17:22:06.179Z",
+  "generatedAt": "2026-05-31T17:50:50.692Z",
   "app": "vendorhub",
   "phase": 30,
   "node": "22",
@@ -305,6 +305,6 @@
       "sha256": "ff14635700a382f0dc6283bba7995c7eb6cd224eec0ace507c67b4c6fe9b74f9"
     }
   ],
-  "migrationSafetyReportSha256": "5de31479a56c44866565d1056e2f78e22f2c4cc7bbac8cd0eb419f685c6ca9e4",
+  "migrationSafetyReportSha256": "5bf0a5378d5ee69123706f030852ac4692d93b5e0efdbbd246ac0f7b3420ec43",
   "packageLockSha256": "c6a015ad42073f50f8eeeff831bc74984890e71ad62b2f4620eb48969bf3b7a1"
 }

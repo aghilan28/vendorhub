@@ -1,0 +1,15 @@
+export { DEPARTMENT_TEMPLATES, TARGET_DEPARTMENTS } from "./templates";
+export type { ProductTemplate, TemplateVariant } from "./templates";
+export { generateBaseDataset, generateProductDataset, baseDatasetSize } from "./dataset";
+export type { DatasetOptions } from "./dataset";
+export { buildProductUniverse, computePopulationMetrics } from "./population";
+export type { ProductUniverse, BuildUniverseOptions, PopulationMetrics } from "./population";
+export { computeCoverage } from "./coverage";
+export type { CoverageReport } from "./coverage";
+export { computeQuality } from "./quality";
+export type { QualityReport, ProductQuality } from "./quality";
+export { buildDiscoverySurfaces, projectToStorefront } from "./discovery";
+export type { HomepageFeeds, StorefrontCatalog } from "./discovery";
+export { certifyPopulationTarget, runPopulationScaleCertification } from "./certification";
+export type { PopulationScaleResult, CertificationContext } from "./certification";
+export { buildStorefrontCatalog, STOREFRONT_DISPLAY_LIMIT } from "./storefront";

@@ -34,6 +34,7 @@
     "pp1:certify": "npx --yes tsx scripts/pp1-taxonomy-certify.ts",
     "pp2:certify": "npx --yes tsx scripts/pp2-brand-certify.ts",
     "pp3:certify": "npx --yes tsx scripts/pp3-product-certify.ts",
+    "pp4:certify": "npx --yes tsx scripts/pp4-population-certify.ts",
     "ops:preflight": "npm run ops:env-audit && npm run ops:secret-scan && npm run ops:migration-audit && npm run ops:release-manifest && npm run ops:backup-plan",
     "validate": "npm run lint && npm run typecheck && npm run test && npm run ops:preflight && npm run build",
     "format": "prettier --write .",
