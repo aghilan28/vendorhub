@@ -41,8 +41,12 @@ export async function middleware(request: NextRequest) {
   });
 
   const pathname = request.nextUrl.pathname;
+  // EC-7 hardening: the demo/QA auth bypass is only honored OUTSIDE production.
+  // In a production deployment it can NEVER be triggered (the `?uiQa=1` open
+  // bypass identified by the QA audit is closed); dev/preview behavior is kept.
   const allowDemoProtectedRoutes =
-    process.env.NODE_ENV === "development" || request.nextUrl.searchParams.get("uiQa") === "1";
+    process.env.NODE_ENV !== "production" &&
+    (process.env.NODE_ENV === "development" || request.nextUrl.searchParams.get("uiQa") === "1");
 
   if (allowDemoProtectedRoutes) {
     return response;
