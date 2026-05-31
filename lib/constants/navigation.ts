@@ -1,4 +1,5 @@
 import {
+  Activity,
   BarChart3,
   Boxes,
   ClipboardList,
@@ -40,6 +41,7 @@ export const buyerNavigation = [
 
 export const sellerNavigation = [
   { label: "Dashboard", href: "/seller/dashboard", icon: LayoutDashboard },
+  { label: "Operations", href: "/seller/operations", icon: Activity },
   { label: "Products", href: "/seller/products", icon: PackageSearch },
   { label: "Catalog Ops", href: "/seller/catalog", icon: ListChecks },
   { label: "Media", href: "/seller/media", icon: Images },
