@@ -1,0 +1,75 @@
+{
+  "generatedAt": "2026-05-31T18:06:20.606Z",
+  "wave": "PP-5",
+  "subject": "Media Population, Image Intelligence & Product Visualization",
+  "coverage": {
+    "sampledProducts": 5000,
+    "coveragePct": 100,
+    "averageCoverageScore": 1,
+    "totalAssets": 25000
+  },
+  "validation": {
+    "valid": true,
+    "errors": 0,
+    "warnings": 0
+  },
+  "quality": {
+    "marketplaceHealth": 100,
+    "averageCoverageScore": 1
+  },
+  "analytics": {
+    "marketplaceCoveragePct": 100,
+    "readinessPct": 100,
+    "topDefects": []
+  },
+  "storefrontActivation": {
+    "products": 600,
+    "productsWithImage": 600,
+    "categoriesWithImage": 17
+  },
+  "scaleCertification": [
+    {
+      "targetProducts": 10000,
+      "generatedProducts": 10000,
+      "totalAssets": 50000,
+      "productsWithPrimary": 10000,
+      "coveragePct": 100,
+      "validationErrors": 0,
+      "storefrontActivated": true,
+      "performanceOk": true,
+      "buildMs": 478
+    },
+    {
+      "targetProducts": 50000,
+      "generatedProducts": 50000,
+      "totalAssets": 250000,
+      "productsWithPrimary": 50000,
+      "coveragePct": 100,
+      "validationErrors": 0,
+      "storefrontActivated": true,
+      "performanceOk": true,
+      "buildMs": 2335
+    },
+    {
+      "targetProducts": 100000,
+      "generatedProducts": 76500,
+      "totalAssets": 382500,
+      "productsWithPrimary": 76500,
+      "coveragePct": 100,
+      "validationErrors": 0,
+      "storefrontActivated": true,
+      "performanceOk": true,
+      "buildMs": 3730
+    }
+  ],
+  "completionCriteria": {
+    "mediaArchitectureExists": true,
+    "galleriesExist": true,
+    "thumbnailsExist": true,
+    "governanceExists": true,
+    "analyticsExists": true,
+    "storefrontRenderingWorks": true,
+    "coverageExceeds95": true,
+    "scaleCertified": true
+  }
+}

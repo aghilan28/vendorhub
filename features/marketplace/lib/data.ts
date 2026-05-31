@@ -1,9 +1,9 @@
 import { OrderStatus, PaymentStatus, type Category, type Order, type Product, type Vendor } from "@/types";
-import { buildStorefrontCatalog } from "@/lib/product-population";
+import { buildMediaActivatedStorefront } from "@/lib/product-media";
 
-// PP-4 activation: the storefront fallback is populated from the PP-4 product universe so the
-// homepage / category / product / search pages render real products even without a database.
-const populatedCatalog = buildStorefrontCatalog();
+// PP-4 activation populates the storefront from the product universe; PP-5 enriches it with
+// deterministic media so the homepage / category / product / search pages render real images.
+const populatedCatalog = buildMediaActivatedStorefront();
 
 export const marketplaceVendors: Vendor[] = populatedCatalog.vendors;
 
