@@ -1,10 +1,15 @@
 import { PageContainer } from "@/components/layout/page-container";
-import { OnboardingScreen } from "@/features/seller/components/detail-screens";
+import { OnboardingWizard } from "@/features/seller-activation/components/onboarding-wizard";
+
+export const metadata = {
+  title: "Seller onboarding",
+  description: "Create your VendorHub store in a guided, validated flow.",
+};
 
 export default function SellerOnboardingPage() {
   return (
     <PageContainer>
-      <OnboardingScreen />
+      <OnboardingWizard sampled={false} />
     </PageContainer>
   );
 }
