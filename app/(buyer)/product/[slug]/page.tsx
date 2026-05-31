@@ -3,6 +3,7 @@ import { Heart, PackageCheck, ShieldCheck, Truck } from "lucide-react";
 import { PriceDisplay } from "@/components/commerce/price-display";
 import { ProductGallery } from "@/components/commerce/product-gallery";
 import { RatingDisplay } from "@/components/commerce/rating-display";
+import { ReviewSubmissionForm } from "@/components/commerce/review-submission-form";
 import { StockBadge } from "@/components/commerce/stock-badge";
 import { PageContainer } from "@/components/layout/page-container";
 import { SectionWrapper } from "@/components/layout/section-wrapper";
@@ -117,6 +118,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               <footer className="mt-3 text-xs font-medium text-primary-text">{review.name} · {review.area}</footer>
             </blockquote>
           ))}
+        </div>
+        <div className="mt-5 border-t border-border pt-5">
+          <h3 className="mb-3 font-semibold text-primary-text">Write a review</h3>
+          <ReviewSubmissionForm productId={product.id} />
         </div>
       </section>
 
