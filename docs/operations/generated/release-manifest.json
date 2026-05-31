@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-31T17:00:23.953Z",
+  "generatedAt": "2026-05-31T17:22:06.179Z",
   "app": "vendorhub",
   "phase": 30,
   "node": "22",
@@ -299,8 +299,12 @@
     {
       "file": "20260531010000_pp2_brand_universe.sql",
       "sha256": "668bb57db11232b9623055b3723945e398264357240fa2e4c99427ff10fd1a9f"
+    },
+    {
+      "file": "20260531020000_pp3_product_master.sql",
+      "sha256": "ff14635700a382f0dc6283bba7995c7eb6cd224eec0ace507c67b4c6fe9b74f9"
     }
   ],
-  "migrationSafetyReportSha256": "c55d495f0db6eefe810864191353c5e23d6edca0eafffa01210357b7956a5f79",
+  "migrationSafetyReportSha256": "5de31479a56c44866565d1056e2f78e22f2c4cc7bbac8cd0eb419f685c6ca9e4",
   "packageLockSha256": "c6a015ad42073f50f8eeeff831bc74984890e71ad62b2f4620eb48969bf3b7a1"
 }

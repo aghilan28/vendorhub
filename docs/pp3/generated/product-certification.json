@@ -1,0 +1,94 @@
+{
+  "generatedAt": "2026-05-31T17:20:33.769Z",
+  "wave": "PP-3",
+  "subject": "Product Master Foundation & Product Ontology System",
+  "sample": {
+    "products": 6,
+    "variants": 13,
+    "skus": 13,
+    "barcodes": 8
+  },
+  "integrity": {
+    "valid": true,
+    "errors": 0,
+    "warnings": 0
+  },
+  "readiness": {
+    "searchDocuments": 6,
+    "affinityEdges": 1,
+    "intelligenceHooks": 9
+  },
+  "scaleCertification": [
+    {
+      "targetProducts": 10000,
+      "totalVariants": 20000,
+      "uniqueSkus": 20000,
+      "skuCollisions": 0,
+      "barcodeCollisions": 0,
+      "integrityValid": true,
+      "structuralSampleSize": 10000,
+      "traversalOk": true,
+      "lookupOk": true,
+      "inheritanceOk": true,
+      "variantsOk": true,
+      "streamMs": 45,
+      "buildMs": 234
+    },
+    {
+      "targetProducts": 100000,
+      "totalVariants": 200000,
+      "uniqueSkus": 200000,
+      "skuCollisions": 0,
+      "barcodeCollisions": 0,
+      "integrityValid": true,
+      "structuralSampleSize": 100000,
+      "traversalOk": true,
+      "lookupOk": true,
+      "inheritanceOk": true,
+      "variantsOk": true,
+      "streamMs": 421,
+      "buildMs": 2118
+    },
+    {
+      "targetProducts": 500000,
+      "totalVariants": 1000000,
+      "uniqueSkus": 1000000,
+      "skuCollisions": 0,
+      "barcodeCollisions": 0,
+      "integrityValid": true,
+      "structuralSampleSize": 100000,
+      "traversalOk": true,
+      "lookupOk": true,
+      "inheritanceOk": true,
+      "variantsOk": true,
+      "streamMs": 2469,
+      "buildMs": 1942
+    },
+    {
+      "targetProducts": 1000000,
+      "totalVariants": 2000000,
+      "uniqueSkus": 2000000,
+      "skuCollisions": 0,
+      "barcodeCollisions": 0,
+      "integrityValid": true,
+      "structuralSampleSize": 100000,
+      "traversalOk": true,
+      "lookupOk": true,
+      "inheritanceOk": true,
+      "variantsOk": true,
+      "streamMs": 4864,
+      "buildMs": 2002
+    }
+  ],
+  "completionCriteria": {
+    "canonicalProductMasterSystem": true,
+    "everyProductRepresentable": true,
+    "everySkuRepresentable": true,
+    "everyBarcodeRepresentable": true,
+    "searchConsumable": true,
+    "recommendationConsumable": true,
+    "intelligenceConsumable": true,
+    "governancePasses": true,
+    "scaleCertified": true
+  }
+}
