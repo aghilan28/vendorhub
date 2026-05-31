@@ -1,0 +1,110 @@
+{
+  "generatedAt": "2026-05-31T18:47:48.955Z",
+  "wave": "SP-2",
+  "subject": "Store Classification, Category & Capability System",
+  "classification": {
+    "totalStores": 7320,
+    "classified": 7320,
+    "coveragePct": 100,
+    "l1Covered": 8,
+    "formatsCovered": 8,
+    "byCategoryL1": {
+      "SPECIALTY": 208,
+      "RETAIL": 2920,
+      "ELECTRONICS": 864,
+      "FOOD": 688,
+      "HEALTHCARE": 1616,
+      "FASHION": 576,
+      "HOME": 320,
+      "PET": 128
+    },
+    "byFormatType": {
+      "REGIONAL_CHAIN": 3838,
+      "WAREHOUSE": 207,
+      "LOCAL_CHAIN": 1820,
+      "MICRO_HUB": 293,
+      "FULFILLMENT_CENTER": 170,
+      "DARK_STORE": 363,
+      "FLAGSHIP": 163,
+      "HYBRID_STORE": 466
+    }
+  },
+  "integrity": {
+    "valid": true,
+    "errors": 0,
+    "warnings": 0
+  },
+  "readiness": {
+    "searchDocuments": 7320,
+    "rankingInputs": 7320,
+    "intelligenceHooks": 8,
+    "complianceCoverage": 68.3
+  },
+  "scaleCertification": [
+    {
+      "targetStores": 1000,
+      "classifiedStores": 1000,
+      "coveragePct": 100,
+      "valid": true,
+      "errorCount": 0,
+      "l1Covered": 8,
+      "formatsCovered": 7,
+      "searchReady": true,
+      "recommendationReady": true,
+      "intelligenceReady": true,
+      "performanceOk": true,
+      "buildMs": 9
+    },
+    {
+      "targetStores": 5000,
+      "classifiedStores": 5000,
+      "coveragePct": 100,
+      "valid": true,
+      "errorCount": 0,
+      "l1Covered": 8,
+      "formatsCovered": 7,
+      "searchReady": true,
+      "recommendationReady": true,
+      "intelligenceReady": true,
+      "performanceOk": true,
+      "buildMs": 35
+    },
+    {
+      "targetStores": 10000,
+      "classifiedStores": 10000,
+      "coveragePct": 100,
+      "valid": true,
+      "errorCount": 0,
+      "l1Covered": 8,
+      "formatsCovered": 7,
+      "searchReady": true,
+      "recommendationReady": true,
+      "intelligenceReady": true,
+      "performanceOk": true,
+      "buildMs": 67
+    },
+    {
+      "targetStores": 50000,
+      "classifiedStores": 50000,
+      "coveragePct": 100,
+      "valid": true,
+      "errorCount": 0,
+      "l1Covered": 8,
+      "formatsCovered": 7,
+      "searchReady": true,
+      "recommendationReady": true,
+      "intelligenceReady": true,
+      "performanceOk": true,
+      "buildMs": 338
+    }
+  ],
+  "completionCriteria": {
+    "everyStoreClassified": true,
+    "everyStoreHasCapabilities": true,
+    "everyStoreHasFulfillment": true,
+    "searchConsumable": true,
+    "recommendationConsumable": true,
+    "intelligenceConsumable": true,
+    "scaleCertified": true
+  }
+}
