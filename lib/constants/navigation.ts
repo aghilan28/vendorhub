@@ -55,8 +55,8 @@ export const sellerNavigation = [
   { label: "Analytics", href: "/seller/analytics", icon: BarChart3 },
   { label: "Store settings", href: "/seller/store-settings", icon: Settings2 },
   { label: "Notifications", href: "/seller/notifications", icon: Bell },
-  { label: "Payouts", href: "/seller/payouts-placeholder", icon: WalletCards },
-  { label: "Support", href: "/seller/support-placeholder", icon: CircleHelp },
+  { label: "Payouts", href: "/seller/payouts", icon: WalletCards },
+  { label: "Support", href: "/seller/support", icon: CircleHelp },
 ] as const;
 
 export const adminNavigation = [
@@ -77,7 +77,7 @@ export const adminNavigation = [
   { label: "Notifications", href: "/admin/notifications", icon: BellRing },
   { label: "Flags", href: "/admin/flags", icon: Flag },
   { label: "Audit logs", href: "/admin/audit-logs", icon: FileClock },
-  { label: "Platform health", href: "/admin/platform-health-placeholder", icon: HeartPulse },
+  { label: "Platform health", href: "/admin/platform-health", icon: HeartPulse },
   { label: "Settings", href: "/admin/settings", icon: Settings2 },
 ] as const;
 
