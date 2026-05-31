@@ -1,9 +1,11 @@
 import { ProductStatus, type Category, type Product, type Vendor } from "@/types";
+import { buildProductGallery, resolveProductImageUrl } from "@/lib/media";
 
 type ProductImageRow = {
   storage_path: string;
   alt_text?: string | null;
   is_primary?: boolean | null;
+  sort_order?: number | null;
 };
 
 type InventoryRow = {
@@ -79,7 +81,9 @@ function metadataStringRecord(value: unknown): Record<string, string> | undefine
 export function mapProductRowToProduct(row: ProductListRow): Product {
   const vendorRow = first(row.vendor);
   const categoryRow = first(row.category);
-  const image = [...(row.images ?? [])].sort((a, b) => Number(b.is_primary) - Number(a.is_primary))[0];
+  const orderedImages = [...(row.images ?? [])].sort((a, b) => Number(b.is_primary) - Number(a.is_primary));
+  const image = orderedImages[0];
+  const gallery = buildProductGallery(row.id, row.name, row.images ?? []);
   const inventory = first(row.inventory);
   const productMeta = metadataObject(row.ai_index_metadata);
   const discoveryMeta = metadataObject(row.discovery_metadata);
@@ -123,7 +127,13 @@ export function mapProductRowToProduct(row: ProductListRow): Product {
     name: row.name,
     vendor,
     category,
-    imageUrl: image?.storage_path,
+    imageUrl: resolveProductImageUrl(image?.storage_path) ?? undefined,
+    gallery: gallery.items.map((item) => ({
+      url: item.url,
+      thumbUrl: item.thumbUrl,
+      alt: item.alt,
+      isPrimary: item.isPrimary,
+    })),
     price: row.base_price,
     originalPrice: metadataNumber(productMeta, "originalPrice"),
     currency: row.currency === "USD" ? "USD" : "INR",
