@@ -21,7 +21,7 @@ export const STORAGE_BUCKETS = {
   profileImages: "profile-images",
 } as const;
 
-export const PROTECTED_ROUTES = ["/home", "/cart", "/checkout", "/orders", "/wishlist", "/profile", "/seller", "/admin"] as const;
+export const PROTECTED_ROUTES = ["/home", "/cart", "/checkout", "/orders", "/rewards", "/wishlist", "/profile", "/seller", "/admin"] as const;
 export const SELLER_ROUTES = ["/seller"] as const;
 export const ADMIN_ROUTES = ["/admin"] as const;
 

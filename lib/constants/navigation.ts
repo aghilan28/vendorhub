@@ -33,6 +33,8 @@ import {
   HeartPulse,
   PackageCheck,
   Compass,
+  Gift,
+  TrendingUp,
 } from "lucide-react";
 
 export const buyerNavigation = [
@@ -42,6 +44,7 @@ export const buyerNavigation = [
   { label: "Nearby", href: "/nearby", icon: MapPin },
   { label: "Categories", href: "/categories", icon: Tags },
   { label: "Orders", href: "/orders", icon: ReceiptText },
+  { label: "Rewards", href: "/rewards", icon: Gift },
   { label: "Wishlist", href: "/wishlist", icon: Heart },
   { label: "Profile", href: "/profile", icon: User },
 ] as const;
@@ -85,6 +88,7 @@ export const adminNavigation = [
   { label: "Orders", href: "/admin/orders", icon: PackageCheck },
   { label: "Commerce", href: "/admin/commerce", icon: ShoppingCart },
   { label: "Location", href: "/admin/location", icon: MapPin },
+  { label: "Growth", href: "/admin/growth", icon: TrendingUp },
   { label: "Refunds", href: "/admin/refunds", icon: WalletCards },
   { label: "Categories", href: "/admin/categories", icon: ListChecks },
   { label: "Analytics", href: "/admin/analytics", icon: BarChart3 },
