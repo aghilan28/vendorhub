@@ -6,6 +6,7 @@ import {
   CircleHelp,
   Heart,
   Home,
+  Images,
   LayoutDashboard,
   ListChecks,
   PackageSearch,
@@ -40,6 +41,7 @@ export const buyerNavigation = [
 export const sellerNavigation = [
   { label: "Dashboard", href: "/seller/dashboard", icon: LayoutDashboard },
   { label: "Products", href: "/seller/products", icon: PackageSearch },
+  { label: "Media", href: "/seller/media", icon: Images },
   { label: "Inventory", href: "/seller/inventory", icon: Boxes },
   { label: "Orders", href: "/seller/orders", icon: ClipboardList },
   { label: "Analytics", href: "/seller/analytics", icon: BarChart3 },
@@ -55,6 +57,7 @@ export const adminNavigation = [
   { label: "Execution", href: "/admin/execution", icon: Rocket },
   { label: "Vendors", href: "/admin/vendors", icon: Users },
   { label: "Moderation", href: "/admin/moderation", icon: ShieldCheck },
+  { label: "Media", href: "/admin/media", icon: Images },
   { label: "Orders", href: "/admin/orders", icon: PackageCheck },
   { label: "Refunds", href: "/admin/refunds", icon: WalletCards },
   { label: "Categories", href: "/admin/categories", icon: ListChecks },
