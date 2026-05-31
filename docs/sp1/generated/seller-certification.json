@@ -1,0 +1,156 @@
+{
+  "generatedAt": "2026-05-31T18:34:52.964Z",
+  "wave": "SP-1",
+  "subject": "Seller Universe Foundation & Store Network System",
+  "universe": {
+    "sellers": 1147,
+    "stores": 7320,
+    "averageStoresPerSeller": 6.38,
+    "storesByType": {
+      "SPECIALTY": 48,
+      "GROCERY": 480,
+      "ELECTRONICS": 864,
+      "SWEETS": 184,
+      "BAKERY": 168,
+      "SUPERMARKET": 1936,
+      "PHARMACY": 1376,
+      "BABY_CARE": 224,
+      "HYPERMARKET": 280,
+      "FISH": 56,
+      "FASHION": 576,
+      "HOUSEHOLD": 320,
+      "STATIONERY": 112,
+      "FRESH_PRODUCE": 112,
+      "POOJA": 48,
+      "PET_SUPPLIES": 128,
+      "HEALTH": 240,
+      "MEAT": 168
+    },
+    "storesByRegion": {
+      "TN": 1800,
+      "KL": 1216,
+      "KA": 1456,
+      "AP": 1376,
+      "TS": 1472
+    }
+  },
+  "integrity": {
+    "valid": true,
+    "errors": 0,
+    "warnings": 0
+  },
+  "classification": {
+    "classifiedStores": 7320,
+    "totalStores": 7320,
+    "typesCovered": 18,
+    "unclassified": 0
+  },
+  "readiness": {
+    "searchDocuments": 7320,
+    "analyticsHooks": 7,
+    "topChains": [
+      {
+        "chainId": "aadhaar-retailing",
+        "stores": 80
+      },
+      {
+        "chainId": "apollo-24x7",
+        "stores": 80
+      },
+      {
+        "chainId": "apollo-pharmacy",
+        "stores": 80
+      },
+      {
+        "chainId": "aster-pharmacy",
+        "stores": 80
+      },
+      {
+        "chainId": "croma",
+        "stores": 80
+      }
+    ]
+  },
+  "scaleCertification": [
+    {
+      "targetSellers": 100,
+      "targetStores": 500,
+      "generatedSellers": 100,
+      "generatedStores": 500,
+      "valid": true,
+      "errorCount": 0,
+      "classificationOk": true,
+      "ownershipOk": true,
+      "searchReady": true,
+      "analyticsReady": true,
+      "performanceOk": true,
+      "buildMs": 3
+    },
+    {
+      "targetSellers": 1000,
+      "targetStores": 5000,
+      "generatedSellers": 1000,
+      "generatedStores": 5000,
+      "valid": true,
+      "errorCount": 0,
+      "classificationOk": true,
+      "ownershipOk": true,
+      "searchReady": true,
+      "analyticsReady": true,
+      "performanceOk": true,
+      "buildMs": 24
+    },
+    {
+      "targetSellers": 1000,
+      "targetStores": 5000,
+      "generatedSellers": 1000,
+      "generatedStores": 5000,
+      "valid": true,
+      "errorCount": 0,
+      "classificationOk": true,
+      "ownershipOk": true,
+      "searchReady": true,
+      "analyticsReady": true,
+      "performanceOk": true,
+      "buildMs": 20
+    },
+    {
+      "targetSellers": 2000,
+      "targetStores": 10000,
+      "generatedSellers": 2000,
+      "generatedStores": 10000,
+      "valid": true,
+      "errorCount": 0,
+      "classificationOk": true,
+      "ownershipOk": true,
+      "searchReady": true,
+      "analyticsReady": true,
+      "performanceOk": true,
+      "buildMs": 32
+    },
+    {
+      "targetSellers": 10000,
+      "targetStores": 50000,
+      "generatedSellers": 10000,
+      "generatedStores": 50000,
+      "valid": true,
+      "errorCount": 0,
+      "classificationOk": true,
+      "ownershipOk": true,
+      "searchReady": true,
+      "analyticsReady": true,
+      "performanceOk": true,
+      "buildMs": 203
+    }
+  ],
+  "completionCriteria": {
+    "canonicalSellerUniverse": true,
+    "canonicalStoreUniverse": true,
+    "sellers1000Plus": true,
+    "stores5000Plus": true,
+    "storesClassified": true,
+    "governancePasses": true,
+    "validationPasses": true,
+    "scaleCertified": true
+  }
+}
