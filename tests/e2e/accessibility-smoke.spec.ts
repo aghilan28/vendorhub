@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const publicRoutes = ["/launch", "/offline", "/demo", "/admin/platform-health-placeholder"];
+const publicRoutes = ["/launch", "/offline", "/demo", "/admin/platform-health"];
 
 test.describe("critical flow accessibility smoke", () => {
   for (const route of publicRoutes) {

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Heart, PackageCheck, ShieldCheck, Truck } from "lucide-react";
-import Image from "next/image";
 import { PriceDisplay } from "@/components/commerce/price-display";
+import { ProductGallery } from "@/components/commerce/product-gallery";
 import { RatingDisplay } from "@/components/commerce/rating-display";
 import { StockBadge } from "@/components/commerce/stock-badge";
 import { PageContainer } from "@/components/layout/page-container";
@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ProductGeoPanel } from "@/features/geo/components/product-geo-panel";
 import { RelatedProductStrip } from "@/features/intelligence/components/recommendation-strip";
+import { BuyerTrustPanel } from "@/features/trust-os/components/buyer-trust-panel";
 import { ProductDeliveryPromise } from "@/features/logistics/components/delivery-commerce-panels";
 import { ProductAddActions } from "@/features/marketplace/components/product-add-actions";
 import { formatEta, getProductActivityLine, getProductFreshnessLine, getProductReviewSnippets, getVendorActivityLine, getVendorHumanLine } from "@/features/marketplace/lib/data";
@@ -25,18 +26,16 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   return (
     <PageContainer className="space-y-8">
       <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_440px]">
-        <div className="rounded-lg border border-border bg-surface p-3 shadow-sm">
-          <div className="relative aspect-square overflow-hidden rounded-md bg-slate-100">
-            {product.imageUrl ? <Image src={product.imageUrl} alt={product.name} fill priority sizes="(max-width: 1024px) 100vw, 55vw" className="object-cover" /> : null}
-          </div>
-          <div className="mt-3 grid grid-cols-4 gap-2">
-            {[product.imageUrl, product.imageUrl, product.imageUrl, product.imageUrl].map((image, index) => (
-              <div key={index} className="relative aspect-square overflow-hidden rounded-md bg-slate-100">
-                {image ? <Image src={image} alt={`${product.name} view ${index + 1}`} fill sizes="120px" className="object-cover" /> : null}
-              </div>
-            ))}
-          </div>
-        </div>
+        <ProductGallery
+          productName={product.name}
+          items={
+            product.gallery && product.gallery.length > 0
+              ? product.gallery
+              : product.imageUrl
+                ? [{ url: product.imageUrl, thumbUrl: product.imageUrl, alt: product.name, isPrimary: true }]
+                : []
+          }
+        />
 
         <aside className="space-y-5 rounded-lg border border-border bg-surface p-5 shadow-sm lg:sticky lg:top-24 lg:h-fit">
           <div className="flex flex-wrap gap-2">
@@ -101,6 +100,13 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           </dl>
         </div>
       </section>
+
+      <BuyerTrustPanel
+        sellerName={product.vendor?.name ?? "Seller"}
+        sellerVerified={Boolean(product.vendor?.verified)}
+        rating={product.rating ?? 0}
+        reviewCount={product.reviewCount ?? 0}
+      />
 
       <section className="rounded-lg border border-border bg-surface p-5 shadow-sm">
         <h2 className="font-semibold text-primary-text">Recent local reviews</h2>
