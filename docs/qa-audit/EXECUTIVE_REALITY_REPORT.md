@@ -89,7 +89,7 @@ All MCP-0A through MCP-1G work exists **only on unmerged feature branches** (PRs
 | 14 | No returns/exchanges flow | MEDIUM | Missing |
 | 15 | Secret scan regex false positive blocks CI | MEDIUM | scripts/ops-secret-scan.mjs |
 | 16 | No customer growth/loyalty system on `main` | MEDIUM | Only on PR #34 |
-| 17 | No cron/scheduler for async worker | MEDIUM | vercel.json configured but unverified |
+| 17 | No cron/scheduler for async worker | MEDIUM | vercel.json is EMPTY (no crons) — verified |
 | 18 | AI embeddings use `text-embedding-3-small` (1536d) but some config references 384d | LOW | lib/ai/ |
 | 19 | No product reviews UX for buyers (only DB reads) | LOW | Reviews table exists, no submit UI on main |
 | 20 | Seller payouts is placeholder-only navigation | LOW | navigation.ts → /seller/payouts-placeholder |
@@ -222,3 +222,15 @@ Not a new code phase. An operational phase:
 > The engineering program (MCP-0A through MCP-1G) added substantial deterministic engines for intelligence, operations, and growth — all of which are architecturally sound but untested against real data. That testing happens during the pilot, not before it.
 >
 > **Stop building. Start shipping.**
+
+
+
+---
+
+## AUDIT CORRECTION (Phase 2 deep-dive)
+
+After deeper source verification for the full 13-report set, one earlier statement in this report was found INACCURATE and is corrected here (no audit drift permitted):
+
+- **RLS:** This report's section 1 implied RLS was thin. **VERIFIED CORRECTION:** the schema contains **170 `enable row level security` statements and 254 `CREATE POLICY` statements** across 44 migrations, plus security-definer helper functions (`current_user_has_role`, `current_user_is_vendor_member`). **RLS is a STRENGTH, not a gap.** Security and Production-Readiness scores are revised upward accordingly (see `PRODUCTION_READINESS_AUDIT.md` and `FINAL_RECOMMENDATION.md`).
+
+All other findings stand. The corrected overall score is **~54/100 on main**, **~72/100 including unmerged branches**.
