@@ -41,8 +41,13 @@ export async function middleware(request: NextRequest) {
   });
 
   const pathname = request.nextUrl.pathname;
+  // SEC-1 (EC-8 certification hardening): the `uiQa` query parameter must never
+  // bypass authentication/RBAC in production. Restrict the demo/QA bypass to
+  // non-production environments so a deployed instance cannot be reached via
+  // `?uiQa=1` without a valid authenticated session.
   const allowDemoProtectedRoutes =
-    process.env.NODE_ENV === "development" || request.nextUrl.searchParams.get("uiQa") === "1";
+    process.env.NODE_ENV !== "production" &&
+    (process.env.NODE_ENV === "development" || request.nextUrl.searchParams.get("uiQa") === "1");
 
   if (allowDemoProtectedRoutes) {
     return response;

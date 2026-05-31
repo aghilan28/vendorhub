@@ -7,7 +7,9 @@ const fileAllowlist = new Set([".env.example"]);
 const suspiciousPatterns = [
   { name: "Supabase service role JWT", pattern: /eyJ[a-zA-Z0-9_-]{20,}\.[a-zA-Z0-9_-]{20,}\.[a-zA-Z0-9_-]{20,}/ },
   { name: "Razorpay live key", pattern: /rzp_live_[A-Za-z0-9]{10,}/ },
-  { name: "OpenAI key", pattern: /sk-[A-Za-z0-9_-]{20,}/ },
+  // Require a non-alphanumeric boundary before `sk-` so documentation URL slugs
+  // and words like "risk-management-..." cannot trigger a false-positive match.
+  { name: "OpenAI key", pattern: /(?<![A-Za-z0-9])sk-[A-Za-z0-9_-]{20,}/ },
   { name: "Private env assignment", pattern: /(?:SUPABASE_SERVICE_ROLE_KEY|RAZORPAY_SECRET|OPENAI_API_KEY|PAYMENT_WEBHOOK_SECRET)=\S+/ },
 ];
 

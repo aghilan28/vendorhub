@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-26T22:40:33.321Z",
+  "generatedAt": "2026-05-31T14:57:48.861Z",
   "app": "vendorhub",
   "phase": 30,
   "node": "22",
@@ -7,7 +7,7 @@
   "release": {
     "gitSha": "local",
     "deploymentId": "local",
-    "operator": "AKILA"
+    "operator": "local"
   },
   "requiredChecks": [
     "npm run lint",
@@ -113,110 +113,186 @@
   },
   "migrations": [
     {
+      "file": "20260525140000_init_role_helpers.sql",
+      "sha256": "6e276cd2e95927edaedaa177c927bd0440429fd1278490687d2d882fc3a19f9d"
+    },
+    {
       "file": "20260525151000_phase_1_marketplace_core.sql",
-      "sha256": "4986248848a3df67b864bbf78b70ce694b088761de9457bfc78871eb9178f6ed"
+      "sha256": "15cbda38416f9f2a65c2f4d38f65435454851c72860604d9619706bb160e6763"
     },
     {
       "file": "20260525233000_phase_7_ai_discovery_intelligence.sql",
-      "sha256": "ebb2fdc1cb1f3083ca5799476a168c1314e562a3ff1b67a7b4e74f27201f5bda"
+      "sha256": "adb224c5ba50247ea6ccf713937f3e1bf9c04485be0a6b3bb3f8c720e595c670"
     },
     {
       "file": "20260526013000_phase_10_true_hyperlocal_geo.sql",
-      "sha256": "cc0eb5312f8f711bbe6635f3fe41bdfc4f0dc7f041adaf69e0a03e8f377cda0c"
+      "sha256": "9e3dec1cfc0190256ead675318d07c2282c414c465bc5e325e99dc46191be30d"
     },
     {
       "file": "20260526023000_phase_11_delivery_logistics_engine.sql",
-      "sha256": "d2a8edbf35f2f5b9392224685729d5eb3406e31f95ba28a067447d594d00abca"
+      "sha256": "c190a77f001263c003d411d3e36c74b19ed20b475663807fbfdea1e03ec7548f"
     },
     {
       "file": "20260526033000_phase_13_trust_kyc_compliance.sql",
-      "sha256": "8fc9481ae18b44115b78c8903ea86f8620780940f59911e8459a519d84b6b86a"
+      "sha256": "80bdd5a298f64090559386a0189eac1c6cd21ba6b37a9a8b405ed3f5fa48c060"
     },
     {
       "file": "20260526043000_phase_17_atomic_transaction_engine.sql",
-      "sha256": "57ef6fa087fe519aedbe1427df182f5d07a9ea162a9c3e4139c89abdd2fff645"
+      "sha256": "54af9e5c54bcf874f83ed7ece73770e39d7996c784fc0ff5d6cbbd2617d8803d"
     },
     {
       "file": "20260526053000_phase_18_live_payment_orchestration.sql",
-      "sha256": "d70d39e25398ce6c88c1218015e928144467311df0cf52faa0113d85b338de0d"
+      "sha256": "42bd382763c696043d28bdca5ddbb1fce3c05a7634476c78f55c84fc7e3545be"
     },
     {
       "file": "20260526063000_phase_19_live_backend_activation.sql",
-      "sha256": "f5aca13a9e5fe4a5ca4e212e518dad2c809fadb057b03d2a62cf2d7ba919b461"
+      "sha256": "67047f19067fafacc178a981fd1376b0112bb2af2a462e3f78e6f298c5a1be75"
     },
     {
       "file": "20260526070000_phase_19_operational_completion.sql",
-      "sha256": "df515f6ecca4eb79ee3b550b983bf746bb2689a32cb3b0d0805f39a8eb1e1de1"
+      "sha256": "c882993c677023499dbbfde8c9f1430069c530508854d554af067fed623e5988"
     },
     {
       "file": "20260526090000_phase_21_live_ai_activation.sql",
-      "sha256": "f6f3714b7e0e27efb4df8c8fdda8b961d78d9f10faf9ba383ced49cee21ce95b"
+      "sha256": "434dd3b8ed27cec30a78318febd23d57ef9dd445e5d819c7fff1ba3b6614a042"
     },
     {
       "file": "20260526183000_phase_24_delivery_execution_hardening.sql",
-      "sha256": "6453cc1b0055efe9af8d092811a38e70ee2aa15ec96c544fb846197e7b887d1a"
+      "sha256": "ea83703a159abc9a9feeac3cb561b534db9bb7cef8970145d2a3f787525cc2cd"
     },
     {
       "file": "20260526193000_phase_25_enterprise_security_hardening.sql",
-      "sha256": "c8722209b6b27d54f83d734538cdb1ef557de7bf285f49d8737498d986033ec5"
+      "sha256": "86a0c460f9313728dd9d979f56d8c7c4a0c011bce99e15c2d82ffefe1d2db945"
     },
     {
       "file": "20260526200000_phase_26_performance_scalability.sql",
-      "sha256": "13f89dcfa9a8b8bb177b7ed5ff3cf69e2e9341399e824e73cf72cd97bd61371a"
+      "sha256": "690fd9346723eea153c7e9d11572cd0f35f0c69e02b4143f8a9ec782112156ea"
     },
     {
       "file": "20260526210000_phase_27_merchant_intelligence.sql",
-      "sha256": "6c5c205d33d88051b91ec7a6178345ff393507b24020676d7a68b714800f7c1f"
+      "sha256": "75a69d3f71274c0cc35f0feebeb9bf8e0b668969f3b0ffdcd0a101fff44a2c97"
     },
     {
       "file": "20260526213000_phase_28_marketplace_financial_operating_layer.sql",
-      "sha256": "f21b1c1ba33ad2cc9dc9434abb9c55d8705e7d53d0a28f46858039224155a1f8"
+      "sha256": "b0775cbd2db61d347d8bb99fc84fb22409f0013ff4f73e8a5ca8819e6551f205"
     },
     {
       "file": "20260526220000_phase_29_trust_governance_operating_layer.sql",
-      "sha256": "7f4db2a45caf5f2df11bbc697a73fbe2e2cf7006c6ba43ed6a3126f9beb1e3b7"
+      "sha256": "ff1c39566653eabc73e1884194ae8f6ebe047cb336238eb21cfee5d38a75446b"
     },
     {
       "file": "20260526230000_stabilization_s1_async_infrastructure.sql",
-      "sha256": "aa85776ec0a59855bdc32c324d820e035b14b0bd84885336c67ced15772d2b63"
+      "sha256": "b055b741d0872d5b2df0cb623067af086b0699b3df850c243d4e4179cf572cdf"
     },
     {
       "file": "20260526233000_stabilization_s2_logistics_hardening.sql",
-      "sha256": "a9ce4945783b2d3a04eb1b6a392034b7a4384fff72954a3673c3df23629c0b19"
+      "sha256": "12ef2894bb63aec033c46847f47c6bb8a570b3ebd1086892cea9340e809b0008"
+    },
+    {
+      "file": "20260527002900_add_verification_states.sql",
+      "sha256": "1ee837d92add91ce46a69e318d41d84a5a2c6a91fd4a78ff35f96040e85c92e4"
     },
     {
       "file": "20260527003000_stabilization_s3_governance_hardening.sql",
-      "sha256": "fc277487948b2eb4a8a4b7d951d97aec936807e62b95ab7d947f11bd504f6203"
+      "sha256": "fbbb0bfbcd6d5bfef5c1b527f806bc374b3c89f2abfa5d71801ea98ccdbd2525"
     },
     {
       "file": "20260527010000_stabilization_s4_india_commerce_hardening.sql",
-      "sha256": "160e5f706c082a0154cf6b8bc1466ee5bf7c6811da77c7f801cf7d31d4fd9ed0"
+      "sha256": "d1adeb60f99b69c4b0061dadadf40dc7d20dcb0711ed543670a497ffd3ae41d4"
     },
     {
       "file": "20260527013000_stabilization_s5_reliability_survivability.sql",
-      "sha256": "6ec848b5a52d0058bf2720448b668dbff828f2aa7586702916c857803a5d3de2"
+      "sha256": "65514b73d1cf1a7b10fa05ca088ef141554b84e7ff24c28d5ad8b83a4ff2e472"
     },
     {
       "file": "20260527220000_phase_31_distributed_async_compute.sql",
-      "sha256": "9b0cfc2c2cc265a3cca698eeb9630b9a900853397c661bb90176b34b5e277005"
+      "sha256": "b93026a01869a5008b834683d7eb81019db055b236c2ab843cfdce08d3947b7e"
     },
     {
       "file": "20260528010000_phase_32_live_logistics_operations.sql",
-      "sha256": "a2d907200edbd8105e9438bc671bf942c8d370d2802f3e131ffcb0e8b102c000"
+      "sha256": "6571e6e94a376a213f6b9fd6846844bb694bbd63478b9633550d0e22fff2962b"
     },
     {
       "file": "20260528020000_phase_33_ai_commerce_intelligence.sql",
-      "sha256": "8e1fc5e18a8d2c137a69b9d413d13f643cc1adc9f720fdbf091d76a2bd7c8d59"
+      "sha256": "64fc6b7b9f0ad34849de54a42b7d39051b3448723ae60ce759cacc0f7db1939c"
     },
     {
       "file": "20260528030000_phase_34_finance_operating_system.sql",
-      "sha256": "a28972a1957da18c886f892ae7efc9a26640b55cf14fa1e749bdf27fd70b980c"
+      "sha256": "fd1f52a9fb8fceec27e30e3de7f1fa32ae0948e51bc9c46130273e796555b45e"
     },
     {
       "file": "20260529010000_phase_41_production_hardening.sql",
       "sha256": "d76a2bd3b468e2fa2c84d233cee5f124a1e530580130574f3e27b42c24d8caa2"
+    },
+    {
+      "file": "20260529020000_tier_1_commerce_foundation.sql",
+      "sha256": "46c0b1d3511a2a44ccf3abdbaade35b07c35cddfc2907f19c9a8a444ef85531e"
+    },
+    {
+      "file": "20260529030000_tier_1_5_catalog_governance.sql",
+      "sha256": "d1580e2bbe79e618d6ac11ac67295b8efc5f8225261285b5148fa95f196952ec"
+    },
+    {
+      "file": "20260529040000_tier_2_hyperlocal_discovery.sql",
+      "sha256": "be588aa9807aa1c90377c6199fc97ac96138a859a773d295ff1731f454d092e7"
+    },
+    {
+      "file": "20260529050000_tier_3_hyperlocal_operations.sql",
+      "sha256": "8f6cd8fae20173c8859e68673ec479fe8d07f55345142e72da29832cd2d25e4a"
+    },
+    {
+      "file": "20260529060000_tier_4_ai_commerce_automation.sql",
+      "sha256": "3542d22306b3cce596c6a74a7f4f21e100b9486272ed56015ab2b4cf1d61435d"
+    },
+    {
+      "file": "20260529070000_tier_5_autonomous_commerce_orchestration.sql",
+      "sha256": "136f210fc8b624fad812276b6fd5f30c4ae78397144160310d3c12058b83298e"
+    },
+    {
+      "file": "20260529200000_south_indian_core_fmcg_kg_seed.sql",
+      "sha256": "f84484a0a14ebcd1c2ce179a9f6f794a2910d58443c0c86c87f7f1ffa5e9fedf"
+    },
+    {
+      "file": "20260529210000_south_indian_fresh_produce_taxonomy_seed.sql",
+      "sha256": "0abe0415849dc14f78b1f64152a53ea051723d3df9c4360614a27ce511eff24e"
+    },
+    {
+      "file": "20260529220000_south_indian_fresh_produce_production_ingestion.sql",
+      "sha256": "b09f01357953d83be57215b6d55124c317a6e3f8404230a282d1ae1456078bae"
+    },
+    {
+      "file": "20260529230000_tier4_hyperlocal_research_inventory_ingestion.sql",
+      "sha256": "77f5826de31e24d358c5199ed5f6496293be390739c3e2f4aca96f848ec708fd"
+    },
+    {
+      "file": "20260530000000_tier5_infrastructure_capacity_catalog_ingestion.sql",
+      "sha256": "d65d697955c581d17ed11614485376e97bd181d9dc522be42e68ff4f3c8d4a87"
+    },
+    {
+      "file": "20260530010000_acil_autonomous_commerce_intelligence_layer_ingestion.sql",
+      "sha256": "e79ce58a5cd2c93332eb7e92d67037a89ab3bd4c8968641af19201c71c99951e"
+    },
+    {
+      "file": "20260530020000_kartex_civilizational_architecture_capability_ingestion.sql",
+      "sha256": "cfa55b0dbf7de115dee9c2463c3f3bb805c169a0a5db447a04d1adaedc97552d"
+    },
+    {
+      "file": "20260530030000_tier_8_knowledge_system_ingestion.sql",
+      "sha256": "76231a89ec9e2d43e7ae0a78de41684d7ee253e123f081dbcfc83031c6e6e9ce"
+    },
+    {
+      "file": "20260530040000_tier_10_civilizational_governance_simulation.sql",
+      "sha256": "32b1fd4daf0b490ab298cd71af5714570e73b2b709bfb47204de28a92b2e24fa"
+    },
+    {
+      "file": "20260530050000_tier_11_secis_implementation.sql",
+      "sha256": "30b13e783e53b018b19ae8e90039005e7ac7158c275556734f3b90105e6c51d0"
+    },
+    {
+      "file": "20260530060000_tier_14_universal_intelligence.sql",
+      "sha256": "93e214fa7c3fbc2d0b6a92c691c6980e7ec2db25502d80b9ed456a88854b947c"
     }
   ],
-  "migrationSafetyReportSha256": "7e178b118f025efce4e8ca015e9c2b51060e578e2417e0238584707e9794a5f2",
-  "packageLockSha256": "b87ec2e60de187254c7835f772b2caada8185b855191fa55a654183cc4819717"
+  "migrationSafetyReportSha256": "e333ad040a6780be005c6934590801a8e4b5057fb60a5bdd81bc0c0264356dc4",
+  "packageLockSha256": "c6a015ad42073f50f8eeeff831bc74984890e71ad62b2f4620eb48969bf3b7a1"
 }
