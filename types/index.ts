@@ -80,6 +80,13 @@ export interface Category {
   productCount?: number;
 }
 
+export interface ProductMediaItem {
+  url: string;
+  thumbUrl: string;
+  alt: string;
+  isPrimary: boolean;
+}
+
 export interface Product {
   id: string;
   slug: string;
@@ -87,6 +94,7 @@ export interface Product {
   vendor: Vendor;
   category: Category;
   imageUrl?: string;
+  gallery?: ProductMediaItem[];
   price: number;
   originalPrice?: number;
   currency: "INR" | "USD";
