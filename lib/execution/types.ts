@@ -39,7 +39,8 @@ export type IntelligenceSource =
   | "knowledge"
   | "simulation"
   | "secis"
-  | "governance";
+  | "governance"
+  | "commerce";
 
 export const INTELLIGENCE_SOURCES: IntelligenceSource[] = [
   "research",
@@ -47,6 +48,7 @@ export const INTELLIGENCE_SOURCES: IntelligenceSource[] = [
   "simulation",
   "secis",
   "governance",
+  "commerce",
 ];
 
 /** A person who can own or be assigned to executable work. */
