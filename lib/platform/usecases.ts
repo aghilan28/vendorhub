@@ -1,0 +1,78 @@
+// KARTEX Phase N — Use Case Library (Section N.9)
+
+import type { UseCase } from "./types";
+
+export const useCases: UseCase[] = [
+  {
+    id: "retail",
+    name: "Retail",
+    icon: "Store",
+    headline: "Grow customers and revenue with evidence, not guesses.",
+    description: "Cohort analysis, retention and acquisition decisions executed and measured end-to-end.",
+    primarySubsystems: ["research", "knowledge", "execution"],
+    scenarioIds: ["customer-growth"],
+  },
+  {
+    id: "commerce",
+    name: "Commerce",
+    icon: "ShoppingCart",
+    headline: "Convert demand spikes into captured revenue.",
+    description: "Detect, validate and scale to meet demand without breaking fulfilment.",
+    primarySubsystems: ["research", "simulation", "execution"],
+    scenarioIds: ["demand-surge"],
+  },
+  {
+    id: "inventory",
+    name: "Inventory",
+    icon: "Boxes",
+    headline: "Put the right stock in the right place at the right time.",
+    description: "Rebalance aging and misallocated inventory to recover margin and free capital.",
+    primarySubsystems: ["knowledge", "simulation", "execution"],
+    scenarioIds: ["inventory-crisis"],
+  },
+  {
+    id: "supply-chain",
+    name: "Supply Chain",
+    icon: "Truck",
+    headline: "Absorb supplier shocks before they reach customers.",
+    description: "Detect supplier failure, simulate exposure and execute a governed recovery.",
+    primarySubsystems: ["research", "simulation", "governance", "execution"],
+    scenarioIds: ["supplier-failure"],
+  },
+  {
+    id: "pricing",
+    name: "Pricing",
+    icon: "Tags",
+    headline: "Price with confidence using simulated elasticity.",
+    description: "Ground pricing changes in evidence and roll them out with governed safeguards.",
+    primarySubsystems: ["research", "simulation", "governance"],
+    scenarioIds: ["pricing-change"],
+  },
+  {
+    id: "expansion",
+    name: "Expansion",
+    icon: "Map",
+    headline: "Expand into markets as a staged, measured program.",
+    description: "Evaluate markets, de-bias projections and govern a phased roll-out.",
+    primarySubsystems: ["research", "simulation", "governance", "execution"],
+    scenarioIds: ["store-expansion"],
+  },
+  {
+    id: "operations",
+    name: "Operations",
+    icon: "Activity",
+    headline: "Keep service levels steady through disruption.",
+    description: "Reroute logistics and recover SLAs with validated telemetry and governed action.",
+    primarySubsystems: ["simulation", "secis", "execution"],
+    scenarioIds: ["logistics-disruption"],
+  },
+  {
+    id: "risk-management",
+    name: "Risk Management",
+    icon: "ShieldAlert",
+    headline: "Turn risk signals into controlled, owned responses.",
+    description: "Detect threats and integrity risks, then govern and execute mitigations.",
+    primarySubsystems: ["secis", "governance", "execution"],
+    scenarioIds: ["supplier-failure", "logistics-disruption"],
+  },
+];
