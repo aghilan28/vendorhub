@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ProductGeoPanel } from "@/features/geo/components/product-geo-panel";
 import { RelatedProductStrip } from "@/features/intelligence/components/recommendation-strip";
+import { BuyerTrustPanel } from "@/features/trust-os/components/buyer-trust-panel";
 import { ProductDeliveryPromise } from "@/features/logistics/components/delivery-commerce-panels";
 import { ProductAddActions } from "@/features/marketplace/components/product-add-actions";
 import { formatEta, getProductActivityLine, getProductFreshnessLine, getProductReviewSnippets, getVendorActivityLine, getVendorHumanLine } from "@/features/marketplace/lib/data";
@@ -99,6 +100,13 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           </dl>
         </div>
       </section>
+
+      <BuyerTrustPanel
+        sellerName={product.vendor?.name ?? "Seller"}
+        sellerVerified={Boolean(product.vendor?.verified)}
+        rating={product.rating ?? 0}
+        reviewCount={product.reviewCount ?? 0}
+      />
 
       <section className="rounded-lg border border-border bg-surface p-5 shadow-sm">
         <h2 className="font-semibold text-primary-text">Recent local reviews</h2>
