@@ -32,6 +32,7 @@
     "ops:backup-plan": "node scripts/ops-backup-plan.mjs",
     "ops:smoke": "node scripts/ops-smoke.mjs",
     "pp1:certify": "npx --yes tsx scripts/pp1-taxonomy-certify.ts",
+    "pp2:certify": "npx --yes tsx scripts/pp2-brand-certify.ts",
     "ops:preflight": "npm run ops:env-audit && npm run ops:secret-scan && npm run ops:migration-audit && npm run ops:release-manifest && npm run ops:backup-plan",
     "validate": "npm run lint && npm run typecheck && npm run test && npm run ops:preflight && npm run build",
     "format": "prettier --write .",
