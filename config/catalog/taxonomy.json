@@ -1,0 +1,156 @@
+{
+  "version": "mcp0b-1",
+  "roots": [
+    { "slug": "groceries", "name": "Groceries", "attrFamily": "groceries", "variantAxes": ["weight", "pack_size"], "keywords": ["staples", "rice", "atta", "dal", "oil", "sugar", "salt"],
+      "subcategories": [
+        { "slug": "rice-grains", "name": "Rice & Grains", "keywords": ["rice", "wheat", "millet", "grain"] },
+        { "slug": "pulses-dals", "name": "Pulses & Dals", "keywords": ["dal", "lentils", "pulses"] },
+        { "slug": "edible-oils", "name": "Edible Oils", "variantAxes": ["volume"], "keywords": ["oil", "ghee"] },
+        { "slug": "spices-masala", "name": "Spices & Masala", "keywords": ["spice", "masala", "turmeric", "chilli"] },
+        { "slug": "sugar-salt", "name": "Sugar & Salt", "keywords": ["sugar", "salt", "jaggery"] }
+      ] },
+    { "slug": "fruits", "name": "Fruits", "attrFamily": "fresh", "variantAxes": ["weight"], "keywords": ["fresh", "fruit", "seasonal"],
+      "subcategories": [
+        { "slug": "fresh-fruits", "name": "Fresh Fruits", "keywords": ["banana", "apple", "mango", "orange"] },
+        { "slug": "exotic-fruits", "name": "Exotic Fruits", "keywords": ["kiwi", "dragonfruit", "avocado"] }
+      ] },
+    { "slug": "vegetables", "name": "Vegetables", "attrFamily": "fresh", "variantAxes": ["weight"], "keywords": ["fresh", "vegetable", "sabzi"],
+      "subcategories": [
+        { "slug": "fresh-vegetables", "name": "Fresh Vegetables", "keywords": ["tomato", "onion", "potato", "greens"] },
+        { "slug": "leafy-greens", "name": "Leafy Greens", "keywords": ["spinach", "coriander", "methi"] }
+      ] },
+    { "slug": "dairy", "name": "Dairy", "attrFamily": "dairy", "variantAxes": ["volume", "pack_size"], "keywords": ["milk", "curd", "paneer", "butter"],
+      "subcategories": [
+        { "slug": "milk", "name": "Milk", "variantAxes": ["volume"], "keywords": ["milk", "toned", "full cream"] },
+        { "slug": "curd-yogurt", "name": "Curd & Yogurt", "keywords": ["curd", "yogurt", "dahi"] },
+        { "slug": "paneer-cheese", "name": "Paneer & Cheese", "keywords": ["paneer", "cheese"] },
+        { "slug": "butter-ghee", "name": "Butter & Ghee", "keywords": ["butter", "ghee"] }
+      ] },
+    { "slug": "bakery", "name": "Bakery", "attrFamily": "bakery", "variantAxes": ["pack_size", "weight"], "keywords": ["bread", "bun", "cake", "biscuit"],
+      "subcategories": [
+        { "slug": "bread", "name": "Bread", "keywords": ["bread", "pav", "bun"] },
+        { "slug": "cakes-pastries", "name": "Cakes & Pastries", "keywords": ["cake", "pastry", "muffin"] }
+      ] },
+    { "slug": "snacks", "name": "Snacks", "attrFamily": "snacks", "variantAxes": ["pack_size", "weight"], "keywords": ["chips", "namkeen", "snack"],
+      "subcategories": [
+        { "slug": "chips-crisps", "name": "Chips & Crisps", "keywords": ["chips", "crisps"] },
+        { "slug": "namkeen", "name": "Namkeen", "keywords": ["namkeen", "mixture", "sev"] },
+        { "slug": "chocolates", "name": "Chocolates", "keywords": ["chocolate", "candy"] }
+      ] },
+    { "slug": "beverages", "name": "Beverages", "attrFamily": "beverages", "variantAxes": ["volume", "pack_size"], "keywords": ["drink", "juice", "tea", "coffee"],
+      "subcategories": [
+        { "slug": "tea-coffee", "name": "Tea & Coffee", "keywords": ["tea", "coffee"] },
+        { "slug": "juices", "name": "Juices", "variantAxes": ["volume"], "keywords": ["juice"] },
+        { "slug": "soft-drinks", "name": "Soft Drinks", "variantAxes": ["volume"], "keywords": ["soda", "cola"] },
+        { "slug": "water", "name": "Water", "variantAxes": ["volume"], "keywords": ["water", "mineral"] }
+      ] },
+    { "slug": "household", "name": "Household", "attrFamily": "household", "variantAxes": ["volume", "pack_size"], "keywords": ["cleaning", "detergent", "home care"],
+      "subcategories": [
+        { "slug": "cleaning-supplies", "name": "Cleaning Supplies", "keywords": ["cleaner", "phenyl"] },
+        { "slug": "detergents", "name": "Detergents", "keywords": ["detergent", "washing"] },
+        { "slug": "tissues-disposables", "name": "Tissues & Disposables", "keywords": ["tissue", "paper"] }
+      ] },
+    { "slug": "personal-care", "name": "Personal Care", "attrFamily": "personalcare", "variantAxes": ["volume", "pack_size"], "keywords": ["soap", "shampoo", "hygiene"],
+      "subcategories": [
+        { "slug": "bath-body", "name": "Bath & Body", "keywords": ["soap", "bodywash"] },
+        { "slug": "hair-care", "name": "Hair Care", "keywords": ["shampoo", "oil"] },
+        { "slug": "oral-care", "name": "Oral Care", "keywords": ["toothpaste", "brush"] }
+      ] },
+    { "slug": "health", "name": "Health", "attrFamily": "health", "variantAxes": ["pack_size"], "keywords": ["wellness", "supplement", "otc"],
+      "subcategories": [
+        { "slug": "vitamins-supplements", "name": "Vitamins & Supplements", "keywords": ["vitamin", "protein"] },
+        { "slug": "first-aid", "name": "First Aid", "keywords": ["bandage", "antiseptic"] }
+      ] },
+    { "slug": "beauty", "name": "Beauty", "attrFamily": "beauty", "variantAxes": ["color", "volume"], "keywords": ["cosmetics", "makeup", "skincare"],
+      "subcategories": [
+        { "slug": "makeup", "name": "Makeup", "variantAxes": ["color"], "keywords": ["lipstick", "foundation"] },
+        { "slug": "skincare", "name": "Skincare", "keywords": ["cream", "serum"] },
+        { "slug": "fragrances", "name": "Fragrances", "variantAxes": ["volume"], "keywords": ["perfume", "deo"] }
+      ] },
+    { "slug": "baby-care", "name": "Baby Care", "attrFamily": "baby", "variantAxes": ["size", "pack_size"], "keywords": ["baby", "infant", "diaper"],
+      "subcategories": [
+        { "slug": "diapers", "name": "Diapers", "variantAxes": ["size", "pack_size"], "keywords": ["diaper"] },
+        { "slug": "baby-food", "name": "Baby Food", "keywords": ["formula", "cereal"] }
+      ] },
+    { "slug": "pet-care", "name": "Pet Care", "attrFamily": "pet", "variantAxes": ["weight", "pack_size"], "keywords": ["pet", "dog", "cat"],
+      "subcategories": [
+        { "slug": "pet-food", "name": "Pet Food", "variantAxes": ["weight"], "keywords": ["dog food", "cat food"] },
+        { "slug": "pet-accessories", "name": "Pet Accessories", "keywords": ["leash", "toy"] }
+      ] },
+    { "slug": "electronics", "name": "Electronics", "attrFamily": "electronics", "variantAxes": ["color", "configuration"], "keywords": ["gadget", "device", "appliance"],
+      "subcategories": [
+        { "slug": "tv-appliances", "name": "TV & Appliances", "keywords": ["tv", "fridge", "washing machine"] },
+        { "slug": "audio", "name": "Audio", "variantAxes": ["color"], "keywords": ["headphone", "speaker"] },
+        { "slug": "cameras", "name": "Cameras", "keywords": ["camera", "lens"] }
+      ] },
+    { "slug": "mobiles", "name": "Mobiles", "attrFamily": "mobiles", "variantAxes": ["color", "storage"], "keywords": ["phone", "smartphone", "mobile"],
+      "subcategories": [
+        { "slug": "smartphones", "name": "Smartphones", "variantAxes": ["color", "storage"], "keywords": ["android", "iphone"] },
+        { "slug": "feature-phones", "name": "Feature Phones", "variantAxes": ["color"], "keywords": ["keypad"] },
+        { "slug": "mobile-accessories", "name": "Mobile Accessories", "variantAxes": ["color"], "keywords": ["case", "charger", "cable"] }
+      ] },
+    { "slug": "computers", "name": "Computers", "attrFamily": "computers", "variantAxes": ["configuration", "color"], "keywords": ["laptop", "desktop", "pc"],
+      "subcategories": [
+        { "slug": "laptops", "name": "Laptops", "variantAxes": ["configuration"], "keywords": ["laptop", "notebook"] },
+        { "slug": "desktops", "name": "Desktops", "variantAxes": ["configuration"], "keywords": ["desktop", "pc"] },
+        { "slug": "components", "name": "Components", "keywords": ["ram", "ssd", "gpu"] }
+      ] },
+    { "slug": "accessories", "name": "Accessories", "attrFamily": "accessories", "variantAxes": ["color"], "keywords": ["accessory", "gadget accessory"],
+      "subcategories": [
+        { "slug": "chargers-cables", "name": "Chargers & Cables", "keywords": ["charger", "cable"] },
+        { "slug": "storage-devices", "name": "Storage Devices", "variantAxes": ["configuration"], "keywords": ["pendrive", "ssd", "hdd"] }
+      ] },
+    { "slug": "fashion", "name": "Fashion", "attrFamily": "fashion", "variantAxes": ["size", "color"], "keywords": ["clothing", "apparel", "wear"],
+      "subcategories": [
+        { "slug": "men", "name": "Men", "variantAxes": ["size", "color"], "keywords": ["shirt", "tshirt", "jeans"] },
+        { "slug": "women", "name": "Women", "variantAxes": ["size", "color"], "keywords": ["kurti", "dress", "saree"] },
+        { "slug": "kids", "name": "Kids", "variantAxes": ["size", "color"], "keywords": ["kids wear"] }
+      ] },
+    { "slug": "footwear", "name": "Footwear", "attrFamily": "footwear", "variantAxes": ["size", "color"], "keywords": ["shoes", "sandals", "slippers"],
+      "subcategories": [
+        { "slug": "mens-footwear", "name": "Men's Footwear", "variantAxes": ["size", "color"], "keywords": ["sneakers", "formal shoes"] },
+        { "slug": "womens-footwear", "name": "Women's Footwear", "variantAxes": ["size", "color"], "keywords": ["heels", "flats"] }
+      ] },
+    { "slug": "home", "name": "Home", "attrFamily": "home", "variantAxes": ["color", "size"], "keywords": ["home", "decor", "living"],
+      "subcategories": [
+        { "slug": "decor", "name": "Decor", "keywords": ["decor", "lamp", "vase"] },
+        { "slug": "bedding", "name": "Bedding", "variantAxes": ["size", "color"], "keywords": ["bedsheet", "pillow"] }
+      ] },
+    { "slug": "kitchen", "name": "Kitchen", "attrFamily": "kitchen", "variantAxes": ["size", "material"], "keywords": ["cookware", "utensils"],
+      "subcategories": [
+        { "slug": "cookware", "name": "Cookware", "variantAxes": ["size", "material"], "keywords": ["pan", "kadai", "pressure cooker"] },
+        { "slug": "storage-containers", "name": "Storage & Containers", "variantAxes": ["size"], "keywords": ["container", "jar"] }
+      ] },
+    { "slug": "furniture", "name": "Furniture", "attrFamily": "furniture", "variantAxes": ["color", "material"], "keywords": ["furniture", "table", "chair"],
+      "subcategories": [
+        { "slug": "seating", "name": "Seating", "variantAxes": ["color", "material"], "keywords": ["chair", "sofa"] },
+        { "slug": "tables", "name": "Tables", "variantAxes": ["material"], "keywords": ["table", "desk"] }
+      ] },
+    { "slug": "sports", "name": "Sports", "attrFamily": "sports", "variantAxes": ["size", "color"], "keywords": ["fitness", "sport", "outdoor"],
+      "subcategories": [
+        { "slug": "fitness-equipment", "name": "Fitness Equipment", "keywords": ["dumbbell", "mat"] },
+        { "slug": "outdoor-sports", "name": "Outdoor Sports", "keywords": ["cricket", "football"] }
+      ] },
+    { "slug": "books", "name": "Books", "attrFamily": "books", "variantAxes": ["style"], "keywords": ["book", "novel", "reading"],
+      "subcategories": [
+        { "slug": "fiction", "name": "Fiction", "keywords": ["novel", "story"] },
+        { "slug": "non-fiction", "name": "Non-Fiction", "keywords": ["biography", "self help"] },
+        { "slug": "academic", "name": "Academic", "keywords": ["textbook", "exam"] }
+      ] },
+    { "slug": "automotive", "name": "Automotive", "attrFamily": "automotive", "variantAxes": ["configuration"], "keywords": ["car", "bike", "auto"],
+      "subcategories": [
+        { "slug": "car-accessories", "name": "Car Accessories", "keywords": ["car cover", "mat"] },
+        { "slug": "bike-accessories", "name": "Bike Accessories", "keywords": ["helmet", "bike cover"] }
+      ] },
+    { "slug": "industrial", "name": "Industrial", "attrFamily": "industrial", "variantAxes": ["configuration", "pack_size"], "keywords": ["industrial", "tools", "mro"],
+      "subcategories": [
+        { "slug": "tools", "name": "Tools", "keywords": ["drill", "wrench"] },
+        { "slug": "safety-equipment", "name": "Safety Equipment", "variantAxes": ["size"], "keywords": ["gloves", "helmet"] }
+      ] },
+    { "slug": "office-supplies", "name": "Office Supplies", "attrFamily": "office", "variantAxes": ["pack_size", "color"], "keywords": ["stationery", "office"],
+      "subcategories": [
+        { "slug": "stationery", "name": "Stationery", "keywords": ["pen", "notebook"] },
+        { "slug": "printer-supplies", "name": "Printer Supplies", "keywords": ["ink", "toner", "paper"] }
+      ] }
+  ]
+}
