@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-31T18:36:35.187Z",
+  "generatedAt": "2026-05-31T18:49:12.150Z",
   "strategy": "Supabase managed PITR plus explicit pre-release logical snapshot",
   "rehearsalEnvironment": "staging",
   "requiredBeforeProductionMigration": true,
