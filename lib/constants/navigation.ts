@@ -44,6 +44,7 @@ export const buyerNavigation = [
 export const sellerNavigation = [
   { label: "Dashboard", href: "/seller/dashboard", icon: LayoutDashboard },
   { label: "Operations", href: "/seller/operations", icon: Activity },
+  { label: "Fulfillment", href: "/seller/fulfillment", icon: PackageCheck },
   { label: "Intelligence", href: "/seller/intelligence", icon: Brain },
   { label: "Reputation", href: "/seller/reputation", icon: ShieldCheck },
   { label: "Products", href: "/seller/products", icon: PackageSearch },
@@ -69,6 +70,7 @@ export const adminNavigation = [
   { label: "Media", href: "/admin/media", icon: Images },
   { label: "Trust", href: "/admin/trust", icon: ShieldCheck },
   { label: "Orders", href: "/admin/orders", icon: PackageCheck },
+  { label: "Commerce", href: "/admin/commerce", icon: ShoppingCart },
   { label: "Refunds", href: "/admin/refunds", icon: WalletCards },
   { label: "Categories", href: "/admin/categories", icon: ListChecks },
   { label: "Analytics", href: "/admin/analytics", icon: BarChart3 },
