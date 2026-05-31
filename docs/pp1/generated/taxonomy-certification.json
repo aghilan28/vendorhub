@@ -1,0 +1,86 @@
+{
+  "generatedAt": "2026-05-31T16:21:09.870Z",
+  "wave": "PP-1",
+  "subject": "Canonical Commerce Taxonomy Foundation",
+  "canonical": {
+    "totalNodes": 618,
+    "byLevel": {
+      "DEPARTMENT": 26,
+      "CATEGORY": 536,
+      "SUBCATEGORY": 39,
+      "PRODUCT_FAMILY": 2,
+      "PRODUCT_TYPE": 11,
+      "VARIANT_GROUP": 4
+    },
+    "maxDepth": 5,
+    "departments": 26,
+    "categories": 536
+  },
+  "integrity": {
+    "valid": true,
+    "errors": 0,
+    "warnings": 0
+  },
+  "readiness": {
+    "searchDocuments": 618,
+    "affinityEdges": 5453,
+    "substitutionGroups": 4,
+    "intelligenceHooks": 7,
+    "departmentRollups": 26
+  },
+  "scaleCertification": [
+    {
+      "targetCategories": 500,
+      "totalNodes": 520,
+      "valid": true,
+      "errorCount": 0,
+      "warningCount": 0,
+      "traversalOk": true,
+      "lookupOk": true,
+      "buildMs": 3,
+      "validateMs": 1
+    },
+    {
+      "targetCategories": 1000,
+      "totalNodes": 1040,
+      "valid": true,
+      "errorCount": 0,
+      "warningCount": 0,
+      "traversalOk": true,
+      "lookupOk": true,
+      "buildMs": 6,
+      "validateMs": 1
+    },
+    {
+      "targetCategories": 5000,
+      "totalNodes": 5200,
+      "valid": true,
+      "errorCount": 0,
+      "warningCount": 0,
+      "traversalOk": true,
+      "lookupOk": true,
+      "buildMs": 27,
+      "validateMs": 15
+    },
+    {
+      "targetCategories": 10000,
+      "totalNodes": 10400,
+      "valid": true,
+      "errorCount": 0,
+      "warningCount": 0,
+      "traversalOk": true,
+      "lookupOk": true,
+      "buildMs": 64,
+      "validateMs": 18
+    }
+  ],
+  "completionCriteria": {
+    "productionGradeEngine": true,
+    "supports100kProductsWithoutRestructure": true,
+    "searchConsumable": true,
+    "recommendationConsumable": true,
+    "intelligenceConsumable": true,
+    "governanceConsumable": true,
+    "scaleCertified": true
+  }
+}
