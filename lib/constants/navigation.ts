@@ -2,6 +2,7 @@ import {
   Activity,
   BarChart3,
   Boxes,
+  Brain,
   ClipboardList,
   Bell,
   CircleHelp,
@@ -33,6 +34,7 @@ import {
 export const buyerNavigation = [
   { label: "Home", href: "/", icon: Home },
   { label: "Search", href: "/search", icon: Search },
+  { label: "Discover", href: "/discover", icon: Compass },
   { label: "Categories", href: "/categories", icon: Tags },
   { label: "Orders", href: "/orders", icon: ReceiptText },
   { label: "Wishlist", href: "/wishlist", icon: Heart },
@@ -42,6 +44,7 @@ export const buyerNavigation = [
 export const sellerNavigation = [
   { label: "Dashboard", href: "/seller/dashboard", icon: LayoutDashboard },
   { label: "Operations", href: "/seller/operations", icon: Activity },
+  { label: "Intelligence", href: "/seller/intelligence", icon: Brain },
   { label: "Reputation", href: "/seller/reputation", icon: ShieldCheck },
   { label: "Products", href: "/seller/products", icon: PackageSearch },
   { label: "Catalog Ops", href: "/seller/catalog", icon: ListChecks },
@@ -58,6 +61,7 @@ export const sellerNavigation = [
 export const adminNavigation = [
   { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
   { label: "Platform", href: "/platform", icon: Compass },
+  { label: "Intelligence", href: "/admin/intelligence", icon: Brain },
   { label: "Execution", href: "/admin/execution", icon: Rocket },
   { label: "Vendors", href: "/admin/vendors", icon: Users },
   { label: "Moderation", href: "/admin/moderation", icon: ShieldCheck },
