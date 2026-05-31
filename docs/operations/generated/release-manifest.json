@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-31T16:22:14.474Z",
+  "generatedAt": "2026-05-31T17:00:23.953Z",
   "app": "vendorhub",
   "phase": 30,
   "node": "22",
@@ -295,8 +295,12 @@
     {
       "file": "20260531000000_pp1_canonical_taxonomy_foundation.sql",
       "sha256": "84d5b510f8dd03045bc1b85a0dd4ce298bd4979b580f25091fe0654c607a5446"
+    },
+    {
+      "file": "20260531010000_pp2_brand_universe.sql",
+      "sha256": "668bb57db11232b9623055b3723945e398264357240fa2e4c99427ff10fd1a9f"
     }
   ],
-  "migrationSafetyReportSha256": "844f84e08c1d746614ff48bdc9350b41f5975c9fa56d20c6532cd355bf23078a",
+  "migrationSafetyReportSha256": "c55d495f0db6eefe810864191353c5e23d6edca0eafffa01210357b7956a5f79",
   "packageLockSha256": "c6a015ad42073f50f8eeeff831bc74984890e71ad62b2f4620eb48969bf3b7a1"
 }

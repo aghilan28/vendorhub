@@ -1,0 +1,165 @@
+{
+  "generatedAt": "2026-05-31T17:00:11.769Z",
+  "wave": "PP-2",
+  "subject": "Brand Universe Foundation & Brand Intelligence System",
+  "canonical": {
+    "brands": 1327,
+    "companies": 70,
+    "byIndustry": {
+      "FOOD": 255,
+      "PERSONAL_CARE": 66,
+      "AUTOMOTIVE": 42,
+      "STATIONERY": 47,
+      "HOUSEHOLD": 66,
+      "BEVERAGES": 58,
+      "HEALTH": 60,
+      "DAIRY": 64,
+      "FMCG": 131,
+      "PHARMA": 39,
+      "ELECTRONICS": 107,
+      "FASHION": 119,
+      "SPORTS": 33,
+      "KITCHEN": 53,
+      "OTHER": 35,
+      "BEAUTY": 72,
+      "BABY_CARE": 23,
+      "FOOTWEAR": 11,
+      "PET_CARE": 27,
+      "APPLIANCES": 19
+    },
+    "localBrands": 71
+  },
+  "integrity": {
+    "valid": true,
+    "errors": 0,
+    "warnings": 0
+  },
+  "classification": {
+    "totalBrands": 1327,
+    "classifiedBrands": 1327,
+    "departmentsCovered": 24,
+    "categoriesCovered": 0
+  },
+  "readiness": {
+    "searchDocuments": 1327,
+    "affinityEdges": 34072,
+    "brandGroups": 91,
+    "intelligenceHooks": 8,
+    "topCompanies": [
+      {
+        "companyId": "hindustan-unilever",
+        "name": "Hindustan Unilever",
+        "brandCount": 42
+      },
+      {
+        "companyId": "itc-limited",
+        "name": "ITC Limited",
+        "brandCount": 19
+      },
+      {
+        "companyId": "dabur-india",
+        "name": "Dabur India",
+        "brandCount": 18
+      },
+      {
+        "companyId": "pepsico-india",
+        "name": "PepsiCo India",
+        "brandCount": 16
+      },
+      {
+        "companyId": "tata-consumer-products",
+        "name": "Tata Consumer Products",
+        "brandCount": 16
+      },
+      {
+        "companyId": "reckitt-benckiser",
+        "name": "Reckitt Benckiser",
+        "brandCount": 15
+      },
+      {
+        "companyId": "amul",
+        "name": "Amul",
+        "brandCount": 14
+      },
+      {
+        "companyId": "britannia-industries",
+        "name": "Britannia Industries",
+        "brandCount": 14
+      },
+      {
+        "companyId": "nestle-india",
+        "name": "Nestle India",
+        "brandCount": 14
+      },
+      {
+        "companyId": "parle-products",
+        "name": "Parle Products",
+        "brandCount": 13
+      }
+    ]
+  },
+  "scaleCertification": [
+    {
+      "targetBrands": 100,
+      "totalBrands": 100,
+      "totalCompanies": 10,
+      "valid": true,
+      "errorCount": 0,
+      "warningCount": 0,
+      "ownershipOk": true,
+      "classificationOk": true,
+      "lookupOk": true,
+      "buildMs": 0,
+      "validateMs": 0
+    },
+    {
+      "targetBrands": 500,
+      "totalBrands": 500,
+      "totalCompanies": 50,
+      "valid": true,
+      "errorCount": 0,
+      "warningCount": 0,
+      "ownershipOk": true,
+      "classificationOk": true,
+      "lookupOk": true,
+      "buildMs": 4,
+      "validateMs": 0
+    },
+    {
+      "targetBrands": 1000,
+      "totalBrands": 1000,
+      "totalCompanies": 100,
+      "valid": true,
+      "errorCount": 0,
+      "warningCount": 0,
+      "ownershipOk": true,
+      "classificationOk": true,
+      "lookupOk": true,
+      "buildMs": 2,
+      "validateMs": 2
+    },
+    {
+      "targetBrands": 5000,
+      "totalBrands": 5000,
+      "totalCompanies": 500,
+      "valid": true,
+      "errorCount": 0,
+      "warningCount": 0,
+      "ownershipOk": true,
+      "classificationOk": true,
+      "lookupOk": true,
+      "buildMs": 12,
+      "validateMs": 6
+    }
+  ],
+  "completionCriteria": {
+    "canonicalBrandUniverse": true,
+    "realBrands1000Plus": true,
+    "linkedToTaxonomy": true,
+    "searchConsumable": true,
+    "recommendationConsumable": true,
+    "intelligenceConsumable": true,
+    "governancePasses": true,
+    "scaleCertified": true
+  }
+}
