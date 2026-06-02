@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-02T18:49:52.808Z",
+  "generatedAt": "2026-06-02T19:50:57.120Z",
   "app": "vendorhub",
   "phase": 30,
   "node": "22",
@@ -319,8 +319,20 @@
     {
       "file": "20260606000000_population_program.sql",
       "sha256": "38c2c534d0bdd07052ce7b1e2b3eb01d3d9e4e4a7353573919c03743c1c741c7"
+    },
+    {
+      "file": "20260607000000_hl1_nearby_discovery.sql",
+      "sha256": "fd25bd05b871cc2ba5edcaffc7b3bbc7f8132aa0203c83819efc04ce4f1d916e"
+    },
+    {
+      "file": "20260607000001_discovery_population.sql",
+      "sha256": "7331eb1548183a6602f6163cace14b49463b2ad658742112f61307c60b0d614b"
+    },
+    {
+      "file": "20260608000000_hl2_hyperlocal_ranking.sql",
+      "sha256": "fbd1d74d272abcfc382f11acf3e6bc24abbc5cabfb8f5a4105beccaf926bfc0f"
     }
   ],
-  "migrationSafetyReportSha256": "1fb84e3632867cb005da3b7730ebb6fc75005eb9cd76eecf54f0295494a8370f",
+  "migrationSafetyReportSha256": "c2a9e5c8b3e365f99bef4571c199fd263a4b3761bfd180c1e06ad4ee4bf3e419",
   "packageLockSha256": "c6a015ad42073f50f8eeeff831bc74984890e71ad62b2f4620eb48969bf3b7a1"
 }
