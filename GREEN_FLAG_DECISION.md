@@ -2,6 +2,8 @@
 
 **DECISION: APPROVED**
 
-Wave 2 is certified as GREEN. All SP-3 geographic layer requirements are implemented, hardened, and verified at scale.
+Wave 2 (SP-1, SP-2, SP-3) and Wave 3 PI-1 are certified as GREEN.
 
-**AUTHORIZATION GRANTED FOR WAVE 3 START.**
+The first Commerce Graph of VendorHub is now active.
+
+**AUTHORIZATION GRANTED FOR WAVE 3 PI-2 START.**
