@@ -8,7 +8,15 @@ describe('ETA Engine', () => {
     requestedAt: new Date().toISOString(),
     context: {
       buyer: {
-        location: { latitude: 13.0405, longitude: 80.2337 },
+        location: {
+          id: 'loc-1',
+          label: 'Home',
+          source: 'gps',
+          latitude: 13.0405,
+          longitude: 80.2337,
+          locality: 'T. Nagar',
+          city: 'Chennai',
+        },
       },
       store: {
         vendor: { id: 'vendor-1', name: 'Test Vendor' } as any,
