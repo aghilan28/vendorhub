@@ -15,9 +15,10 @@ import { useLocaleStore } from "@/store/locale-store";
 import { useMobileStore } from "@/store/mobile-store";
 import { useWishlistStore } from "@/store/wishlist-store";
 import type { Product } from "@/types";
+import type { BuyerETAProjection } from "@/features/intelligence/types";
 import { PriceDisplay } from "./price-display";
 
-export function ProductCard({ product }: { product: Product; compact?: boolean }) {
+export function ProductCard({ product, etaProjection }: { product: Product; compact?: boolean; etaProjection?: BuyerETAProjection }) {
   const [isPending, startTransition] = useTransition();
   const { t } = useTranslation();
   const locale = useLocaleStore((state) => state.locale);
@@ -112,7 +113,9 @@ export function ProductCard({ product }: { product: Product; compact?: boolean }
         </Button>
 
         <div className="flex min-w-0 items-center justify-between gap-2 text-xs font-medium text-secondary-text">
-          <span className="min-w-0 whitespace-nowrap">{formatEta(product.deliveryMinutes)}</span>
+          <span className={`min-w-0 whitespace-nowrap ${etaProjection?.isHighRisk ? 'text-amber-700' : ''}`} title={etaProjection?.explanation}>
+            {formatEta(product.deliveryMinutes, etaProjection?.window)}
+          </span>
           <span className={isUnavailable ? "shrink-0 text-danger" : product.stockCount < 5 ? "shrink-0 text-amber-700" : "shrink-0 text-emerald-700"}>
             {stockLabel}
           </span>

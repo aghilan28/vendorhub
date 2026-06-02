@@ -16,12 +16,10 @@ export default defineConfig({
     { name: "chromium", use: { ...devices["Desktop Chrome"] } },
     { name: "mobile-chrome", use: { ...devices["Pixel 5"] } },
   ],
-  webServer: process.env.CI
-    ? undefined
-    : {
-        command: "node scripts/clean-next-cache.mjs && npm run dev",
-        url: "http://localhost:3000",
-        reuseExistingServer: false,
-        timeout: 120000,
-      },
+  webServer: {
+    command: "npm run dev",
+    url: "http://localhost:3000",
+    reuseExistingServer: !process.env.CI,
+    timeout: 120000,
+  },
 });
