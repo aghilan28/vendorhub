@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-02T18:16:33.948Z",
+  "generatedAt": "2026-06-02T18:49:52.808Z",
   "app": "vendorhub",
   "phase": 30,
   "node": "22",
@@ -311,8 +311,16 @@
     {
       "file": "20260604000000_pi2_inventory_foundation.sql",
       "sha256": "174892b2d71eb57a918f8a21f0c906045372b1f6f3bca3b3e0600f4cbb2d719c"
+    },
+    {
+      "file": "20260605000000_pi3_availability_engine.sql",
+      "sha256": "5cb4cc3047853c3c8953dabec5f6ac7af41c31a06704c0e0d2db2d18943980c0"
+    },
+    {
+      "file": "20260606000000_population_program.sql",
+      "sha256": "38c2c534d0bdd07052ce7b1e2b3eb01d3d9e4e4a7353573919c03743c1c741c7"
     }
   ],
-  "migrationSafetyReportSha256": "7d6158d11fa8d394e71768fca464893eddb8750adc64232e2419f67399075079",
+  "migrationSafetyReportSha256": "1fb84e3632867cb005da3b7730ebb6fc75005eb9cd76eecf54f0295494a8370f",
   "packageLockSha256": "c6a015ad42073f50f8eeeff831bc74984890e71ad62b2f4620eb48969bf3b7a1"
 }

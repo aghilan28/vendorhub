@@ -6,9 +6,9 @@ export class StoreCatalogEngine {
     return {
       storeId,
       products: storeLinks.map(l => l.productId),
-      brands: [], // To be populated from Product Master
-      categories: [],
-      departments: [],
+      brands: Array.from(new Set(storeLinks.map(l => l.metadata?.brandId).filter(Boolean))),
+      categories: Array.from(new Set(storeLinks.map(l => l.metadata?.categoryId).filter(Boolean))),
+      departments: Array.from(new Set(storeLinks.map(l => l.metadata?.departmentId).filter(Boolean))),
       healthScore: storeLinks.length > 0 ? 1.0 : 0.0,
     };
   }
@@ -21,6 +21,7 @@ export class SellerCatalogEngine {
       sellerId,
       productCount: sellerLinks.length,
       stores: Array.from(new Set(sellerLinks.map(l => l.storeId))),
+      brandCoverage: Array.from(new Set(sellerLinks.map(l => l.metadata?.brandId).filter(Boolean))),
     };
   }
 }

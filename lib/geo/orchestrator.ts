@@ -32,8 +32,8 @@ export class StoreGeoOrchestrator {
     };
 
     // 3. Pincode Assignment
-    const pincode = (vendor as any).pincode || "600017";
-    const pincodeValid = PincodeEngine.validatePincode(pincode);
+    const pincode = (vendor as any).pincode || (vendor as any).metadata?.pincode;
+    const pincodeValid = pincode ? PincodeEngine.validatePincode(pincode) : false;
 
     // 4. Coverage Profile
     const coverage = CoverageEngine.calculateCoverage(

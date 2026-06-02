@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-06-02T18:16:33.708Z",
-  "migrationsAudited": 50,
+  "generatedAt": "2026-06-02T18:49:52.563Z",
+  "migrationsAudited": 52,
   "strict": true,
   "destructiveOperations": [
     {

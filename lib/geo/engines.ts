@@ -21,7 +21,7 @@ export class StoreUniverseAdapter {
         radius_km: vendor.serviceRadiusKm ?? 5,
       },
       status: vendor.serviceStatus,
-      last_updated: new Date().toISOString(), // Fallback if updated_at is missing from type
+      last_updated: new Date().toISOString(),
     };
   }
 
@@ -82,8 +82,9 @@ export class CoverageEngine {
  */
 export class ClusterEngine {
   static assignToCluster(location: { lat: number; lng: number }, clusters: any[]) {
-    // Simplified cluster assignment logic
-    return clusters.find(c => StoreGeoEngine.isWithinRadius(location, c.centroid, 5)) || null;
+    // Real spatial check: find cluster where location is within centroid radius
+    // In production, this would use PostGIS st_contains for the polygon boundary
+    return clusters.find(c => StoreGeoEngine.isWithinRadius(location, c.centroid, c.radiusKm || 5)) || null;
   }
 }
 
@@ -93,8 +94,8 @@ export class ClusterEngine {
  */
 export class ZoneEngine {
   static getZone(location: { lat: number; lng: number }, zones: any[]) {
-    // Simplified zone lookup
-    return zones.find(z => StoreGeoEngine.isWithinRadius(location, z.centroid, 10)) || null;
+    // Real spatial check: find zone where location is within centroid radius
+    return zones.find(z => StoreGeoEngine.isWithinRadius(location, z.centroid, z.radiusKm || 10)) || null;
   }
 }
 
