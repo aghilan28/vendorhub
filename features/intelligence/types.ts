@@ -43,6 +43,7 @@ export interface RankedProduct {
   distanceKm?: number | null;
   geoScore?: number;
   deliveryStatus?: string;
+  etaProjection?: BuyerETAProjection;
   reason: string;
   explanations?: string[];
   rankSignals?: RankingSignalBreakdown;
@@ -114,6 +115,15 @@ export interface RankingSignalBreakdown {
   multilingual: number;
   trendingVelocity: number;
   fairness: number;
+}
+
+export interface BuyerETAProjection {
+  etaMinutes: number;
+  window: string;
+  confidence: string;
+  explanation: string;
+  isHighRisk: boolean;
+  risks: string[];
 }
 
 export interface RankingPipelineDiagnostics {

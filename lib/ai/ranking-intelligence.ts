@@ -2,6 +2,7 @@ import type { BuyerLocation, Product } from "@/types";
 import type { RankedProduct, RankingWeights, RecommendationContext } from "@/features/intelligence/types";
 import { applyDiversityBalancing, scoreHybridRank } from "@/features/intelligence/hybrid-ranking";
 import { defaultHybridRankingWeights, normalizeRankingWeights } from "@/features/intelligence/ranking-config";
+import { calculateETASync, projectBuyerETA } from "@/lib/eta";
 import { personalizationScore, type PersonalizationProfile } from "./personalization";
 
 export interface RankingControlPlane {
@@ -76,6 +77,40 @@ export function rankCommerceCandidates(input: {
       ...item,
       score: Math.max(0, item.score + adaptiveBehavior * weights.behavioral),
       behavioralScore: Math.max(item.behavioralScore ?? 0, adaptiveBehavior),
+      // HL-3: Real-time ETA Integration for adaptive ranking
+      etaProjection: projectBuyerETA(calculateETASync({
+        id: `adaptive-${candidate.product.id}`,
+        context: {
+          buyer: {
+            location: input.buyerLocation || { id: "default", label: "Default", source: "default", latitude: 13.0827, longitude: 80.2707, locality: "Chennai", city: "Chennai" }
+          },
+          store: {
+            vendor: candidate.product.vendor,
+            storeType: candidate.product.vendor.name.toLowerCase().includes("pharmacy") ? "pharmacy" : candidate.product.vendor.name.toLowerCase().includes("super") ? "supermarket" : "general_store",
+            fulfillmentCapacity: 0.9,
+            currentBacklog: 2,
+            isOpen: candidate.product.vendor.serviceStatus === "open"
+          },
+          geo: {
+            distanceKm: item.distanceKm || 0,
+            routeComplexity: 1,
+            weatherImpact: 0
+          },
+          fulfillment: {
+            pickingTimeMinutes: 5,
+            packingTimeMinutes: 3,
+            dispatchTimeMinutes: 2,
+            readyStatus: "ready"
+          },
+          traffic: {
+            intensity: "normal",
+            factor: 1,
+            lastUpdated: new Date().toISOString()
+          },
+          mode: "bike"
+        },
+        requestedAt: new Date().toISOString()
+      })),
       explanations: [...(item.explanations ?? []), input.profile?.isColdStart ? "cold-start controlled ranking" : "adaptive behavior-aware ranking"].slice(0, 5),
     };
   });

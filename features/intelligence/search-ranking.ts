@@ -3,6 +3,7 @@ import { cosineSimilarity, createDeterministicEmbedding, tokenizeForIntelligence
 import { getSearchAliases, localizeProduct } from "@/features/localization/catalog";
 import { normalizeVernacularQuery } from "@/lib/india/vernacular";
 import { deliveryFeasibility } from "@/lib/geo";
+import { calculateETASync, projectBuyerETA, ETARequest } from "@/lib/eta";
 import type { AppLocale } from "@/lib/i18n/config";
 import type { BuyerLocation, Product } from "@/types";
 import { applyDiversityBalancing, rankingPipelineDiagnostics, scoreHybridRank } from "./hybrid-ranking";
@@ -117,7 +118,7 @@ export function searchMarketplaceProducts(
   const queryEmbedding = createDeterministicEmbedding(expandedQuery || "popular nearby marketplace products");
   const coldStartActive = !query.trim() || Boolean(context?.isNewUser);
 
-  let ranked = products
+  let ranked: RankedProduct[] = products
     .filter((product) => filters.category === "all" || product.category.slug === filters.category)
     .filter((product) => filters.availability === "all" || product.stockCount > 0)
     .filter((product) => {
@@ -158,7 +159,49 @@ export function searchMarketplaceProducts(
         context,
       });
 
-      return { ...item, product: localizeProduct(product, locale) } satisfies RankedProduct;
+      // HL-3: Real-time ETA Integration
+      const etaRequest: ETARequest = {
+        id: `search-${product.id}-${Date.now()}`,
+        context: {
+          buyer: {
+            location: buyerLocation || { id: "default", label: "Default", source: "default", latitude: 13.0827, longitude: 80.2707, locality: "Chennai", city: "Chennai" }
+          },
+          store: {
+            vendor: product.vendor,
+            storeType: product.vendor.name.toLowerCase().includes("pharmacy") ? "pharmacy" : product.vendor.name.toLowerCase().includes("super") ? "supermarket" : "general_store",
+            fulfillmentCapacity: 0.9,
+            currentBacklog: 2,
+            isOpen: product.vendor.serviceStatus === "open"
+          },
+          geo: {
+            distanceKm: item.distanceKm || 0,
+            routeComplexity: 1,
+            weatherImpact: 0
+          },
+          fulfillment: {
+            pickingTimeMinutes: 5,
+            packingTimeMinutes: 3,
+            dispatchTimeMinutes: 2,
+            readyStatus: "ready"
+          },
+          traffic: {
+            intensity: "normal",
+            factor: 1,
+            lastUpdated: new Date().toISOString()
+          },
+          mode: "bike"
+        },
+        requestedAt: new Date().toISOString()
+      };
+
+      // HL-3: Real-time ETA Integration
+      const etaResult = calculateETASync(etaRequest);
+
+      return {
+        ...item,
+        product: localizeProduct(product, locale),
+        etaProjection: projectBuyerETA(etaResult)
+      } satisfies RankedProduct;
     })
     .filter((item) => !query.trim() || item.score > 0.28 || item.keywordScore > 0 || item.fuzzyScore > 0.2);
 

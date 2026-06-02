@@ -4,7 +4,62 @@ export const marketplaceVendors: Vendor[] = [];
 
 export const marketplaceCategories: Category[] = [];
 
-export const marketplaceProducts: Product[] = [];
+export const marketplaceProducts: Product[] = [
+  {
+    id: "p1",
+    slug: "nandi-valley-tomato",
+    name: "Nandi Valley Tomato",
+    price: 48,
+    currency: "INR",
+    rating: 4.7,
+    stockCount: 86,
+    status: "active" as any,
+    vendor: {
+      id: "v1",
+      name: "Malleswaram Morning Basket",
+      slug: "malleswaram-morning-basket",
+      rating: 4.7,
+      serviceStatus: "open",
+      fulfillmentPromiseMinutes: 30,
+      locality: "Malleswaram",
+      city: "Bengaluru"
+    },
+    category: {
+      id: "c1",
+      name: "Fresh Produce",
+      slug: "fresh-produce"
+    },
+    tags: ["tomato", "fresh"],
+    deliveryMinutes: 25
+  },
+  {
+    id: "p2",
+    slug: "breakfast-banana",
+    name: "Breakfast Banana",
+    price: 72,
+    currency: "INR",
+    rating: 4.5,
+    stockCount: 42,
+    status: "active" as any,
+    vendor: {
+      id: "v1",
+      name: "Malleswaram Morning Basket",
+      slug: "malleswaram-morning-basket",
+      rating: 4.7,
+      serviceStatus: "open",
+      fulfillmentPromiseMinutes: 30,
+      locality: "Malleswaram",
+      city: "Bengaluru"
+    },
+    category: {
+      id: "c1",
+      name: "Fresh Produce",
+      slug: "fresh-produce"
+    },
+    tags: ["banana", "breakfast"],
+    deliveryMinutes: 30
+  }
+];
 
 export const featuredDeals: Product[] = [];
 
@@ -59,7 +114,8 @@ export function getProductReviewSnippets(product: Product) {
   ];
 }
 
-export function formatEta(minutes?: number) {
+export function formatEta(minutes?: number, window?: string) {
+  if (window) return window;
   return minutes ? `${minutes}-${minutes + 8} min` : "Slot pending";
 }
 
