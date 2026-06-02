@@ -2,8 +2,8 @@
 
 **DECISION: APPROVED**
 
-Waves 2 and 3 are certified as GREEN.
+Waves 2, 3, and Wave 4 HL-1 are certified as GREEN.
 
-VendorHub is now fully inventory-aware and purchase-aware.
+VendorHub is now discoverable. Customers can find nearby available products.
 
-**AUTHORIZATION GRANTED FOR WAVE 4 HL-1 START.**
+**AUTHORIZATION GRANTED FOR WAVE 4 HL-2 START.**
