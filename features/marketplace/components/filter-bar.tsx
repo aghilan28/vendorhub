@@ -12,7 +12,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSemanticMarketplaceSearch } from "@/features/intelligence/queries";
 import { localizeCategory } from "@/features/localization/catalog";
-import { marketplaceCategories, marketplaceProducts } from "@/features/marketplace/lib/data";
+import { marketplaceProducts } from "@/features/marketplace/lib/data";
+import { useLiveCategories } from "@/features/marketplace/lib/category-queries";
 import { useIntelligenceStore } from "@/store/intelligence-store";
 import { useLocationStore } from "@/store/location-store";
 import { useSearchStore } from "@/store/search-store";
@@ -69,7 +70,8 @@ export function SearchExperience({ initialQuery = "", products = marketplaceProd
   const recordEvent = useIntelligenceStore((state) => state.recordEvent);
   const geoFilters = { ...filters, radiusKm, nearbyOnly };
   const { data, isLoading, isError } = useSemanticMarketplaceSearch(query, geoFilters, products, currentLocation, locale);
-  const categories = marketplaceCategories.map((item) => localizeCategory(item, locale));
+  const { data: rawCategories = [] } = useLiveCategories();
+  const categories = rawCategories.map((item) => localizeCategory(item, locale));
   const normalizedQuery = query.trim().toLowerCase();
   const suggestedProducts = useMemo(() => {
     if (!normalizedQuery) return products.slice(0, 3);

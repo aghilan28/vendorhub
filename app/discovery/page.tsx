@@ -1,142 +1,155 @@
 "use client";
 
 import { useState } from 'react';
-import { DiscoveryEngine } from '@/lib/discovery/discovery-engine';
-import { RankingEngine, SelectionEngine } from '@/lib/ranking/ranking-engine';
-import { BuyerProjection as RankingProjection } from '@/lib/ranking/summary-engines';
-import { ETAEngine } from '@/lib/eta/eta-engines';
-import { BuyerProjection as ETAProjection } from '@/lib/eta/summary-engines';
 import { useLocationStore } from '@/store/location-store';
+import { useCurrentLocale } from '@/components/i18n/language-switcher';
+import { useSemanticMarketplaceSearch } from '@/features/intelligence/queries';
+import { DiscoverySkeleton } from './discovery-skeleton';
 
 export default function DiscoveryPage() {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<any[]>([]);
-  const { currentLocation } = useLocationStore();
+  const [searchTrigger, setSearchTrigger] = useState('');
+  const { currentLocation, radiusKm, nearbyOnly } = useLocationStore();
+  const locale = useCurrentLocale();
 
-  const handleSearch = async () => {
-    if (!currentLocation) return;
+  const filters = {
+    category: 'all',
+    availability: 'available' as const,
+    sort: 'intelligent' as const,
+    radiusKm,
+    nearbyOnly,
+  };
 
-    // Mock universes for demonstration
-    const mockUniverse = {
-      products: [
-        { id: 'p1', name: 'Aavin Milk 500ml', tags: ['milk', 'dairy'], vendor: { id: 'v1' } } as any,
-        { id: 'p1', name: 'Aavin Milk 500ml', tags: ['milk', 'dairy'], vendor: { id: 'v2' } } as any,
-      ],
-      vendors: [
-        { id: 'v1', name: 'Ratna Stores', latitude: currentLocation.latitude + 0.01, longitude: currentLocation.longitude + 0.01, rating: 4.2, verified: true, serviceStatus: 'open', metadata: { storeType: 'supermarket' } } as any,
-        { id: 'v2', name: 'Nilgiris', latitude: currentLocation.latitude + 0.02, longitude: currentLocation.longitude + 0.02, rating: 4.8, verified: true, serviceStatus: 'open', metadata: { storeType: 'dark_store' } } as any,
-      ],
-      links: [
-        { productId: 'p1', storeId: 'v1', status: 'APPROVED' } as any,
-        { productId: 'p1', storeId: 'v2', status: 'APPROVED' } as any,
-      ],
-      availability: [
-        { productId: 'p1', storeId: 'v1', status: 'AVAILABLE', eligibility: 'PURCHASABLE' } as any,
-        { productId: 'p1', storeId: 'v2', status: 'AVAILABLE', eligibility: 'PURCHASABLE' } as any,
-      ],
-      positions: [
-        { productId: 'p1', storeId: 'v1', onHand: 20, safetyStock: 2, reorderThreshold: 5 } as any,
-        { productId: 'p1', storeId: 'v2', onHand: 50, safetyStock: 2, reorderThreshold: 5 } as any,
-      ]
-    };
+  // We use the real search hook which connects to the database via API
+  const { data, isLoading, isError } = useSemanticMarketplaceSearch(
+    searchTrigger,
+    filters,
+    [], // Empty products array to force DB search
+    currentLocation,
+    locale
+  );
 
-    const request = {
-      query,
-      location: currentLocation,
-      context: { radiusKm: 8, limit: 10 },
-    };
-
-    const discoveryResults = await DiscoveryEngine.search(request, mockUniverse);
-
-    const enrichedResults = discoveryResults.map(dr => {
-      const rankings = RankingEngine.rankStores(
-        mockUniverse.products.find(p => p.id === dr.productId) as any,
-        dr.stores.map(s => ({ store: s.store, distanceKm: s.distanceKm })),
-        { buyerLocation: currentLocation, radiusKm: 8 },
-        { availability: mockUniverse.availability, positions: mockUniverse.positions }
-      );
-
-      const resultsWithETA = rankings.map(r => {
-        const store = mockUniverse.vendors.find(v => v.id === r.storeId)!;
-        const dist = dr.stores.find(s => s.store.id === r.storeId)!.distanceKm;
-        const etaResult = ETAEngine.generateETA({
-          productId: dr.productId,
-          storeId: r.storeId,
-          distanceKm: dist,
-          trafficMode: 'normal',
-          transportMode: 'BIKE'
-        }, store);
-
-        return {
-          ...r,
-          eta: ETAProjection.projectETA(etaResult)
-        };
-      });
-
-      const selection = SelectionEngine.selectStore(rankings);
-      return {
-        ...RankingProjection.projectRankings(rankings, selection),
-        results: resultsWithETA
-      };
-    });
-
-    setResults(enrichedResults);
+  const handleSearch = () => {
+    setSearchTrigger(query);
   };
 
   return (
-    <div className="p-8 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Hyperlocal Store Selection & ETA</h1>
+    <div className="p-8 max-w-4xl mx-auto">
+      <h1 className="text-3xl font-bold mb-2">Marketplace Discovery</h1>
+      <p className="text-gray-500 mb-8">Direct database-backed hyperlocal discovery engine.</p>
+
       <div className="flex gap-2 mb-8">
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="e.g. Aavin Milk"
-          className="flex-1 p-2 border rounded"
+          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+          placeholder="Search for products (e.g. Milk, Apple, Amul)"
+          className="flex-1 p-3 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 outline-none"
         />
         <button
           onClick={handleSearch}
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          disabled={isLoading}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition disabled:opacity-50"
         >
-          Search
+          {isLoading ? 'Searching...' : 'Search'}
         </button>
       </div>
 
+      {isLoading && <DiscoverySkeleton />}
+
+      {isError && (
+        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+          Error connecting to the discovery engine. Please check database connectivity.
+        </div>
+      )}
+
       <div className="space-y-8">
-        {results.map((r, i) => (
-          <div key={i} className="border p-6 rounded-lg shadow-md bg-white">
-            <h2 className="text-xl font-bold mb-4 text-blue-800">Recommendation: {r.summary}</h2>
-            <div className="space-y-4">
-              {r.results.map((s: any, j: number) => (
-                <div key={j} className={`p-4 border rounded-md ${s.storeId === r.recommended ? 'border-green-500 bg-green-50' : 'border-gray-200'}`}>
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <div className="font-bold text-lg">
-                        {s.storeId === r.recommended && <span className="mr-2 text-green-600">★</span>}
-                        Store ID: {s.storeId}
-                      </div>
-                      <div className="flex gap-4 mt-2">
-                        <div className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-bold">
-                          ETA: {s.eta.label}
-                        </div>
-                        <div className="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs font-bold">
-                          Confidence: {s.eta.confidence}
-                        </div>
-                      </div>
-                      <div className="text-xs text-gray-500 mt-2 italic">{s.eta.explanation}</div>
-                      <div className="text-sm text-gray-600 mt-2">{s.explanation}</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-mono font-bold text-blue-600">{(s.score * 100).toFixed(1)}%</div>
-                      <div className="text-xs uppercase font-semibold text-gray-400 mt-1">Rank #{s.rank}</div>
-                    </div>
+        {data?.results.map((r: any, i: number) => (
+          <div key={i} className="border p-6 rounded-xl shadow-md bg-white">
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">{r.product.name}</h2>
+                <p className="text-sm text-gray-500">{r.product.category.name} • {r.product.vendor.name}</p>
+              </div>
+              <div className="text-right">
+                <div className="text-2xl font-bold text-blue-600">Rs {r.product.price}</div>
+                <div className="text-xs text-gray-400 uppercase tracking-wider font-semibold">Match Score: {(r.score * 100).toFixed(1)}%</div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+              <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
+                <h3 className="text-xs font-bold text-slate-400 uppercase mb-2">Logistics & ETA</h3>
+                <div className="flex items-center gap-3">
+                  <div className="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-sm font-bold">
+                    {r.eta?.label || 'Calculating...'}
+                  </div>
+                  <div className="text-sm text-slate-600">
+                    {r.distanceKm?.toFixed(2)} km away
                   </div>
                 </div>
-              ))}
+                <p className="text-xs text-slate-500 mt-2 italic">{r.eta?.explanation}</p>
+              </div>
+
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                <h3 className="text-xs font-bold text-blue-400 uppercase mb-2">Discovery Intelligence</h3>
+                <div className="flex flex-wrap gap-1">
+                  {r.explanations?.map((exp: string, idx: number) => (
+                    <span key={idx} className="bg-white border border-blue-200 text-blue-700 px-2 py-0.5 rounded text-[10px] font-medium">
+                      {exp}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4 p-3 bg-gray-50 rounded-lg text-sm text-gray-600 border border-dashed border-gray-200">
+              {r.explanation}
             </div>
           </div>
         ))}
+
+        {data && data.results.length === 0 && (
+          <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-xl">
+            <p className="text-gray-400 font-medium">No results found for &quot;{searchTrigger}&quot;</p>
+            <p className="text-sm text-gray-300 mt-1">Try searching for broader terms like &quot;Milk&quot; or &quot;Electronics&quot;</p>
+          </div>
+        )}
       </div>
+
+      {data?.intelligence && (
+        <div className="mt-12 p-6 bg-slate-900 rounded-xl text-white">
+          <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+            <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+            Engine Diagnostics
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+            <div>
+              <p className="text-slate-400 mb-1 uppercase text-[10px] font-bold tracking-widest">Mode</p>
+              <p className="font-mono text-emerald-400 uppercase">{data.mode}</p>
+            </div>
+            <div>
+              <p className="text-slate-400 mb-1 uppercase text-[10px] font-bold tracking-widest">Latency</p>
+              <p className="font-mono text-emerald-400">{data.latencyMs}ms</p>
+            </div>
+            <div>
+              <p className="text-slate-400 mb-1 uppercase text-[10px] font-bold tracking-widest">Confidence</p>
+              <p className="font-mono text-emerald-400 uppercase">{data.intelligence.confidence}</p>
+            </div>
+          </div>
+          <div className="mt-6 pt-6 border-t border-slate-800">
+            <p className="text-slate-400 mb-2 uppercase text-[10px] font-bold tracking-widest">Signals Processed</p>
+            <div className="flex flex-wrap gap-2">
+              {data.intelligence.signals.map((s: string, idx: number) => (
+                <span key={idx} className="bg-slate-800 text-slate-300 px-2 py-1 rounded text-[11px] font-mono">
+                  {s}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

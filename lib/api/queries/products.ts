@@ -2,28 +2,12 @@ import { getPaginationRange, type QueryPage } from "@/lib/api/client";
 import { getLiveRelatedProductIds } from "@/lib/ai/commerce-intelligence";
 import { mapProductRowToProduct, type ProductListRow } from "@/lib/api/mappers/products";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { env } from "@/lib/env";
-import { marketplaceProducts } from "@/features/marketplace/lib/data";
 
 export type ProductSearchInput = QueryPage & {
   query?: string;
   categorySlug?: string;
   vendorSlug?: string;
 };
-
-function listFallbackProducts(input: ProductSearchInput = {}) {
-  const query = input.query?.trim().toLowerCase();
-  const filtered = marketplaceProducts.filter((product) => {
-    const queryMatch = query
-      ? [product.name, product.description, product.category.name, product.vendor.name, ...(product.tags ?? [])].join(" ").toLowerCase().includes(query)
-      : true;
-    const categoryMatch = input.categorySlug ? product.category.slug === input.categorySlug : true;
-    const vendorMatch = input.vendorSlug ? product.vendor.slug === input.vendorSlug : true;
-    return queryMatch && categoryMatch && vendorMatch;
-  });
-  const { from, to } = getPaginationRange(input);
-  return { products: filtered.slice(from, to + 1), count: filtered.length };
-}
 
 export async function listPublicProducts(input: ProductSearchInput = {}) {
   const supabase = await createSupabaseServerClient();
@@ -89,18 +73,10 @@ export async function getProductBySlug(slug: string) {
 }
 
 export async function listLiveProducts(input: ProductSearchInput = {}) {
-  if (!env.supabaseUrl || !env.supabaseAnonKey) {
-    return listFallbackProducts(input);
-  }
-
-  const { data, error, count } = await listPublicProducts(input).catch(() => ({
-    data: null,
-    error: new Error("Live products unavailable"),
-    count: 0,
-  }));
+  const { data, error, count } = await listPublicProducts(input);
 
   if (error) {
-    return listFallbackProducts(input);
+    throw error;
   }
 
   return {
@@ -110,26 +86,16 @@ export async function listLiveProducts(input: ProductSearchInput = {}) {
 }
 
 export async function getLiveProductBySlug(slug: string) {
-  if (!env.supabaseUrl || !env.supabaseAnonKey) {
-    return marketplaceProducts.find((product) => product.slug === slug) ?? null;
-  }
-
-  const { data, error } = await getProductBySlug(slug).catch(() => ({ data: null, error: new Error("Live product unavailable") }));
+  const { data, error } = await getProductBySlug(slug);
 
   if (error || !data) {
-    return marketplaceProducts.find((product) => product.slug === slug) ?? null;
+    return null;
   }
 
   return mapProductRowToProduct(data as unknown as ProductListRow);
 }
 
 export async function listVectorRelatedProducts(productId: string, categorySlug: string, input: QueryPage = {}) {
-  if (!env.supabaseUrl || !env.supabaseAnonKey) {
-    const related = marketplaceProducts.filter((product) => product.id !== productId && product.category.slug === categorySlug);
-    const { from, to } = getPaginationRange(input);
-    return { products: related.slice(from, to + 1), count: related.length };
-  }
-
   const ids = await getLiveRelatedProductIds(productId, input.pageSize ?? 8).catch(() => []);
 
   if (!ids.length) {

@@ -4,15 +4,20 @@ import { SectionWrapper } from "@/components/layout/section-wrapper";
 import { HomepageRecommendationStrip } from "@/features/intelligence/components/recommendation-strip";
 import { CategoryRail, MarketplaceFooter, MarketplaceHero, VendorRail } from "@/features/marketplace/components/marketplace-sections";
 import { listLiveProducts } from "@/lib/api/queries/products";
+import { listLiveCategories } from "@/lib/api/queries/categories";
 
 export default async function HomePage() {
-  const { products } = await listLiveProducts({ pageSize: 24 });
+  const [productsData, categories] = await Promise.all([
+    listLiveProducts({ pageSize: 24 }),
+    listLiveCategories(),
+  ]);
+  const { products } = productsData;
 
   return (
     <PageContainer className="space-y-10 sm:space-y-12">
       <MarketplaceHero />
       <SectionWrapper title="Categories">
-        <CategoryRail />
+        <CategoryRail categories={categories as any} />
       </SectionWrapper>
       <SectionWrapper title="Marketplace catalog" description="Real verified products will appear after ingestion.">
         <ProductGrid products={products.slice(0, 8)} />
