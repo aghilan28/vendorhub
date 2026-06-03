@@ -37,6 +37,97 @@ type AppendOnlyTable<Row extends { id: string; created_at: string }, Insert = Pa
 export type Database = {
   public: {
     Tables: {
+      departments: Table<
+        RowBase &
+          SoftDelete & {
+            slug: string;
+            canonical_name: string;
+            multilingual_names: Json;
+            aliases: string[];
+            search_terms: string[];
+            regional_priority: Json;
+            seasonality: Json;
+            perishability_class: Database["public"]["Enums"]["perishability_class"];
+            image_requirements: Json;
+            packaging_defaults: Json;
+            fulfillment_constraints: Json;
+            dietary_classification: Json;
+            discovery_tags: string[];
+            sort_order: number;
+            is_active: boolean;
+            status: string;
+            is_mvp_enabled: boolean;
+            quality_score: number;
+            governance_metadata: Json;
+          }
+      >;
+      subcategories: Table<
+        RowBase &
+          SoftDelete & {
+            department_id: string;
+            category_id: string;
+            slug: string;
+            canonical_name: string;
+            multilingual_names: Json;
+            aliases: string[];
+            search_terms: string[];
+            regional_priority: Json;
+            seasonality: Json;
+            perishability_class: Database["public"]["Enums"]["perishability_class"];
+            image_requirements: Json;
+            packaging_defaults: Json;
+            fulfillment_constraints: Json;
+            dietary_classification: Json;
+            discovery_tags: string[];
+            sort_order: number;
+            is_active: boolean;
+            status: string;
+            is_mvp_enabled: boolean;
+            quality_score: number;
+            governance_metadata: Json;
+          }
+      >;
+      product_families: Table<
+        RowBase &
+          SoftDelete & {
+            department_id: string;
+            category_id: string;
+            subcategory_id: string | null;
+            slug: string;
+            canonical_name: string;
+            product_group: string | null;
+            multilingual_names: Json;
+            aliases: string[];
+            search_terms: string[];
+            regional_priority: Json;
+            seasonality: Json;
+            perishability_class: Database["public"]["Enums"]["perishability_class"];
+            image_requirements: Json;
+            packaging_defaults: Json;
+            fulfillment_constraints: Json;
+            dietary_classification: Json;
+            discovery_tags: string[];
+            is_active: boolean;
+            status: string;
+            is_mvp_enabled: boolean;
+            quality_score: number;
+            governance_metadata: Json;
+          }
+      >;
+      brands: Table<
+        RowBase &
+          SoftDelete & {
+            slug: string;
+            canonical_name: string;
+            manufacturer: string | null;
+            origin_region: Database["public"]["Enums"]["commerce_region"] | null;
+            country_code: string;
+            aliases: string[];
+            is_local_brand: boolean;
+            metadata: Json;
+            status: string;
+          }
+      >;
       profiles: Table<
         RowBase &
           SoftDelete & {
@@ -1317,6 +1408,8 @@ export type Database = {
       };
     };
     Enums: {
+      commerce_region: "TN" | "KL" | "KA" | "AP" | "TS";
+      perishability_class: "ULTRA_FRESH" | "SAME_DAY_FRESH" | "SHORT_SHELF" | "MEDIUM_SHELF" | "LONG_SHELF" | "FROZEN" | "DRY_STABLE";
       app_role: "BUYER" | "SELLER" | "ADMIN" | "SUPER_ADMIN";
       vendor_member_role: "OWNER" | "MANAGER" | "STAFF";
       vendor_status: "DRAFT" | "PENDING_VERIFICATION" | "ACTIVE" | "SUSPENDED" | "CLOSED";

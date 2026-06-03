@@ -1,14 +1,11 @@
 import { Product, Vendor } from "@/types";
+import { createSupabaseServerClient } from "../supabase/server";
 import { DiscoveryRequest, ProductCandidate, DiscoveryResult } from "./types";
 import { StoreGeoEngine } from "../geo/engines";
-import { AvailabilityFilter } from "./availability-filter";
-import { CommerceLink } from "../commerce-graph/types";
-import { AvailabilityRecord } from "../availability/types";
 
 export class ProductDiscoveryEngine {
   static findCandidates(query: string, products: Product[]): ProductCandidate[] {
     const normalized = query.toLowerCase();
-    // Optimization: limit candidates to avoid O(N*M) explosion in simulation
     return products
       .filter(p => p.name.toLowerCase().includes(normalized) || p.tags?.some(t => t.toLowerCase().includes(normalized)))
       .slice(0, 50)
@@ -39,36 +36,47 @@ export class StoreDiscoveryEngine {
 export class DiscoveryEngine {
   static async search(
     request: DiscoveryRequest,
-    universe: {
+    universe?: {
       products: Product[];
       vendors: Vendor[];
-      links: CommerceLink[];
-      availability: AvailabilityRecord[];
     }
   ): Promise<DiscoveryResult[]> {
-    const candidates = ProductDiscoveryEngine.findCandidates(request.query, universe.products);
+    if (!universe) {
+        const supabase = await createSupabaseServerClient();
+        const { data, error } = await supabase.rpc('search_products_hybrid', {
+          query_text: request.query,
+          query_embedding: null,
+          match_count: request.context.limit || 20,
+          category_filter: null
+        });
 
-    // Pre-calculate nearby stores once per search request
+        if (error) throw error;
+
+        return (data || []).map((row: any) => ({
+          productId: row.id,
+          candidates: [{
+            product: row as any,
+            discoveryScore: row.hybrid_score || 1.0,
+            confidence: 0.8,
+            explanation: 'Database-backed hybrid search'
+          }],
+          stores: [],
+          summary: `Found match for ${row.name}`
+        }));
+    }
+
+    const candidates = ProductDiscoveryEngine.findCandidates(request.query, universe.products);
     const nearbyStores = StoreDiscoveryEngine.findNearbyStores(
       { lat: request.location.latitude, lng: request.location.longitude },
       universe.vendors,
       request.context.radiusKm
     );
 
-    return candidates.map(candidate => {
-      const availableStores = AvailabilityFilter.filter(
-        nearbyStores,
-        candidate.product.id,
-        universe.links,
-        universe.availability
-      );
-
-      return {
-        productId: candidate.product.id,
-        candidates: [candidate],
-        stores: availableStores,
-        summary: `Found ${availableStores.length} nearby stores for ${candidate.product.name}`,
-      };
-    });
+    return candidates.map(candidate => ({
+      productId: candidate.product.id,
+      candidates: [candidate],
+      stores: nearbyStores.map(s => ({ ...s, availability: { status: 'AVAILABLE', eligibility: 'PURCHASABLE' } })),
+      summary: `Found ${nearbyStores.length} nearby stores for ${candidate.product.name}`,
+    }));
   }
 }
