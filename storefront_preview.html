@@ -1,0 +1,768 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VendorHub — Storefront Preview (live DB rows)</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f6f8fa;color:#0f172a}
+header{background:#065f46;color:#fff;padding:18px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+header .logo{font-weight:800;font-size:22px;letter-spacing:-.5px}
+header .search{flex:1;min-width:240px;max-width:560px;background:#fff;border-radius:10px;display:flex;align-items:center;padding:10px 14px;color:#334155;gap:8px}
+header .search input{border:0;outline:0;font-size:15px;width:100%}
+.note{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;padding:10px 16px;font-size:13px;text-align:center}
+.stats{display:flex;gap:14px;flex-wrap:wrap;padding:20px 24px;max-width:1200px;margin:0 auto}
+.stat{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:14px 20px;min-width:120px;text-align:center;flex:1}
+.stat .n{font-size:26px;font-weight:800;color:#065f46}
+.stat .l{font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
+h2.section{max-width:1200px;margin:24px auto 8px;padding:0 24px;font-size:18px}
+.sub{max-width:1200px;margin:0 auto 8px;padding:0 24px;color:#64748b;font-size:13px}
+.grid{max-width:1200px;margin:0 auto;padding:8px 24px 28px;display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}
+.card{background:#fff;border:1px solid #e6eaef;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:.15s;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+.card:hover{box-shadow:0 14px 30px rgba(15,23,42,.12);transform:translateY(-3px)}
+.thumb{height:120px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;text-align:center;padding:8px}
+.body{padding:12px 12px 14px;display:flex;flex-direction:column;gap:7px;flex:1}
+.cat{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8}
+.card h3{margin:0;font-size:13.5px;line-height:1.35;font-weight:600;min-height:37px}
+.meta{display:flex;justify-content:space-between;font-size:11.5px;color:#64748b}
+.brand{font-weight:600;color:#0f766e}
+.row{display:flex;align-items:center;justify-content:space-between;margin-top:2px}
+.price{font-size:17px;font-weight:800}
+.stock{font-size:11px;color:#16a34a;font-weight:600}
+.add{margin-top:6px;background:#065f46;color:#fff;border:0;border-radius:9px;padding:9px;font-size:13px;font-weight:600;cursor:pointer}
+footer{text-align:center;color:#94a3b8;font-size:12px;padding:24px}
+</style></head><body>
+<header>
+  <span class="logo">🛒 VendorHub</span>
+  <div class="search">🔎 <input value="milk" readonly></div>
+  <span>Chennai • 6 km</span>
+</header>
+<div class="note">⚠️ Static preview rendered from <b>real rows of the PP-C2 database</b> (PostgreSQL 17, 53,732 products). Placeholder image tiles stand in for product photos. This mirrors what the live homepage/search will show once the migration is applied.</div>
+<div class="stats"><div class="stat"><div class="n">53,732</div><div class="l">Products</div></div><div class="stat"><div class="n">365</div><div class="l">Brands</div></div><div class="stat"><div class="n">34</div><div class="l">Categories</div></div><div class="stat"><div class="n">12</div><div class="l">Vendors</div></div><div class="stat"><div class="n">11</div><div class="l">Departments</div></div></div>
+
+<h2 class="section">🔎 Search results for “milk”</h2>
+<div class="sub">Powered by <code>websearch_to_tsquery</code> on <code>products.search_document</code> — 1,380 total matches.</div>
+<div class="grid"><article class="card">
+  <div class="thumb" style="background:hsl(225,58%,88%);color:hsl(225,45%,38%)">Chennai Cooper</div>
+  <div class="body">
+    <div class="cat">Milk &amp; Curd</div>
+    <h3>Chennai Cooperative Milk Probiotic Curd 400g</h3>
+    <div class="meta"><span class="brand">Chennai Cooperative Milk</span><span class="pack"></span></div>
+    <div class="row"><span class="price">₹74</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(320,58%,88%);color:hsl(320,45%,38%)">Saras</div>
+  <div class="body">
+    <div class="cat">Milk &amp; Curd</div>
+    <h3>Saras Spiced Buttermilk 200ml</h3>
+    <div class="meta"><span class="brand">Saras</span><span class="pack"></span></div>
+    <div class="row"><span class="price">₹16</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(40,58%,88%);color:hsl(40,45%,38%)">Thanjavur Coop</div>
+  <div class="body">
+    <div class="cat">Milk &amp; Curd</div>
+    <h3>Thanjavur Cooperative Milk Set Curd 200g</h3>
+    <div class="meta"><span class="brand">Thanjavur Cooperative Milk</span><span class="pack"></span></div>
+    <div class="row"><span class="price">₹51</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(263,58%,88%);color:hsl(263,45%,38%)">Amul</div>
+  <div class="body">
+    <div class="cat">Milk &amp; Curd</div>
+    <h3>Amul Plain Lassi 500ml</h3>
+    <div class="meta"><span class="brand">Amul</span><span class="pack"></span></div>
+    <div class="row"><span class="price">₹38</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(297,58%,88%);color:hsl(297,45%,38%)">Trichy Coopera</div>
+  <div class="body">
+    <div class="cat">Oil &amp; Ghee</div>
+    <h3>Trichy Cooperative Milk Premium Buffalo Ghee 500ml</h3>
+    <div class="meta"><span class="brand">Trichy Cooperative Milk</span><span class="pack"></span></div>
+    <div class="row"><span class="price">₹440</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(225,58%,88%);color:hsl(225,45%,38%)">Chennai Cooper</div>
+  <div class="body">
+    <div class="cat">Oil &amp; Ghee</div>
+    <h3>Chennai Cooperative Milk A2 Cow Ghee 500ml</h3>
+    <div class="meta"><span class="brand">Chennai Cooperative Milk</span><span class="pack"></span></div>
+    <div class="row"><span class="price">₹965</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(314,58%,88%);color:hsl(314,45%,38%)">Vellore Cooper</div>
+  <div class="body">
+    <div class="cat">Oil &amp; Ghee</div>
+    <h3>Vellore Cooperative Milk Refined Soyabean Oil 1L</h3>
+    <div class="meta"><span class="brand">Vellore Cooperative Milk</span><span class="pack"></span></div>
+    <div class="row"><span class="price">₹230</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(202,58%,88%);color:hsl(202,45%,38%)">Mother Dairy</div>
+  <div class="body">
+    <div class="cat">Milk &amp; Curd</div>
+    <h3>Mother Dairy Slim Double Toned Milk 500ml</h3>
+    <div class="meta"><span class="brand">Mother Dairy</span><span class="pack"></span></div>
+    <div class="row"><span class="price">₹45</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(338,58%,88%);color:hsl(338,45%,38%)">Vijaya</div>
+  <div class="body">
+    <div class="cat">Milk &amp; Curd</div>
+    <h3>Vijaya Plain Buttermilk 500ml</h3>
+    <div class="meta"><span class="brand">Vijaya</span><span class="pack"></span></div>
+    <div class="row"><span class="price">₹13</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(276,58%,88%);color:hsl(276,45%,38%)">Milma</div>
+  <div class="body">
+    <div class="cat">Milk &amp; Curd</div>
+    <h3>Milma Long Life Toned Milk 500ml</h3>
+    <div class="meta"><span class="brand">Milma</span><span class="pack"></span></div>
+    <div class="row"><span class="price">₹42</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(166,58%,88%);color:hsl(166,45%,38%)">Coimbatore Coo</div>
+  <div class="body">
+    <div class="cat">Oil &amp; Ghee</div>
+    <h3>Coimbatore Cooperative Milk Cold Pressed Groundnut Oil 1L</h3>
+    <div class="meta"><span class="brand">Coimbatore Cooperative Milk</span><span class="pack"></span></div>
+    <div class="row"><span class="price">₹380</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(297,58%,88%);color:hsl(297,45%,38%)">Trichy Coopera</div>
+  <div class="body">
+    <div class="cat">Oil &amp; Ghee</div>
+    <h3>Trichy Cooperative Milk Cold Pressed Groundnut Oil 1L</h3>
+    <div class="meta"><span class="brand">Trichy Cooperative Milk</span><span class="pack"></span></div>
+    <div class="row"><span class="price">₹805</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article></div>
+
+<h2 class="section">✨ Popular & Recently Added</h2>
+<div class="sub">A random cross-section of the live catalog across departments.</div>
+<div class="grid"><article class="card">
+  <div class="thumb" style="background:hsl(250,58%,88%);color:hsl(250,45%,38%)">Patanjali</div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>Patanjali Whole Wheat Atta 5kg</h3>
+    <div class="meta"><span class="brand">Patanjali</span><span class="pack">5kg</span></div>
+    <div class="row"><span class="price">₹71</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(323,58%,88%);color:hsl(323,45%,38%)">Mamaearth</div>
+  <div class="body">
+    <div class="cat">Bath &amp; Body</div>
+    <h3>Mamaearth Aloe Face Wash 50g</h3>
+    <div class="meta"><span class="brand">Mamaearth</span><span class="pack">50g</span></div>
+    <div class="row"><span class="price">₹110</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(338,58%,88%);color:hsl(338,45%,38%)">Vijaya</div>
+  <div class="body">
+    <div class="cat">Milk &amp; Curd</div>
+    <h3>Vijaya Rose Flavoured Milk 180ml</h3>
+    <div class="meta"><span class="brand">Vijaya</span><span class="pack">180ml</span></div>
+    <div class="row"><span class="price">₹47</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(342,58%,88%);color:hsl(342,45%,38%)">Nivea</div>
+  <div class="body">
+    <div class="cat">Bath &amp; Body</div>
+    <h3>Nivea Cocoa Body Lotion 200ml</h3>
+    <div class="meta"><span class="brand">Nivea</span><span class="pack">200ml</span></div>
+    <div class="row"><span class="price">₹365</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(297,58%,88%);color:hsl(297,45%,38%)">Trichy Coopera</div>
+  <div class="body">
+    <div class="cat">Oil &amp; Ghee</div>
+    <h3>Trichy Cooperative Milk Refined Sunflower Oil 1L</h3>
+    <div class="meta"><span class="brand">Trichy Cooperative Milk</span><span class="pack">1L</span></div>
+    <div class="row"><span class="price">₹840</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(151,58%,88%);color:hsl(151,45%,38%)">Aachi</div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>Aachi Fine Rava / Sooji 0.5kg</h3>
+    <div class="meta"><span class="brand">Aachi</span><span class="pack">0.5kg</span></div>
+    <div class="row"><span class="price">₹99</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(225,58%,88%);color:hsl(225,45%,38%)">Chennai Cooper</div>
+  <div class="body">
+    <div class="cat">Milk &amp; Curd</div>
+    <h3>Chennai Cooperative Milk Plain Lassi 500ml</h3>
+    <div class="meta"><span class="brand">Chennai Cooperative Milk</span><span class="pack">500ml</span></div>
+    <div class="row"><span class="price">₹42</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(174,58%,88%);color:hsl(174,45%,38%)">Madurai Rice M</div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>Madurai Rice Mills Bombay Rava / Sooji 1kg</h3>
+    <div class="meta"><span class="brand">Madurai Rice Mills</span><span class="pack">1kg</span></div>
+    <div class="row"><span class="price">₹69</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(76,58%,88%);color:hsl(76,45%,38%)">Himalaya</div>
+  <div class="body">
+    <div class="cat">Bath &amp; Body</div>
+    <h3>Himalaya Cool Talcum Powder 100g</h3>
+    <div class="meta"><span class="brand">Himalaya</span><span class="pack">100g</span></div>
+    <div class="row"><span class="price">₹150</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(174,58%,88%);color:hsl(174,45%,38%)">Madurai Rice M</div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>Madurai Rice Mills Premium Sona Masoori Rice 5kg</h3>
+    <div class="meta"><span class="brand">Madurai Rice Mills</span><span class="pack">5kg</span></div>
+    <div class="row"><span class="price">₹1450</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(269,58%,88%);color:hsl(269,45%,38%)">Trichy Organic</div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>Trichy Organic Farmers Premium Besan 0.5kg</h3>
+    <div class="meta"><span class="brand">Trichy Organic Farmers</span><span class="pack">0.5kg</span></div>
+    <div class="row"><span class="price">₹135</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(341,58%,88%);color:hsl(341,45%,38%)">Nandini</div>
+  <div class="body">
+    <div class="cat">Milk &amp; Curd</div>
+    <h3>Nandini Fresh Curd 200g</h3>
+    <div class="meta"><span class="brand">Nandini</span><span class="pack">200g</span></div>
+    <div class="row"><span class="price">₹28</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(354,58%,88%);color:hsl(354,45%,38%)">Tirunelveli Co</div>
+  <div class="body">
+    <div class="cat">Oil &amp; Ghee</div>
+    <h3>Tirunelveli Cooperative Milk Cold Pressed Groundnut Oil 1L</h3>
+    <div class="meta"><span class="brand">Tirunelveli Cooperative Milk</span><span class="pack">1L</span></div>
+    <div class="row"><span class="price">₹385</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(38,58%,88%);color:hsl(38,45%,38%)">Vellore Organi</div>
+  <div class="body">
+    <div class="cat">Oil &amp; Ghee</div>
+    <h3>Vellore Organic Farmers Premium Buffalo Ghee 500ml</h3>
+    <div class="meta"><span class="brand">Vellore Organic Farmers</span><span class="pack">500ml</span></div>
+    <div class="row"><span class="price">₹400</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(274,58%,88%);color:hsl(274,45%,38%)">Davidoff Coffe</div>
+  <div class="body">
+    <div class="cat">Beverages</div>
+    <h3>Davidoff Coffee Filter Instant Coffee 50g</h3>
+    <div class="meta"><span class="brand">Davidoff Coffee</span><span class="pack">50g</span></div>
+    <div class="row"><span class="price">₹460</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(83,58%,88%);color:hsl(83,45%,38%)">Thoothukudi Co</div>
+  <div class="body">
+    <div class="cat">Oil &amp; Ghee</div>
+    <h3>Thoothukudi Cooperative Milk Pure Cow Ghee 1L</h3>
+    <div class="meta"><span class="brand">Thoothukudi Cooperative Milk</span><span class="pack">1L</span></div>
+    <div class="row"><span class="price">₹560</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(144,58%,88%);color:hsl(144,45%,38%)">Fortune</div>
+  <div class="body">
+    <div class="cat">Oil &amp; Ghee</div>
+    <h3>Fortune A2 Cow Ghee 200ml</h3>
+    <div class="meta"><span class="brand">Fortune</span><span class="pack">200ml</span></div>
+    <div class="row"><span class="price">₹405</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(250,58%,88%);color:hsl(250,45%,38%)">Patanjali</div>
+  <div class="body">
+    <div class="cat">Bath &amp; Body</div>
+    <h3>Patanjali Bathing Soap 125g</h3>
+    <div class="meta"><span class="brand">Patanjali</span><span class="pack">125g</span></div>
+    <div class="row"><span class="price">₹205</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(331,58%,88%);color:hsl(331,45%,38%)">Chennai Rice M</div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>Chennai Rice Mills Gota Urad Dal 1kg</h3>
+    <div class="meta"><span class="brand">Chennai Rice Mills</span><span class="pack">1kg</span></div>
+    <div class="row"><span class="price">₹240</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(151,58%,88%);color:hsl(151,45%,38%)">Aachi</div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>Aachi Split Urad Dal 0.5kg</h3>
+    <div class="meta"><span class="brand">Aachi</span><span class="pack">0.5kg</span></div>
+    <div class="row"><span class="price">₹110</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(14,58%,88%);color:hsl(14,45%,38%)">Thanjavur Orga</div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>Thanjavur Organic Farmers Yellow Moong Dal 0.5kg</h3>
+    <div class="meta"><span class="brand">Thanjavur Organic Farmers</span><span class="pack">0.5kg</span></div>
+    <div class="row"><span class="price">₹170</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(84,58%,88%);color:hsl(84,45%,38%)">Santoor</div>
+  <div class="body">
+    <div class="cat">Bath &amp; Body</div>
+    <h3>Santoor Oil Clear Face Wash 50g</h3>
+    <div class="meta"><span class="brand">Santoor</span><span class="pack">50g</span></div>
+    <div class="row"><span class="price">₹90</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(170,58%,88%);color:hsl(170,45%,38%)">3 Roses</div>
+  <div class="body">
+    <div class="cat">Beverages</div>
+    <h3>3 Roses Leaf Tea Powder 500g</h3>
+    <div class="meta"><span class="brand">3 Roses</span><span class="pack">500g</span></div>
+    <div class="row"><span class="price">₹505</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(187,58%,88%);color:hsl(187,45%,38%)">Salem Organic </div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>Salem Organic Farmers Chakki Fresh Whole Wheat Atta 10kg</h3>
+    <div class="meta"><span class="brand">Salem Organic Farmers</span><span class="pack">10kg</span></div>
+    <div class="row"><span class="price">₹430</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(197,58%,88%);color:hsl(197,45%,38%)">Aavin</div>
+  <div class="body">
+    <div class="cat">Butter &amp; Cheese</div>
+    <h3>Aavin Plain Cheese Spread 200g</h3>
+    <div class="meta"><span class="brand">Aavin</span><span class="pack">200g</span></div>
+    <div class="row"><span class="price">₹200</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(351,58%,88%);color:hsl(351,45%,38%)">24 Mantra Orga</div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>24 Mantra Organic Multigrain Whole Wheat Atta 5kg</h3>
+    <div class="meta"><span class="brand">24 Mantra Organic</span><span class="pack">5kg</span></div>
+    <div class="row"><span class="price">₹415</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(170,58%,88%);color:hsl(170,45%,38%)">3 Roses</div>
+  <div class="body">
+    <div class="cat">Beverages</div>
+    <h3>3 Roses Premium Tea Powder 500g</h3>
+    <div class="meta"><span class="brand">3 Roses</span><span class="pack">500g</span></div>
+    <div class="row"><span class="price">₹265</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(166,58%,88%);color:hsl(166,45%,38%)">Coimbatore Coo</div>
+  <div class="body">
+    <div class="cat">Milk &amp; Curd</div>
+    <h3>Coimbatore Cooperative Milk Fresh Curd 200g</h3>
+    <div class="meta"><span class="brand">Coimbatore Cooperative Milk</span><span class="pack">200g</span></div>
+    <div class="row"><span class="price">₹78</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(193,58%,88%);color:hsl(193,45%,38%)">Moov</div>
+  <div class="body">
+    <div class="cat">OTC Medicine</div>
+    <h3>Moov Strong Pain Balm 8g</h3>
+    <div class="meta"><span class="brand">Moov</span><span class="pack">8g</span></div>
+    <div class="row"><span class="price">₹68</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(341,58%,88%);color:hsl(341,45%,38%)">Nandini</div>
+  <div class="body">
+    <div class="cat">Milk &amp; Curd</div>
+    <h3>Nandini Chocolate Flavoured Milk 200ml</h3>
+    <div class="meta"><span class="brand">Nandini</span><span class="pack">200ml</span></div>
+    <div class="row"><span class="price">₹53</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(191,58%,88%);color:hsl(191,45%,38%)">Sakthi</div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>Sakthi Chakki Fresh Whole Wheat Atta 10kg</h3>
+    <div class="meta"><span class="brand">Sakthi</span><span class="pack">10kg</span></div>
+    <div class="row"><span class="price">₹315</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(341,58%,88%);color:hsl(341,45%,38%)">Nandini</div>
+  <div class="body">
+    <div class="cat">Oil &amp; Ghee</div>
+    <h3>Nandini Premium Vanaspati 1kg</h3>
+    <div class="meta"><span class="brand">Nandini</span><span class="pack">1kg</span></div>
+    <div class="row"><span class="price">₹210</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(215,58%,88%);color:hsl(215,45%,38%)">Rajdhani</div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>Rajdhani Classic Basmati Rice 1kg</h3>
+    <div class="meta"><span class="brand">Rajdhani</span><span class="pack">1kg</span></div>
+    <div class="row"><span class="price">₹815</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(331,58%,88%);color:hsl(331,45%,38%)">Chennai Rice M</div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>Chennai Rice Mills Thick Poha 1kg</h3>
+    <div class="meta"><span class="brand">Chennai Rice Mills</span><span class="pack">1kg</span></div>
+    <div class="row"><span class="price">₹66</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(263,58%,88%);color:hsl(263,45%,38%)">Samsung</div>
+  <div class="body">
+    <div class="cat">Mobiles</div>
+    <h3>Galaxy S24 Ultra (Pearl White, 8GB/256GB)</h3>
+    <div class="meta"><span class="brand">Samsung</span><span class="pack">1pc</span></div>
+    <div class="row"><span class="price">₹38350</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(215,58%,88%);color:hsl(215,45%,38%)">Rajdhani</div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>Rajdhani Organic Toor Dal 0.5kg</h3>
+    <div class="meta"><span class="brand">Rajdhani</span><span class="pack">0.5kg</span></div>
+    <div class="row"><span class="price">₹110</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(338,58%,88%);color:hsl(338,45%,38%)">Sprite</div>
+  <div class="body">
+    <div class="cat">Beverages</div>
+    <h3>Sprite Original Soft Drink 2L</h3>
+    <div class="meta"><span class="brand">Sprite</span><span class="pack">2L</span></div>
+    <div class="row"><span class="price">₹87</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(46,58%,88%);color:hsl(46,45%,38%)">Calpol</div>
+  <div class="body">
+    <div class="cat">OTC Medicine</div>
+    <h3>Calpol 500mg Paracetamol Tablets 15pc</h3>
+    <div class="meta"><span class="brand">Calpol</span><span class="pack">15pc</span></div>
+    <div class="row"><span class="price">₹51</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(198,58%,88%);color:hsl(198,45%,38%)">Chennai Organi</div>
+  <div class="body">
+    <div class="cat">Oil &amp; Ghee</div>
+    <h3>Chennai Organic Farmers Wood Pressed Gingelly / Sesame Oil 1L</h3>
+    <div class="meta"><span class="brand">Chennai Organic Farmers</span><span class="pack">1L</span></div>
+    <div class="row"><span class="price">₹610</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(263,58%,88%);color:hsl(263,45%,38%)">Amul</div>
+  <div class="body">
+    <div class="cat">Butter &amp; Cheese</div>
+    <h3>Amul Cheese Slices 200g</h3>
+    <div class="meta"><span class="brand">Amul</span><span class="pack">200g</span></div>
+    <div class="row"><span class="price">₹165</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(28,58%,88%);color:hsl(28,45%,38%)">Trichy Rice Mi</div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>Trichy Rice Mills Roasted Rava / Sooji 0.5kg</h3>
+    <div class="meta"><span class="brand">Trichy Rice Mills</span><span class="pack">0.5kg</span></div>
+    <div class="row"><span class="price">₹100</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(14,58%,88%);color:hsl(14,45%,38%)">Thanjavur Orga</div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>Thanjavur Organic Farmers Unpolished Toor Dal 1kg</h3>
+    <div class="meta"><span class="brand">Thanjavur Organic Farmers</span><span class="pack">1kg</span></div>
+    <div class="row"><span class="price">₹115</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(316,58%,88%);color:hsl(316,45%,38%)">Dairy Milk</div>
+  <div class="body">
+    <div class="cat">Biscuits &amp; Chocolates</div>
+    <h3>Dairy Milk Milk Chocolate Bar 150g</h3>
+    <div class="meta"><span class="brand">Dairy Milk</span><span class="pack">150g</span></div>
+    <div class="row"><span class="price">₹195</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(259,58%,88%);color:hsl(259,45%,38%)">Glow &amp; Lovely</div>
+  <div class="body">
+    <div class="cat">Bath &amp; Body</div>
+    <h3>Glow &amp; Lovely Lime Bathing Soap 125g</h3>
+    <div class="meta"><span class="brand">Glow &amp; Lovely</span><span class="pack">125g</span></div>
+    <div class="row"><span class="price">₹125</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(174,58%,88%);color:hsl(174,45%,38%)">Madurai Rice M</div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>Madurai Rice Mills Yellow Moong Dal 1kg</h3>
+    <div class="meta"><span class="brand">Madurai Rice Mills</span><span class="pack">1kg</span></div>
+    <div class="row"><span class="price">₹145</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(323,58%,88%);color:hsl(323,45%,38%)">Madurai Organi</div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>Madurai Organic Farmers Raw Sona Masoori Rice 25kg</h3>
+    <div class="meta"><span class="brand">Madurai Organic Farmers</span><span class="pack">25kg</span></div>
+    <div class="row"><span class="price">₹1200</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(29,58%,88%);color:hsl(29,45%,38%)">Maaza</div>
+  <div class="body">
+    <div class="cat">Beverages</div>
+    <h3>Maaza Mixed Fruit Fruit Juice 1000ml</h3>
+    <div class="meta"><span class="brand">Maaza</span><span class="pack">1000ml</span></div>
+    <div class="row"><span class="price">₹105</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(250,58%,88%);color:hsl(250,45%,38%)">Patanjali</div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>Patanjali Organic Toor Dal 0.5kg</h3>
+    <div class="meta"><span class="brand">Patanjali</span><span class="pack">0.5kg</span></div>
+    <div class="row"><span class="price">₹90</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(323,58%,88%);color:hsl(323,45%,38%)">Mamaearth</div>
+  <div class="body">
+    <div class="cat">Bath &amp; Body</div>
+    <h3>Mamaearth Lime Bathing Soap 100g</h3>
+    <div class="meta"><span class="brand">Mamaearth</span><span class="pack">100g</span></div>
+    <div class="row"><span class="price">₹125</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(276,58%,88%);color:hsl(276,45%,38%)">Milma</div>
+  <div class="body">
+    <div class="cat">Butter &amp; Cheese</div>
+    <h3>Milma Pepper Cheese Spread 100g</h3>
+    <div class="meta"><span class="brand">Milma</span><span class="pack">100g</span></div>
+    <div class="row"><span class="price">₹105</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(14,58%,88%);color:hsl(14,45%,38%)">Thanjavur Orga</div>
+  <div class="body">
+    <div class="cat">Oil &amp; Ghee</div>
+    <h3>Thanjavur Organic Farmers Refined Soyabean Oil 1L</h3>
+    <div class="meta"><span class="brand">Thanjavur Organic Farmers</span><span class="pack">1L</span></div>
+    <div class="row"><span class="price">₹865</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(132,58%,88%);color:hsl(132,45%,38%)">Daawat</div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>Daawat Gota Urad Dal 1kg</h3>
+    <div class="meta"><span class="brand">Daawat</span><span class="pack">1kg</span></div>
+    <div class="row"><span class="price">₹120</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(83,58%,88%);color:hsl(83,45%,38%)">Thoothukudi Co</div>
+  <div class="body">
+    <div class="cat">Oil &amp; Ghee</div>
+    <h3>Thoothukudi Cooperative Milk Edible Coconut Oil 500ml</h3>
+    <div class="meta"><span class="brand">Thoothukudi Cooperative Milk</span><span class="pack">500ml</span></div>
+    <div class="row"><span class="price">₹380</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(135,58%,88%);color:hsl(135,45%,38%)">Balaji</div>
+  <div class="body">
+    <div class="cat">Snacks &amp; Namkeen</div>
+    <h3>Balaji Navratan Namkeen Mixture 400g</h3>
+    <div class="meta"><span class="brand">Balaji</span><span class="pack">400g</span></div>
+    <div class="row"><span class="price">₹180</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(269,58%,88%);color:hsl(269,45%,38%)">Trichy Organic</div>
+  <div class="body">
+    <div class="cat">Oil &amp; Ghee</div>
+    <h3>Trichy Organic Farmers Gold Sunflower Oil 5L</h3>
+    <div class="meta"><span class="brand">Trichy Organic Farmers</span><span class="pack">5L</span></div>
+    <div class="row"><span class="price">₹445</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(139,58%,88%);color:hsl(139,45%,38%)">Mysore Sandal</div>
+  <div class="body">
+    <div class="cat">Bath &amp; Body</div>
+    <h3>Mysore Sandal Sandal Talcum Powder 100g</h3>
+    <div class="meta"><span class="brand">Mysore Sandal</span><span class="pack">100g</span></div>
+    <div class="row"><span class="price">₹165</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(208,58%,88%);color:hsl(208,45%,38%)">Verka</div>
+  <div class="body">
+    <div class="cat">Milk &amp; Curd</div>
+    <h3>Verka Fresh Paneer 500g</h3>
+    <div class="meta"><span class="brand">Verka</span><span class="pack">500g</span></div>
+    <div class="row"><span class="price">₹295</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(237,58%,88%);color:hsl(237,45%,38%)">Tirunelveli Ri</div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>Tirunelveli Rice Mills Split Urad Dal 1kg</h3>
+    <div class="meta"><span class="brand">Tirunelveli Rice Mills</span><span class="pack">1kg</span></div>
+    <div class="row"><span class="price">₹140</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(354,58%,88%);color:hsl(354,45%,38%)">Tirunelveli Co</div>
+  <div class="body">
+    <div class="cat">Oil &amp; Ghee</div>
+    <h3>Tirunelveli Cooperative Milk Edible Coconut Oil 500ml</h3>
+    <div class="meta"><span class="brand">Tirunelveli Cooperative Milk</span><span class="pack">500ml</span></div>
+    <div class="row"><span class="price">₹325</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article>
+<article class="card">
+  <div class="thumb" style="background:hsl(38,58%,88%);color:hsl(38,45%,38%)">Vellore Organi</div>
+  <div class="body">
+    <div class="cat">Atta, Rice &amp; Dal</div>
+    <h3>Vellore Organic Farmers Multigrain Whole Wheat Atta 5kg</h3>
+    <div class="meta"><span class="brand">Vellore Organic Farmers</span><span class="pack">5kg</span></div>
+    <div class="row"><span class="price">₹165</span><span class="stock">In stock</span></div>
+    <button class="add">Add to cart</button>
+  </div>
+</article></div>
+
+<footer>VendorHub • PP-C2 Product Population • generated 2026-06-06 from live DB rows</footer>
+</body></html>
