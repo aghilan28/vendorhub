@@ -1,6 +1,41 @@
 create extension if not exists "pgcrypto";
-create extension if not exists "unaccent";
+create schema if not exists extensions;
+create extension if not exists "unaccent" with schema extensions;
 create extension if not exists "pg_trgm";
+
+-- ---------------------------------------------------------------------------
+-- IMMUTABLE wrapper around unaccent().
+-- The single-argument unaccent(text) is only STABLE (it resolves the
+-- "unaccent" dictionary via search_path at call time), so PostgreSQL rejects
+-- it inside GENERATED ALWAYS AS STORED columns (SQLSTATE 42P17).
+-- By pinning the dictionary explicitly we get a deterministic, IMMUTABLE
+-- function that is safe to use in generated columns and functional indexes,
+-- while producing identical output to the original unaccent(text).
+-- ---------------------------------------------------------------------------
+create or replace function public.immutable_unaccent(text)
+returns text
+language sql
+immutable
+parallel safe
+strict
+as $$
+  select extensions.unaccent('extensions.unaccent'::regdictionary, $1);
+$$;
+
+-- ---------------------------------------------------------------------------
+-- IMMUTABLE text[] -> text joiner.
+-- The built-in array_to_string(anyarray, text) is only STABLE, which also
+-- disqualifies it from generated columns. This text[]-specific wrapper joins
+-- with a single space and is safe to mark IMMUTABLE.
+-- ---------------------------------------------------------------------------
+create or replace function public.immutable_array_to_string(text[])
+returns text
+language sql
+immutable
+parallel safe
+as $$
+  select coalesce(array_to_string($1, ' '), '');
+$$;
 
 do $$
 begin
@@ -312,10 +347,10 @@ create table if not exists public.master_products (
   regional_priority jsonb not null default '{}'::jsonb,
   metadata jsonb not null default '{}'::jsonb,
   search_document tsvector generated always as (
-    setweight(to_tsvector('simple', unaccent(coalesce(canonical_name, ''))), 'A') ||
-    setweight(to_tsvector('simple', unaccent(coalesce(english_name, ''))), 'A') ||
-    setweight(to_tsvector('simple', unaccent(coalesce(array_to_string(romanized_variants, ' '), ''))), 'B') ||
-    setweight(to_tsvector('simple', unaccent(coalesce(description, ''))), 'C')
+    setweight(to_tsvector('simple', public.immutable_unaccent(coalesce(canonical_name, ''))), 'A') ||
+    setweight(to_tsvector('simple', public.immutable_unaccent(coalesce(english_name, ''))), 'A') ||
+    setweight(to_tsvector('simple', public.immutable_unaccent(public.immutable_array_to_string(romanized_variants))), 'B') ||
+    setweight(to_tsvector('simple', public.immutable_unaccent(coalesce(description, ''))), 'C')
   ) stored
 );
 
