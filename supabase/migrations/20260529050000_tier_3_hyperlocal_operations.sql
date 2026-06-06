@@ -72,7 +72,7 @@ create table if not exists public.pricing_events (
 create index if not exists pricing_events_product_created_idx on public.pricing_events(product_id, created_at desc);
 create index if not exists pricing_events_risk_idx on public.pricing_events(manipulation_risk, volatility_score desc);
 
-create table if not exists public.perishability_profiles (
+create table if not exists public.product_perishability_profiles (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
@@ -87,7 +87,7 @@ create table if not exists public.perishability_profiles (
   metadata jsonb not null default '{}'::jsonb
 );
 
-create unique index if not exists perishability_profiles_product_idx on public.perishability_profiles(product_id);
+create unique index if not exists product_perishability_profiles_product_idx on public.product_perishability_profiles(product_id);
 
 create table if not exists public.seller_health_scores (
   id uuid primary key default gen_random_uuid(),
@@ -465,7 +465,7 @@ create index if not exists inventory_health_snapshots_state_idx on public.invent
 alter table public.inventory_snapshots enable row level security;
 alter table public.locality_demand_scores enable row level security;
 alter table public.pricing_events enable row level security;
-alter table public.perishability_profiles enable row level security;
+alter table public.product_perishability_profiles enable row level security;
 alter table public.seller_health_scores enable row level security;
 alter table public.basket_affinities enable row level security;
 alter table public.festival_demand_curves enable row level security;
@@ -495,7 +495,7 @@ begin
     'inventory_snapshots',
     'locality_demand_scores',
     'pricing_events',
-    'perishability_profiles',
+    'product_perishability_profiles',
     'seller_health_scores',
     'basket_affinities',
     'festival_demand_curves',
