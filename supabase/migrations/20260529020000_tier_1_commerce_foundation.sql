@@ -1,7 +1,7 @@
 create extension if not exists "pgcrypto";
 create schema if not exists extensions;
 create extension if not exists "unaccent" with schema extensions;
-create extension if not exists "pg_trgm";
+create extension if not exists "pg_trgm" with schema extensions;
 
 -- ---------------------------------------------------------------------------
 -- IMMUTABLE wrapper around unaccent().
@@ -607,14 +607,14 @@ create index if not exists subcategories_category_idx on public.subcategories(ca
 create index if not exists product_families_subcategory_idx on public.product_families(subcategory_id) where deleted_at is null;
 create index if not exists master_products_taxonomy_idx on public.master_products(department_id, category_id, subcategory_id, product_family_id) where deleted_at is null;
 create index if not exists master_products_search_document_idx on public.master_products using gin(search_document);
-create index if not exists master_products_name_trgm_idx on public.master_products using gin(normalized_name gin_trgm_ops);
+create index if not exists master_products_name_trgm_idx on public.master_products using gin(normalized_name extensions.gin_trgm_ops);
 create index if not exists product_aliases_product_idx on public.product_aliases(product_id) where deleted_at is null;
-create index if not exists product_aliases_normalized_trgm_idx on public.product_aliases using gin(normalized_alias gin_trgm_ops);
+create index if not exists product_aliases_normalized_trgm_idx on public.product_aliases using gin(normalized_alias extensions.gin_trgm_ops);
 create index if not exists catalog_product_variants_product_idx on public.catalog_product_variants(product_id) where deleted_at is null;
 create index if not exists catalog_product_images_product_kind_idx on public.catalog_product_images(product_id, image_kind) where deleted_at is null;
 create index if not exists product_logistics_profiles_product_idx on public.product_logistics_profiles(product_id, variant_id) where deleted_at is null;
 create index if not exists search_tokens_product_idx on public.search_tokens(product_id, token_type) where deleted_at is null;
-create index if not exists search_tokens_normalized_trgm_idx on public.search_tokens using gin(normalized_token gin_trgm_ops);
+create index if not exists search_tokens_normalized_trgm_idx on public.search_tokens using gin(normalized_token extensions.gin_trgm_ops);
 create index if not exists multilingual_mappings_entity_idx on public.multilingual_mappings(entity_table, entity_id, language) where deleted_at is null;
 create index if not exists seller_products_vendor_idx on public.seller_products(vendor_id, is_active) where deleted_at is null;
 create index if not exists seller_products_master_idx on public.seller_products(master_product_id, catalog_variant_id) where deleted_at is null;
