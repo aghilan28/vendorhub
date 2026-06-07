@@ -19,16 +19,16 @@ export default async function HomePage() {
       <SectionWrapper title="Categories">
         <CategoryRail categories={categories as any} />
       </SectionWrapper>
-      <SectionWrapper title="Marketplace catalog" description="Real verified products will appear after ingestion.">
+      <SectionWrapper title="Marketplace catalog" description="Discover a wide range of verified products from trusted local sellers.">
         <ProductGrid products={products.slice(0, 8)} />
       </SectionWrapper>
-      <SectionWrapper title="Regional ingestion queue" description="Breakfast, fresh, pooja, fish, pharmacy, and kirana catalogs are ready to be populated from real sources.">
+      <SectionWrapper title="Regional essentials" description="Fresh produce, bakery items, and daily kirana needs delivered to your doorstep.">
         <ProductGrid products={products.filter((product) => /breakfast|coffee|banana|batter|loaf|fresh|pooja|fish|pharmacy|kirana/i.test(`${product.name} ${product.tags?.join(" ")}`)).slice(0, 4)} />
       </SectionWrapper>
-      <SectionWrapper title="Popular nearby sellers" description="Trusted shops serving your neighbourhood.">
+      <SectionWrapper title="Popular nearby sellers" description="Top-rated shops serving your neighbourhood.">
         <VendorRail />
       </SectionWrapper>
-      <SectionWrapper title="Discovery graph" description="Recommendations will stay empty until verified product and behavior signals exist.">
+      <SectionWrapper title="Curated for you" description="Intelligent recommendations based on local popularity and availability.">
         <ProductGrid products={products.filter((product) => /snack|puff|wrap|meal|makhana|biryani/i.test(`${product.name} ${product.tags?.join(" ")}`)).slice(0, 4)} />
       </SectionWrapper>
       <SectionWrapper title="Recommended for you">

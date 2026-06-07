@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { Heart, PackageCheck, ShieldCheck, Truck } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { PriceDisplay } from "@/components/commerce/price-display";
 import { RatingDisplay } from "@/components/commerce/rating-display";
 import { StockBadge } from "@/components/commerce/stock-badge";
@@ -22,8 +23,45 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   if (!product) notFound();
   const { products: relatedProducts } = await listVectorRelatedProducts(product.id, product.category.slug, { pageSize: 12 });
 
+  const jsonLd = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": product.name,
+    "image": product.imageUrl,
+    "description": product.description,
+    "brand": {
+      "@type": "Brand",
+      "name": product.brand.name,
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": `https://vendorhub.in/product/${product.slug}`,
+      "priceCurrency": product.currency,
+      "price": product.price,
+      "availability": product.stockCount > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      "seller": {
+        "@type": "Organization",
+        "name": product.vendor.name,
+      },
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": product.rating,
+      "reviewCount": product.reviewCount ?? 0,
+    },
+  };
+
   return (
     <PageContainer className="space-y-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      
+      <nav className="flex items-center gap-2 text-xs text-secondary-text">
+        <Link href="/" className="hover:text-brand">Home</Link> / <Link href={`/categories/${product.category.slug}`} className="hover:text-brand">{product.category.name}</Link> / <span className="text-primary-text font-medium">{product.name}</span>
+      </nav>
+
       <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_440px]">
         <div className="rounded-lg border border-border bg-surface p-3 shadow-sm">
           <div className="relative aspect-square overflow-hidden rounded-md bg-slate-100">
@@ -45,7 +83,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           </div>
           <div>
             <h1 className="text-2xl font-semibold leading-tight text-primary-text sm:text-3xl">{product.name}</h1>
-            <p className="mt-2 text-sm text-secondary-text">{product.vendor.name} - {product.vendor.locality}</p>
+            <p className="mt-2 text-sm text-secondary-text">{product.vendor.name} • {product.brand.name} • {product.vendor.locality}</p>
             <p className="mt-2 text-sm font-medium text-emerald-700">{getProductFreshnessLine(product)} · {getProductActivityLine(product)}</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
@@ -102,6 +140,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         </div>
       </section>
 
+      <SectionWrapper title="You may also like">
+        <RelatedProductStrip productId={product.id} products={relatedProducts} />
+      </SectionWrapper>
+
       <section className="rounded-lg border border-border bg-surface p-5 shadow-sm">
         <h2 className="font-semibold text-primary-text">Recent local reviews</h2>
         <div className="mt-4 grid gap-3 md:grid-cols-2">
@@ -113,10 +155,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           ))}
         </div>
       </section>
-
-      <SectionWrapper title="You may also like">
-        <RelatedProductStrip productId={product.id} products={relatedProducts} />
-      </SectionWrapper>
     </PageContainer>
   );
 }

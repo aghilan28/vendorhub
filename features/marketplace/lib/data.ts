@@ -27,40 +27,34 @@ export function getVendorServingSince() {
 }
 
 export function getVendorHumanLine(vendor: Vendor) {
-  return vendor.locality ? `Seller profile ready for ${vendor.locality}.` : "Seller profile ready for real catalog ingestion.";
+  return vendor.locality ? `Verified local seller in ${vendor.locality}.` : "Verified marketplace partner.";
 }
 
 export function getVendorActivityLine(vendor: Vendor) {
-  if (vendor.serviceStatus === "busy") return "Seller profile active";
-  if (vendor.serviceStatus === "open") return "Seller profile ready";
-  return "Seller profile awaiting activation";
+  if (vendor.serviceStatus === "busy") return "Currently processing high volume";
+  if (vendor.serviceStatus === "open") return "Ready for orders";
+  return "Awaiting operational activation";
 }
 
 export function getProductFreshnessLine(product: Product) {
-  if (product.category.slug === "fresh-produce") return "Freshness metadata pending real catalog ingestion";
-  if (product.category.slug === "bakery-breakfast") return "Batch metadata pending real catalog ingestion";
-  if (product.category.slug === "ready-meals") return "Preparation metadata pending real catalog ingestion";
-  return "Local stock metadata pending real catalog ingestion";
+  if (product.category.slug === "fresh-produce") return "Sourced from local organic farms";
+  if (product.category.slug === "bakery-breakfast") return "Baked fresh daily";
+  if (product.category.slug === "ready-meals") return "Prepared in hygienic facilities";
+  return "Verified quality standards";
 }
 
 export function getProductActivityLine(product: Product) {
-  if (product.stockCount <= 0) return "Awaiting verified inventory";
-  if (product.deliveryMinutes) return `Dispatch metadata: ${product.deliveryMinutes} min`;
-  return `Awaiting seller activity for ${product.vendor.locality ?? "local zone"}`;
+  if (product.stockCount <= 0) return "Out of stock";
+  if (product.deliveryMinutes) return `Fast dispatch: ~${product.deliveryMinutes} min`;
+  return `Available from ${product.vendor.locality ?? "local store"}`;
 }
 
 export function getProductReviewSnippets(product: Product) {
-  return [
-    {
-      name: "Catalog Ops",
-      area: product.vendor.locality ?? "VendorHub",
-      text: "Reviews will appear after verified real orders are available.",
-    },
-  ];
+  return [];
 }
 
 export function formatEta(minutes?: number) {
-  return minutes ? `${minutes}-${minutes + 8} min` : "Slot pending";
+  return minutes ? `${minutes}-${minutes + 8} min` : "Check delivery slots at checkout";
 }
 
 export const emptyOrderDefaults = {

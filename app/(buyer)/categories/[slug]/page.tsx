@@ -4,13 +4,18 @@ import { PageContainer } from "@/components/layout/page-container";
 import { SectionWrapper } from "@/components/layout/section-wrapper";
 import { LocationControlBar } from "@/features/geo/components/location-controls";
 import { SearchExperience } from "@/features/marketplace/components/filter-bar";
-import { getCategoryBySlug, getProductsByCategory } from "@/features/marketplace/lib/data";
+import { getCategoryBySlug } from "@/lib/api/queries/categories";
+import { mapCategoryRowToCategory } from "@/lib/api/mappers/categories";
+import { listLiveProducts } from "@/lib/api/queries/products";
 
 export default async function CategoryDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const category = getCategoryBySlug(slug);
-  if (!category) notFound();
-  const products = getProductsByCategory(slug);
+  
+  const { data: categoryRow, error: catError } = await getCategoryBySlug(slug);
+  if (catError || !categoryRow) notFound();
+  const category = mapCategoryRowToCategory(categoryRow);
+  
+  const { products } = await listLiveProducts({ categorySlug: slug });
 
   return (
     <PageContainer className="space-y-8">

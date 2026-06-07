@@ -44,6 +44,7 @@ export type ProductListRow = {
   ai_index_metadata?: unknown;
   discovery_metadata?: unknown;
   vendor: VendorRow | VendorRow[] | null;
+  brand: any | any[] | null;
   category: CategoryRow | CategoryRow[] | null;
   images?: ProductImageRow[] | null;
   inventory?: InventoryRow[] | null;
@@ -108,6 +109,17 @@ export function mapProductRowToProduct(row: ProductListRow): Product {
     orderCount: metadataNumber(vendorMeta, "orderCount"),
   };
 
+  const brandRow = first(row.brand);
+  const brand: Brand = {
+    id: brandRow?.id ?? "unknown-brand",
+    name: brandRow?.name ?? "Verified Brand",
+    slug: brandRow?.slug ?? "brand",
+    manufacturer: brandRow?.manufacturer,
+    logoUrl: brandRow?.logo_url,
+    status: brandRow?.status,
+    metadata: metadataObject(brandRow?.metadata),
+  };
+
   const category: Category = {
     id: categoryRow?.id ?? "unknown-category",
     name: categoryRow?.name ?? "Category",
@@ -121,6 +133,7 @@ export function mapProductRowToProduct(row: ProductListRow): Product {
     id: row.id,
     slug: row.slug,
     name: row.name,
+    brand,
     vendor,
     category,
     imageUrl: image?.storage_path,

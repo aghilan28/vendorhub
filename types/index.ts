@@ -52,6 +52,16 @@ export interface User {
   avatarUrl?: string;
 }
 
+export interface Brand {
+  id: string;
+  name: string;
+  slug: string;
+  manufacturer?: string;
+  logoUrl?: string;
+  status?: string;
+  metadata?: Record<string, unknown>;
+}
+
 export interface Vendor {
   id: string;
   name: string;
@@ -84,6 +94,7 @@ export interface Product {
   id: string;
   slug: string;
   name: string;
+  brand: Brand;
   vendor: Vendor;
   category: Category;
   imageUrl?: string;

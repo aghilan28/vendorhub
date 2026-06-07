@@ -53,12 +53,12 @@ export function ProductsScreen() {
   return (
     <div className="space-y-6">
       {data[0] ? (
-        <SellerGuidancePanel product={{ ...data[0], description: "Seller catalog item ready for listing quality guidance." }} />
+        <SellerGuidancePanel product={{ ...data[0], description: data[0].description ?? "Ready for listing optimization." }} />
       ) : (
         <EmptyState
           icon={Lightbulb}
           title="Listing intelligence ready"
-          description="Search, pricing, and conversion guidance will appear after the first real catalog item is created."
+          description="Pricing and conversion guidance will appear once you add your first product to the catalog."
         />
       )}
       <OperationalTable
