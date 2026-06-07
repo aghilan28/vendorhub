@@ -82,6 +82,20 @@ create table if not exists public.south_indian_festival_product_curves (
   unique (festival_key, event_key, product_id)
 );
 
+-- ---------------------------------------------------------------------------
+-- COMPATIBILITY GUARD (SQLSTATE 42703 fix: column pqs.metadata does not exist)
+-- ---------------------------------------------------------------------------
+-- product_quality_scores is created in 20260529030000_tier_1_5_catalog_governance.sql.
+-- That migration is already recorded as applied on the remote database, so any
+-- later edit to it (including the metadata column) is NOT re-executed by
+-- `supabase db push`. As a result the deployed product_quality_scores table can
+-- be missing the `metadata` column, which the ingestion DO-block below reads via
+-- `pqs.metadata`. We defensively (re)create the column here. This statement is
+-- fully idempotent (ADD COLUMN IF NOT EXISTS) and safe to run on databases that
+-- already have the column.
+alter table public.product_quality_scores
+  add column if not exists metadata jsonb not null default '{}'::jsonb;
+
 do $$
 declare
   p jsonb;

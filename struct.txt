@@ -1,0 +1,1596 @@
+Folder PATH listing for volume OS
+Volume serial number is 00000032 368E:D4C2
+C:.
+|   .env.example
+|   .gitignore
+|   .prettierrc
+|   components.json
+|   DEPLOY_PP_C2.md
+|   eslint.config.mjs
+|   FINAL_PPA_PPB_REPORT.md
+|   global.d.ts
+|   GREEN_FLAG_DECISION.md
+|   instrumentation.ts
+|   middleware.ts
+|   next-env.d.ts
+|   next.config.ts
+|   next_output.log
+|   package-lock.json
+|   package.json
+|   playwright.config.ts
+|   postcss.config.mjs
+|   PP_C2_SCHEMA_AUDIT.md
+|   PP_C_FINAL_CERTIFICATION.md
+|   PP_C_SCHEMA_AUDIT.md
+|   PRODUCT_UNIVERSE_SPEC.md
+|   README_FIRST.md
+|   README_FULL_CHAIN_FIX.md
+|   SEARCH_CERTIFICATION.md
+|   SEARCH_VALIDATION_REPORT.md
+|   sentry.client.config.ts
+|   sentry.edge.config.ts
+|   sentry.server.config.ts
+|   SP3_COMPLETION_CERTIFICATION.md
+|   SP3_FINAL_CERTIFICATION_REPORT.md
+|   storefront_preview.html
+|   struct.txt
+|   structure.txt
+|   top_100_products.txt
+|   tsconfig.json
+|   tsconfig.tsbuildinfo
+|   UI_QA_REPORT.md
+|   vercel.json
+|   vitest.config.ts
+|   WAVE2_COMPLETION_CERTIFICATION.md
+|   WAVE2_FINAL_CERTIFICATION_REPORT.md
+|   WAVE3_FINAL_COMPLETION_CERTIFICATION.md
+|   WAVE3_PI2_COMPLETION_CERTIFICATION.md
+|   WAVE4_FINAL_COMPLETION_CERTIFICATION.md
+|   WAVE4_HL1_COMPLETION_CERTIFICATION.md
+|   WAVE4_HL2_COMPLETION_CERTIFICATION.md
+|   WAVE4_HL3_COMPLETION_CERTIFICATION.md
+|   
++---.github
+|   \---workflows
+|           production-release.yml
+|           reliability.yml
+|           
++---app
+|   |   error.tsx
+|   |   globals.css
+|   |   layout.tsx
+|   |   loading.tsx
+|   |   manifest.ts
+|   |   not-found.tsx
+|   |   
+|   +---(admin)
+|   |   |   error.tsx
+|   |   |   layout.tsx
+|   |   |   
+|   |   \---admin
+|   |       |   page.tsx
+|   |       |   
+|   |       +---analytics
+|   |       |       page.tsx
+|   |       |       
+|   |       +---audit-logs
+|   |       |       page.tsx
+|   |       |       
+|   |       +---categories
+|   |       |       page.tsx
+|   |       |       
+|   |       +---dashboard
+|   |       |       page.tsx
+|   |       |       
+|   |       +---flags
+|   |       |       page.tsx
+|   |       |       
+|   |       +---moderation
+|   |       |   |   page.tsx
+|   |       |   |   
+|   |       |   +---products
+|   |       |   |       page.tsx
+|   |       |   |       
+|   |       |   \---reviews
+|   |       |           page.tsx
+|   |       |           
+|   |       +---notifications
+|   |       |       page.tsx
+|   |       |       
+|   |       +---orders
+|   |       |       page.tsx
+|   |       |       
+|   |       +---platform-health-placeholder
+|   |       |       page.tsx
+|   |       |       
+|   |       +---refunds
+|   |       |       page.tsx
+|   |       |       
+|   |       +---settings
+|   |       |       page.tsx
+|   |       |       
+|   |       \---vendors
+|   |           |   page.tsx
+|   |           |   
+|   |           \---[id]
+|   |                   page.tsx
+|   |                   
+|   +---(auth)
+|   |   |   layout.tsx
+|   |   |   
+|   |   +---auth
+|   |   |   +---login
+|   |   |   |       page.tsx
+|   |   |   |       
+|   |   |   \---register
+|   |   |           page.tsx
+|   |   |           
+|   |   +---seller-registration
+|   |   |       page.tsx
+|   |   |       
+|   |   +---sign-in
+|   |   |       page.tsx
+|   |   |       
+|   |   \---sign-up
+|   |           page.tsx
+|   |           
+|   +---(buyer)
+|   |   |   error.tsx
+|   |   |   layout.tsx
+|   |   |   page.tsx
+|   |   |   
+|   |   +---cart
+|   |   |       page.tsx
+|   |   |       
+|   |   +---categories
+|   |   |   |   page.tsx
+|   |   |   |   
+|   |   |   \---[slug]
+|   |   |           page.tsx
+|   |   |           
+|   |   +---checkout
+|   |   |       page.tsx
+|   |   |       
+|   |   +---home
+|   |   |       page.tsx
+|   |   |       
+|   |   +---orders
+|   |   |   |   page.tsx
+|   |   |   |   
+|   |   |   \---[id]
+|   |   |           page.tsx
+|   |   |           
+|   |   +---product
+|   |   |   \---[slug]
+|   |   |           page.tsx
+|   |   |           
+|   |   +---products
+|   |   |   \---[id]
+|   |   |           page.tsx
+|   |   |           
+|   |   +---profile
+|   |   |       page.tsx
+|   |   |       
+|   |   +---search
+|   |   |       page.tsx
+|   |   |       
+|   |   +---tracking
+|   |   |   |   page.tsx
+|   |   |   |   
+|   |   |   \---[id]
+|   |   |           page.tsx
+|   |   |           
+|   |   \---wishlist
+|   |           page.tsx
+|   |           
+|   +---(public)
+|   |   +---demo
+|   |   |       page.tsx
+|   |   |       
+|   |   \---launch
+|   |           page.tsx
+|   |           
+|   +---(seller)
+|   |   |   error.tsx
+|   |   |   layout.tsx
+|   |   |   
+|   |   \---seller
+|   |       |   page.tsx
+|   |       |   
+|   |       +---analytics
+|   |       |       page.tsx
+|   |       |       
+|   |       +---dashboard
+|   |       |       page.tsx
+|   |       |       
+|   |       +---inventory
+|   |       |       page.tsx
+|   |       |       
+|   |       +---notifications
+|   |       |       page.tsx
+|   |       |       
+|   |       +---onboarding
+|   |       |       page.tsx
+|   |       |       
+|   |       +---orders
+|   |       |   |   page.tsx
+|   |       |   |   
+|   |       |   \---[id]
+|   |       |           page.tsx
+|   |       |           
+|   |       +---payouts
+|   |       |       page.tsx
+|   |       |       
+|   |       +---payouts-placeholder
+|   |       |       page.tsx
+|   |       |       
+|   |       +---products
+|   |       |   |   page.tsx
+|   |       |   |   
+|   |       |   +---new
+|   |       |   |       page.tsx
+|   |       |   |       
+|   |       |   \---[id]
+|   |       |           page.tsx
+|   |       |           
+|   |       +---store-settings
+|   |       |       page.tsx
+|   |       |       
+|   |       \---support-placeholder
+|   |               page.tsx
+|   |               
+|   +---api
+|   |   +---admin
+|   |   |   +---moderation
+|   |   |   |   +---product
+|   |   |   |   |       route.ts
+|   |   |   |   |       
+|   |   |   |   \---vendor
+|   |   |   |           route.ts
+|   |   |   |           
+|   |   |   \---snapshot
+|   |   |           route.ts
+|   |   |           
+|   |   +---governance
+|   |   |   \---detection
+|   |   |           route.ts
+|   |   |           
+|   |   +---health
+|   |   |       route.ts
+|   |   |       
+|   |   +---intelligence
+|   |   |   +---embedding
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---embeddings
+|   |   |   |   \---refresh
+|   |   |   |           route.ts
+|   |   |   |           
+|   |   |   \---search
+|   |   |           route.ts
+|   |   |           
+|   |   +---invoices
+|   |   |   \---[orderId]
+|   |   |           route.ts
+|   |   |           
+|   |   +---logistics
+|   |   |   +---deliveries
+|   |   |   |   |   route.ts
+|   |   |   |   |   
+|   |   |   |   \---[id]
+|   |   |   |           route.ts
+|   |   |   |           
+|   |   |   +---dispatch
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---health
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   \---reconciliation
+|   |   |           route.ts
+|   |   |           
+|   |   +---operations
+|   |   |   +---health
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   \---release
+|   |   |           route.ts
+|   |   |           
+|   |   +---ops
+|   |   |   \---async
+|   |   |       +---health
+|   |   |       |       route.ts
+|   |   |       |       
+|   |   |       \---worker
+|   |   |               route.ts
+|   |   |               
+|   |   +---payments
+|   |   |   +---razorpay
+|   |   |   |   +---order
+|   |   |   |   |       route.ts
+|   |   |   |   |       
+|   |   |   |   +---verify
+|   |   |   |   |       route.ts
+|   |   |   |   |       
+|   |   |   |   \---webhook
+|   |   |   |           route.ts
+|   |   |   |           
+|   |   |   +---reconciliation
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   \---refunds
+|   |   |           route.ts
+|   |   |           
+|   |   +---public
+|   |   |   \---v1
+|   |   |       +---categories
+|   |   |       |       route.ts
+|   |   |       |       
+|   |   |       \---events
+|   |   |               route.ts
+|   |   |               
+|   |   +---push
+|   |   |   \---subscribe
+|   |   |           route.ts
+|   |   |           
+|   |   +---readiness
+|   |   |       route.ts
+|   |   |       
+|   |   +---seller
+|   |   |   +---intelligence
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---inventory
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---orders
+|   |   |   |   \---[orderId]
+|   |   |   |       \---status
+|   |   |   |               route.ts
+|   |   |   |               
+|   |   |   \---snapshot
+|   |   |           route.ts
+|   |   |           
+|   |   +---tier10
+|   |   |   +---alignment
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---governance
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   +---knowledge
+|   |   |   |       route.ts
+|   |   |   |       
+|   |   |   \---simulation
+|   |   |           route.ts
+|   |   |           
+|   |   +---tier14
+|   |   |       route.ts
+|   |   |       
+|   |   +---tier15
+|   |   |       route.ts
+|   |   |       
+|   |   \---worker
+|   |           route.ts
+|   |           
+|   +---discovery
+|   |       discovery-skeleton.tsx
+|   |       page.tsx
+|   |       
+|   \---offline
+|           page.tsx
+|           
++---components
+|   +---charts
+|   |       operational-bar-chart.tsx
+|   |       
+|   +---commerce
+|   |       cart-item-card.tsx
+|   |       checkout-summary-card.tsx
+|   |       intelligent-product-grid.tsx
+|   |       order-status-pill.tsx
+|   |       price-display.tsx
+|   |       product-card.tsx
+|   |       product-grid.tsx
+|   |       quantity-selector.tsx
+|   |       rating-display.tsx
+|   |       seller-badge.tsx
+|   |       stock-badge.tsx
+|   |       timeline-item.tsx
+|   |       
+|   +---dashboard
+|   |       activity-feed.tsx
+|   |       analytics-card.tsx
+|   |       dashboard-header.tsx
+|   |       dashboard-sidebar.tsx
+|   |       data-table.tsx
+|   |       metric-card.tsx
+|   |       mobile-workspace-nav.tsx
+|   |       operational-timeline.tsx
+|   |       status-indicator.tsx
+|   |       
+|   +---experience
+|   |       accessibility-announcer.tsx
+|   |       production-experience-panel.tsx
+|   |       trust-strip.tsx
+|   |       
+|   +---feedback
+|   |       dashboard-skeleton.tsx
+|   |       empty-state.tsx
+|   |       error-state.tsx
+|   |       loading-state.tsx
+|   |       page-loader.tsx
+|   |       search-skeleton.tsx
+|   |       skeleton-grid.tsx
+|   |       table-skeleton.tsx
+|   |       
+|   +---i18n
+|   |       i18n-provider.tsx
+|   |       language-switcher.tsx
+|   |       
+|   +---layout
+|   |       header.tsx
+|   |       mobile-nav.tsx
+|   |       page-container.tsx
+|   |       search-bar.tsx
+|   |       section-wrapper.tsx
+|   |       sidebar.tsx
+|   |       
+|   +---observability
+|   |       frontend-telemetry.tsx
+|   |       
+|   +---pwa
+|   |       install-prompt.tsx
+|   |       network-status-pill.tsx
+|   |       notification-center.tsx
+|   |       offline-banner.tsx
+|   |       pwa-runtime.tsx
+|   |       
+|   +---realtime
+|   |       live-event-feed.tsx
+|   |       live-state-badge.tsx
+|   |       
+|   +---shared
+|   |       form-field.tsx
+|   |       form-shell.tsx
+|   |       shell-page.tsx
+|   |       
+|   \---ui
+|           accordion.tsx
+|           alert.tsx
+|           badge.tsx
+|           breadcrumbs.tsx
+|           button.tsx
+|           dialog.tsx
+|           dropdown.tsx
+|           index.ts
+|           input.tsx
+|           pagination.tsx
+|           select.tsx
+|           sheet.tsx
+|           skeleton.tsx
+|           table.tsx
+|           tabs.tsx
+|           textarea.tsx
+|           toast.tsx
+|           tooltip.tsx
+|           
++---config
+|       environments.json
+|       release-safety.json
+|       site.ts
+|       
++---contracts
+|   +---constitutional
+|   |       kmos.constitution
+|   |       
+|   \---formal
+|           KMOSConstitution.tla
+|           Tier10AmendmentValidation.smt2
+|           Tier10ConstitutionalModel.als
+|           Tier10InstitutionLifecycle.tla
+|           Tier11ConstitutionalCompiler.tla
+|           Tier11DiscoveryEngine.tla
+|           Tier11EpistemicImmuneSystem.tla
+|           Tier11LegitimacyEngine.tla
+|           Tier11ValidationMarket.tla
+|           Tier14KnowledgeInvariants.tla
+|           Tier14MetricInvariants.smt2
+|           Tier14SimulationInvariants.als
+|           Tier15KnowledgeLifecycle.tla
+|           Tier15Traceability.als
+|           Tier15ValidationInvariants.smt2
+|           
++---docs
+|   |   VENDORHUB_COMPLETE_SYSTEM_INTELLIGENCE_REPORT.md
+|   |   VENDORHUB_PHASE_0_SYSTEM_LOCK.md
+|   |   VENDORHUB_PHASE_10_AI_SEARCH_PERSONALIZATION_MARKETPLACE_INTELLIGENCE.md
+|   |   VENDORHUB_PHASE_11_PAYMENTS_LEDGER_SETTLEMENT_ECONOMIC_ORCHESTRATION.md
+|   |   VENDORHUB_PHASE_12_DEVOPS_INFRASTRUCTURE_OBSERVABILITY_RESILIENCE.md
+|   |   VENDORHUB_PHASE_13_TESTING_QA_RESILIENCE_SECURITY_PRODUCTION_READINESS.md
+|   |   VENDORHUB_PHASE_14_EXECUTION_DELIVERY_GOVERNANCE_LAUNCH.md
+|   |   VENDORHUB_PHASE_15_MASTER_BLUEPRINT_ENTERPRISE_CONSTITUTION.md
+|   |   VENDORHUB_PHASE_16_AI_AUTONOMOUS_ENGINEERING_CODE_GENERATION_CONSTITUTION.md
+|   |   VENDORHUB_PHASE_17_MARKETPLACE_ECONOMICS_GROWTH_ENGINEERING_CONSTITUTION.md
+|   |   VENDORHUB_PHASE_18_BRAND_EXPERIENCE_TRUST_ENGINEERING_CONSTITUTION.md
+|   |   VENDORHUB_PHASE_19_ENTERPRISE_OPERATIONS_LOGISTICS_GOVERNANCE_CONSTITUTION.md
+|   |   VENDORHUB_PHASE_1_ENGINEERING_FOUNDATION.md
+|   |   VENDORHUB_PHASE_20_LEGAL_REGULATORY_COMPLIANCE_GOVERNANCE_CONSTITUTION.md
+|   |   VENDORHUB_PHASE_23_RELIABILITY_ENGINEERING.md
+|   |   VENDORHUB_PHASE_26_PERFORMANCE_SCALABILITY.md
+|   |   VENDORHUB_PHASE_27_MERCHANT_INTELLIGENCE.md
+|   |   VENDORHUB_PHASE_2_VISUAL_INFRASTRUCTURE.md
+|   |   VENDORHUB_PHASE_3_DISTRIBUTED_COMMUNICATION.md
+|   |   VENDORHUB_PHASE_4_IDENTITY_TRUST_SECURITY.md
+|   |   VENDORHUB_PHASE_5_DATA_SPATIAL_INFRASTRUCTURE.md
+|   |   VENDORHUB_PHASE_6_BUYER_COMMERCE_EXPERIENCE.md
+|   |   VENDORHUB_PHASE_7_SELLER_OPERATIONS_INFRASTRUCTURE.md
+|   |   VENDORHUB_PHASE_8_GOVERNANCE_TRUST_OPERATIONS.md
+|   |   VENDORHUB_PHASE_9_DEPLOYMENT_LAUNCH_CERTIFICATION.md
+|   |   VENDORHUB_PHASE_9_HYPERLOCAL_LOGISTICS_DELIVERY.md
+|   |   
+|   +---hl1
+|   |       HL1_FINAL_CERTIFICATION_REPORT.md
+|   |       HL1_REALITY_AUDIT.md
+|   |       
+|   +---hl2
+|   |       HL2_FINAL_CERTIFICATION_REPORT.md
+|   |       HL2_REALITY_AUDIT.md
+|   |       
+|   +---hl3
+|   |       HL3_FINAL_CERTIFICATION_REPORT.md
+|   |       HL3_REALITY_AUDIT.md
+|   |       
+|   +---kmos
+|   |       00-global-repository-architecture.md
+|   |       01-layer-implementation.md
+|   |       02-constitutional-dsl-and-amendment-engine.md
+|   |       03-identity-governance-economics-knowledge.md
+|   |       04-simulation-measurement-failure-resilience-evolution.md
+|   |       05-formal-methods-protobuf-kafka-temporal-database.md
+|   |       06-observability-kubernetes-roadmap.md
+|   |       README.md
+|   |       
+|   +---knowledge
+|   |       TIER8_KNOWLEDGE_OPERATING_SYSTEM.md
+|   |       tier8_neo4j_ingestion.cypher
+|   |       
+|   +---operations
+|   |   |   DISASTER_RECOVERY_PLAYBOOK.md
+|   |   |   PHASE_30_PRODUCTION_RUNBOOK.md
+|   |   |   
+|   |   \---generated
+|   |           backup-restore-plan.json
+|   |           migration-safety-report.json
+|   |           release-manifest.json
+|   |           
+|   +---pi1
+|   |       PI1_FINAL_CERTIFICATION_REPORT.md
+|   |       PI1_REALITY_AUDIT.md
+|   |       
+|   +---pi2
+|   |       PI2_FINAL_CERTIFICATION_REPORT.md
+|   |       PI2_REALITY_AUDIT.md
+|   |       
+|   +---pi3
+|   |       PI3_FINAL_CERTIFICATION_REPORT.md
+|   |       PI3_REALITY_AUDIT.md
+|   |       
+|   +---tier10
+|   |       ADR-001-civilizational-governance-platform.md
+|   |       architecture.mmd
+|   |       neo4j-tier10-schema.cypher
+|   |       OPENAPI.yaml
+|   |       RFC-001-tier10-executable-research-blueprint.md
+|   |       
+|   +---tier11
+|   |       IMPLEMENTATION_SPEC.md
+|   |       neo4j-tier11-schema.cypher
+|   |       secis-ontology.ttl
+|   |       
+|   +---tier12
+|   |       OPEN_PROBLEMS_REGISTRY.csv
+|   |       README.md
+|   |       RESEARCH_COMPENDIUM.md
+|   |       
+|   +---tier13
+|   |       RFC-001-tier13-architecture.md
+|   |       
+|   +---tier14
+|   |       OPENAPI.yaml
+|   |       TRACEABILITY_MATRIX.md
+|   |       
+|   \---tier15
+|           neo4j-tier15-schema.cypher
+|           OPENAPI.yaml
+|           storage.sql
+|           TRACEABILITY_MATRIX.md
+|           
++---features
+|   +---admin
+|   |   |   data.ts
+|   |   |   queries.ts
+|   |   |   store.ts
+|   |   |   types.ts
+|   |   |   utils.ts
+|   |   |   
+|   |   \---components
+|   |           dashboard-screen.tsx
+|   |           detail-screens.tsx
+|   |           forms.tsx
+|   |           governance-badge.tsx
+|   |           governance-card.tsx
+|   |           governance-metric-card.tsx
+|   |           governance-table.tsx
+|   |           loading.tsx
+|   |           table-screens.tsx
+|   |           
+|   +---checkout
+|   |   \---components
+|   |           transactional-checkout.tsx
+|   |           
+|   +---commerce-finance
+|   |   |   cod.ts
+|   |   |   finance-orchestration.ts
+|   |   |   financial-recovery.ts
+|   |   |   gst.ts
+|   |   |   ledger-operating-system.ts
+|   |   |   marketplace-economics.ts
+|   |   |   observability.ts
+|   |   |   payout-orchestration.ts
+|   |   |   payouts.ts
+|   |   |   queries.ts
+|   |   |   razorpay.ts
+|   |   |   reconciliation-intelligence.ts
+|   |   |   recovery.ts
+|   |   |   refund-accounting.ts
+|   |   |   server.ts
+|   |   |   settlement-intelligence.ts
+|   |   |   types.ts
+|   |   |   upi.ts
+|   |   |   
+|   |   \---components
+|   |           admin-finance-oversight.tsx
+|   |           finance-metric-card.tsx
+|   |           seller-payouts-screen.tsx
+|   |           
+|   +---dashboard
+|   |       shell-data.ts
+|   |       
+|   +---demo
+|   |       demo-flow.ts
+|   |       
+|   +---geo
+|   |   \---components
+|   |           admin-geo-panel.tsx
+|   |           hyperlocal-sections.tsx
+|   |           location-controls.tsx
+|   |           map-preview.tsx
+|   |           product-geo-panel.tsx
+|   |           
+|   +---governance
+|   |   |   server.ts
+|   |   |   trust-engine.ts
+|   |   |   
+|   |   \---components
+|   |           admin-governance-dashboard.tsx
+|   |           
+|   +---intelligence
+|   |   |   behavioral-events.ts
+|   |   |   hybrid-ranking.ts
+|   |   |   marketplace-insights.ts
+|   |   |   marketplace-signals.ts
+|   |   |   queries.ts
+|   |   |   ranking-config.ts
+|   |   |   recommendations.ts
+|   |   |   search-ranking.ts
+|   |   |   seller-assistance.ts
+|   |   |   types.ts
+|   |   |   
+|   |   \---components
+|   |           admin-intelligence-panel.tsx
+|   |           recommendation-strip.tsx
+|   |           seller-guidance-panel.tsx
+|   |           
+|   +---localization
+|   |       catalog.ts
+|   |       
+|   +---logistics
+|   |   |   data.ts
+|   |   |   density.ts
+|   |   |   dispatch-intelligence.ts
+|   |   |   eta.ts
+|   |   |   orchestrator.ts
+|   |   |   providers.ts
+|   |   |   queries.ts
+|   |   |   self-delivery.ts
+|   |   |   sla.ts
+|   |   |   status-engine.ts
+|   |   |   types.ts
+|   |   |   
+|   |   \---components
+|   |           admin-delivery-panel.tsx
+|   |           buyer-tracking-experience.tsx
+|   |           delivery-commerce-panels.tsx
+|   |           delivery-map-placeholder.tsx
+|   |           delivery-status-badge.tsx
+|   |           eta-card.tsx
+|   |           seller-dispatch-panel.tsx
+|   |           tracking-timeline.tsx
+|   |           
+|   +---marketplace
+|   |   +---components
+|   |   |       cart-client.tsx
+|   |   |       checkout-form.tsx
+|   |   |       filter-bar.tsx
+|   |   |       marketplace-sections.tsx
+|   |   |       product-add-actions.tsx
+|   |   |       tracking-panel.tsx
+|   |   |       wishlist-client.tsx
+|   |   |       
+|   |   \---lib
+|   |           cart-queries.ts
+|   |           category-queries.ts
+|   |           data.ts
+|   |           wishlist-queries.ts
+|   |           
+|   +---merchant-intelligence
+|   |   |   engine.ts
+|   |   |   index.ts
+|   |   |   types.ts
+|   |   |   
+|   |   \---components
+|   |           merchant-intelligence-panel.tsx
+|   |           
+|   +---operations
+|   |   |   queries.ts
+|   |   |   
+|   |   \---components
+|   |           platform-health-screen.tsx
+|   |           
+|   +---orders
+|   |   \---components
+|   |           buyer-orders-client.tsx
+|   |           order-detail-client.tsx
+|   |           
+|   +---payments
+|   |       razorpay-sandbox.ts
+|   |       
+|   +---products
+|   |       mock-data.ts
+|   |       
+|   +---seller
+|   |   |   data.ts
+|   |   |   queries.ts
+|   |   |   store.ts
+|   |   |   types.ts
+|   |   |   utils.ts
+|   |   |   
+|   |   \---components
+|   |           dashboard-screen.tsx
+|   |           detail-screens.tsx
+|   |           forms.tsx
+|   |           inventory-screen.tsx
+|   |           loading.tsx
+|   |           operational-card.tsx
+|   |           operational-metric-card.tsx
+|   |           operational-table.tsx
+|   |           orders-screen.tsx
+|   |           products-screen.tsx
+|   |           status-badge.tsx
+|   |           
+|   +---transactions
+|   |   |   atomic-client.ts
+|   |   |   data.ts
+|   |   |   lifecycle.ts
+|   |   |   pricing.ts
+|   |   |   queries.ts
+|   |   |   types.ts
+|   |   |   
+|   |   \---components
+|   |           order-timeline.tsx
+|   |           payment-state-indicator.tsx
+|   |           transaction-summary.tsx
+|   |           
+|   \---trust
+|       |   data.ts
+|       |   queries.ts
+|       |   scoring.ts
+|       |   types.ts
+|       |   
+|       \---components
+|               admin-verification-dashboard.tsx
+|               buyer-seller-trust-card.tsx
+|               seller-kyc-panel.tsx
+|               trust-badges.tsx
+|               
++---hooks
+|       use-marketplace-realtime.ts
+|       use-mounted.ts
+|       
++---infrastructure
+|   +---flink
+|   |       tier10-pipelines.sql
+|   |       tier11-pipelines.sql
+|   |       tier15-pipelines.sql
+|   |       
+|   \---kafka
+|           tier10-topics.yaml
+|           tier11-topics.yaml
+|           tier15-topics.yaml
+|           
++---lib
+|   |   env.ts
+|   |   
+|   +---actions
+|   |       admin.ts
+|   |       auth.ts
+|   |       cart.ts
+|   |       index.ts
+|   |       orders.ts
+|   |       products.ts
+|   |       vendors.ts
+|   |       wishlist.ts
+|   |       
+|   +---ai
+|   |       commerce-intelligence.ts
+|   |       embedding-config.ts
+|   |       embedding-sync.ts
+|   |       feedback-learning.ts
+|   |       local-embeddings.ts
+|   |       observability.ts
+|   |       openai-embeddings.ts
+|   |       orchestration.ts
+|   |       personalization.ts
+|   |       phase33-validation.ts
+|   |       ranking-intelligence.ts
+|   |       recommendation-engine.ts
+|   |       recovery.ts
+|   |       semantic-discovery.ts
+|   |       vector.ts
+|   |       
+|   +---ai-commerce-automation
+|   |       index.ts
+|   |       
+|   +---api
+|   |   |   auth.ts
+|   |   |   client.ts
+|   |   |   query-keys.ts
+|   |   |   response.ts
+|   |   |   
+|   |   +---mappers
+|   |   |       categories.ts
+|   |   |       products.ts
+|   |   |       
+|   |   \---queries
+|   |           admin.ts
+|   |           brands.ts
+|   |           cart.ts
+|   |           categories.ts
+|   |           index.ts
+|   |           logistics.ts
+|   |           orders.ts
+|   |           products.ts
+|   |           seller.ts
+|   |           vendors.ts
+|   |           wishlist.ts
+|   |           
+|   +---async
+|   |       compute-isolation.ts
+|   |       event-processor.ts
+|   |       handlers.ts
+|   |       observability-domain.ts
+|   |       observability.ts
+|   |       orchestrator.ts
+|   |       policies.ts
+|   |       supabase-unsafe.ts
+|   |       types.ts
+|   |       webhooks.ts
+|   |       worker.ts
+|   |       
+|   +---autonomous-commerce-orchestration
+|   |       index.ts
+|   |       
+|   +---autonomous-operations
+|   |       containment.ts
+|   |       incident-intelligence.ts
+|   |       index.ts
+|   |       observability.ts
+|   |       orchestration.ts
+|   |       self-healing.ts
+|   |       types.ts
+|   |       
+|   +---availability
+|   |       availability-engine.ts
+|   |       governance-engine.ts
+|   |       projections.ts
+|   |       summary-engines.ts
+|   |       types.ts
+|   |       
+|   +---catalog-governance
+|   |       engine.ts
+|   |       index.ts
+|   |       
+|   +---commerce-foundation
+|   |       catalog.ts
+|   |       index.ts
+|   |       
+|   +---commerce-graph
+|   |       catalog-engine.ts
+|   |       distribution-engine.ts
+|   |       governance-engine.ts
+|   |       link-engine.ts
+|   |       projections.ts
+|   |       types.ts
+|   |       
+|   +---constants
+|   |       marketplace.ts
+|   |       navigation.ts
+|   |       
+|   +---developer-platform
+|   |       api-governance.ts
+|   |       auth.ts
+|   |       events.ts
+|   |       index.ts
+|   |       observability.ts
+|   |       sdk.ts
+|   |       types.ts
+|   |       webhooks.ts
+|   |       
+|   +---discovery
+|   |       availability-filter.ts
+|   |       discovery-engine.ts
+|   |       summary-engines.ts
+|   |       types.ts
+|   |       
+|   +---enterprise-governance
+|   |       audit.ts
+|   |       index.ts
+|   |       observability.ts
+|   |       organization-lifecycle.ts
+|   |       rbac-abac.ts
+|   |       tenant-isolation.ts
+|   |       types.ts
+|   |       
+|   +---errors
+|   |       app-error.ts
+|   |       index.ts
+|   |       
+|   +---eta
+|   |       eta-engines.ts
+|   |       summary-engines.ts
+|   |       types.ts
+|   |       
+|   +---executive-intelligence
+|   |       command-center.ts
+|   |       decision-support.ts
+|   |       forecasting.ts
+|   |       index.ts
+|   |       strategic-observability.ts
+|   |       types.ts
+|   |       
+|   +---experience
+|   |       governance.ts
+|   |       index.ts
+|   |       types.ts
+|   |       
+|   +---formatting
+|   |       currency.ts
+|   |       
+|   +---geo
+|   |       city-centers.ts
+|   |       delivery.ts
+|   |       engines.ts
+|   |       geocoder.ts
+|   |       index.ts
+|   |       locations.ts
+|   |       orchestrator.ts
+|   |       spatial.ts
+|   |       types.ts
+|   |       
+|   +---global-infrastructure
+|   |       edge-cache.ts
+|   |       failover.ts
+|   |       index.ts
+|   |       observability.ts
+|   |       orchestration.ts
+|   |       realtime.ts
+|   |       types.ts
+|   |       
+|   +---governance
+|   |       recovery.ts
+|   |       
+|   +---hyperlocal-discovery
+|   |       index.ts
+|   |       
+|   +---hyperlocal-operations
+|   |       index.ts
+|   |       
+|   +---i18n
+|   |       client.ts
+|   |       config.ts
+|   |       format.ts
+|   |       governance.ts
+|   |       invoice-labels.ts
+|   |       messages.ts
+|   |       transliteration.ts
+|   |       
+|   +---india
+|   |       cod-risk.ts
+|   |       gst.ts
+|   |       hsn-codes.ts
+|   |       low-bandwidth.ts
+|   |       operations.ts
+|   |       payments.ts
+|   |       vernacular.ts
+|   |       
+|   +---inventory
+|   |       event-engine.ts
+|   |       governance-engine.ts
+|   |       inventory-engines.ts
+|   |       position-engine.ts
+|   |       projections.ts
+|   |       types.ts
+|   |       
+|   +---logistics
+|   |   |   live-operations.ts
+|   |   |   observability.ts
+|   |   |   reconciliation.ts
+|   |   |   
+|   |   \---providers
+|   |           shiprocket.ts
+|   |           
+|   +---motion
+|   |       presets.ts
+|   |       
+|   +---observability
+|   |       alerts.ts
+|   |       core.ts
+|   |       operational-health.ts
+|   |       types.ts
+|   |       
+|   +---operations
+|   |       production-readiness.ts
+|   |       
+|   +---payments
+|   |       orchestration.ts
+|   |       rate-limit.ts
+|   |       
+|   +---performance
+|   |       api.ts
+|   |       cache-policy.ts
+|   |       index.ts
+|   |       request-cache.ts
+|   |       
+|   +---product-universe
+|   |       BrandExpansionEngine.ts
+|   |       brands.json
+|   |       categories.json
+|   |       PackagingExpansionEngine.ts
+|   |       ProductGenerationEngine.ts
+|   |       product_families.json
+|   |       SearchNormalizationEngine.ts
+|   |       types.ts
+|   |       VariantExpansionEngine.ts
+|   |       
+|   +---production
+|   |       demo-accounts.ts
+|   |       observability.ts
+|   |       
+|   +---push
+|   |       sender.ts
+|   |       
+|   +---pwa
+|   |       runtime.ts
+|   |       
+|   +---ranking
+|   |       ranking-engine.ts
+|   |       scoring-engines.ts
+|   |       summary-engines.ts
+|   |       types.ts
+|   |       
+|   +---realtime
+|   |       event-bus.ts
+|   |       mappers.ts
+|   |       scoped-subscriptions.ts
+|   |       types.ts
+|   |       
+|   +---reliability
+|   |       chaos.ts
+|   |       rollback.ts
+|   |       slo.ts
+|   |       
+|   +---security
+|   |       audit.ts
+|   |       authorization.ts
+|   |       rate-limit.ts
+|   |       replay.ts
+|   |       request-guard.ts
+|   |       upload.ts
+|   |       
+|   +---supabase
+|   |       admin.ts
+|   |       browser.ts
+|   |       index.ts
+|   |       middleware.ts
+|   |       server.ts
+|   |       
+|   +---tier10
+|   |       index.ts
+|   |       types.ts
+|   |       
+|   +---tier11
+|   |       index.ts
+|   |       types.ts
+|   |       
+|   +---tier13
+|   |       contracts.ts
+|   |       index.ts
+|   |       types.ts
+|   |       
+|   +---tier14
+|   |       contracts.ts
+|   |       index.ts
+|   |       types.ts
+|   |       
+|   +---tier15
+|   |       contracts.ts
+|   |       index.ts
+|   |       types.ts
+|   |       
+|   +---transactions
+|   |       atomic-checkout.ts
+|   |       payment-reconciliation.ts
+|   |       
+|   +---utils
+|   |       cn.ts
+|   |       index.ts
+|   |       
+|   \---validations
+|           admin.ts
+|           auth.ts
+|           cart.ts
+|           common.ts
+|           index.ts
+|           orders.ts
+|           products.ts
+|           storage.ts
+|           vendors.ts
+|           
++---messages
+|       hi.json
+|       ta.json
+|       
++---packages
+|   +---api
+|   |       index.ts
+|   |       
+|   +---calibration-engine
+|   |       index.ts
+|   |       
+|   +---collective-intelligence
+|   |       index.ts
+|   |       
+|   +---commons-governance
+|   |       index.ts
+|   |       
+|   +---concept-drift
+|   |       index.ts
+|   |       
+|   +---conformal-engine
+|   |       index.ts
+|   |       
+|   +---deep-time-storage
+|   |       index.ts
+|   |       
+|   +---dhott-runtime
+|   |       index.ts
+|   |       
+|   +---discovery-engines
+|   |       index.ts
+|   |       
+|   +---epistemic-security
+|   |       index.ts
+|   |       
+|   +---events
+|   |       index.ts
+|   |       
+|   +---evolutionary-intelligence
+|   |       index.ts
+|   |       
+|   +---failure-analysis
+|   |       index.ts
+|   |       
+|   +---forecasting
+|   |       index.ts
+|   |       
+|   +---frontier-discovery
+|   |       index.ts
+|   |       
+|   +---graph-engine
+|   |       index.ts
+|   |       
+|   +---human-ai-intelligence
+|   |       index.ts
+|   |       
+|   +---information-theory
+|   |       index.ts
+|   |       
+|   +---infrastructure
+|   |       index.ts
+|   |       
+|   +---intelligence-core
+|   |       index.ts
+|   |       
+|   +---intelligence-economics
+|   |       index.ts
+|   |       
+|   +---intelligence-metrics
+|   |       index.ts
+|   |       
+|   +---knowledge-economics
+|   |       index.ts
+|   |       
+|   +---knowledge-evolution
+|   |       index.ts
+|   |       
+|   +---knowledge-governance
+|   |       index.ts
+|   |       
+|   +---knowledge-graphs
+|   |       index.ts
+|   |       
+|   +---knowledge-preservation
+|   |       index.ts
+|   |       
+|   +---knowledge-quality
+|   |       index.ts
+|   |       
+|   +---knowledge-representation
+|   |       index.ts
+|   |       
+|   +---knowledge-units
+|   |       index.ts
+|   |       
+|   +---knowledge-validation
+|   |       index.ts
+|   |       
+|   +---learning-systems
+|   |       index.ts
+|   |       
+|   +---lineage-engine
+|   |       index.ts
+|   |       
+|   +---mechanism-design
+|   |       index.ts
+|   |       
+|   +---memory-systems
+|   |       index.ts
+|   |       
+|   +---meta-intelligence
+|   |       index.ts
+|   |       
+|   +---meta-synthesis
+|   |       index.ts
+|   |       
+|   +---observability
+|   |       index.ts
+|   |       
+|   +---ontology-runtime
+|   |       index.ts
+|   |       
+|   +---open-problems
+|   |       index.ts
+|   |       
+|   +---orchestration
+|   |       index.ts
+|   |       
+|   +---preservation-systems
+|   |       index.ts
+|   |       
+|   +---recursive-intelligence
+|   |       index.ts
+|   |       
+|   +---security
+|   |       index.ts
+|   |       
+|   +---simulation-runtime
+|   |       index.ts
+|   |       
+|   +---substrate-modeling
+|   |       index.ts
+|   |       
+|   +---translation-layer
+|   |       index.ts
+|   |       
+|   +---umko
+|   |       index.ts
+|   |       
+|   +---vector-engine
+|   |       index.ts
+|   |       
+|   \---verification
+|           index.ts
+|           
++---playwright-report
+|       index.html
+|       
++---proto
+|   \---kmos
+|       \---v1
+|               kmos.proto
+|               tier11.proto
+|               tier15.proto
+|               
++---providers
+|       app-providers.tsx
+|       query-provider.tsx
+|       realtime-provider.tsx
+|       
++---public
+|       icon.svg
+|       offline.html
+|       sw.js
+|       
++---scripts
+|       apply_all_fixes.py
+|       clean-next-cache.mjs
+|       fix_ppa.py
+|       generate-ppc-migration.ts
+|       generate_product_universe.py
+|       hl1-scale-certification.ts
+|       hl2-scale-certification.ts
+|       hl3-scale-certification.ts
+|       ops-backup-plan.mjs
+|       ops-env-audit.mjs
+|       ops-migration-audit.mjs
+|       ops-release-manifest.mjs
+|       ops-secret-scan.mjs
+|       ops-smoke.mjs
+|       phase17-concurrency-smoke.mjs
+|       phase26-performance-load.mjs
+|       phase27-merchant-intelligence-load.mjs
+|       phase31-distributed-async-load.mjs
+|       phase32-live-logistics-load.mjs
+|       phase36-global-infrastructure-load.mjs
+|       phase37-developer-platform-load.mjs
+|       phase38-autonomous-operations-load.mjs
+|       phase39-executive-intelligence-load.mjs
+|       pi1-scale-certification.ts
+|       pi2-scale-certification.ts
+|       pi3-scale-certification.ts
+|       real_brands.json
+|       reliability-load.mjs
+|       sp3-scale-certification.ts
+|       stabilization-s1-load.mjs
+|       stabilization-s5-chaos.mjs
+|       staging-setup.sh
+|       ui-qa-audit.mjs
+|       
++---store
+|       auth-store.ts
+|       cart-store.ts
+|       checkout-store.ts
+|       delivery-store.ts
+|       intelligence-store.ts
+|       locale-store.ts
+|       location-store.ts
+|       mobile-store.ts
+|       notification-store.ts
+|       operations-store.ts
+|       realtime-store.ts
+|       search-store.ts
+|       trust-store.ts
+|       ui-store.ts
+|       wishlist-store.ts
+|       
++---styles
+|       design-tokens.ts
+|       
++---supabase
+|   |   config.toml
+|   |   
+|   +---.temp
+|   |       cli-latest
+|   |       gotrue-version
+|   |       linked-project.json
+|   |       pooler-url
+|   |       postgres-version
+|   |       project-ref
+|   |       rest-version
+|   |       storage-migration
+|   |       storage-version
+|   |       
+|   +---migrations
+|   |       20260525140000_init_role_helpers.sql
+|   |       20260525151000_phase_1_marketplace_core.sql
+|   |       20260525233000_phase_7_ai_discovery_intelligence.sql
+|   |       20260526013000_phase_10_true_hyperlocal_geo.sql
+|   |       20260526023000_phase_11_delivery_logistics_engine.sql
+|   |       20260526033000_phase_13_trust_kyc_compliance.sql
+|   |       20260526043000_phase_17_atomic_transaction_engine.sql
+|   |       20260526053000_phase_18_live_payment_orchestration.sql
+|   |       20260526063000_phase_19_live_backend_activation.sql
+|   |       20260526070000_phase_19_operational_completion.sql
+|   |       20260526090000_phase_21_live_ai_activation.sql
+|   |       20260526183000_phase_24_delivery_execution_hardening.sql
+|   |       20260526193000_phase_25_enterprise_security_hardening.sql
+|   |       20260526200000_phase_26_performance_scalability.sql
+|   |       20260526210000_phase_27_merchant_intelligence.sql
+|   |       20260526213000_phase_28_marketplace_financial_operating_layer.sql
+|   |       20260526220000_phase_29_trust_governance_operating_layer.sql
+|   |       20260526230000_stabilization_s1_async_infrastructure.sql
+|   |       20260526233000_stabilization_s2_logistics_hardening.sql
+|   |       20260527002900_add_verification_states.sql
+|   |       20260527003000_stabilization_s3_governance_hardening.sql
+|   |       20260527010000_stabilization_s4_india_commerce_hardening.sql
+|   |       20260527013000_stabilization_s5_reliability_survivability.sql
+|   |       20260527220000_phase_31_distributed_async_compute.sql
+|   |       20260528010000_phase_32_live_logistics_operations.sql
+|   |       20260528020000_phase_33_ai_commerce_intelligence.sql
+|   |       20260528030000_phase_34_finance_operating_system.sql
+|   |       20260529010000_phase_41_production_hardening.sql
+|   |       20260529020000_tier_1_commerce_foundation.sql
+|   |       20260529030000_tier_1_5_catalog_governance.sql
+|   |       20260529040000_tier_2_hyperlocal_discovery.sql
+|   |       20260529050000_tier_3_hyperlocal_operations.sql
+|   |       20260529060000_tier_4_ai_commerce_automation.sql
+|   |       20260529070000_tier_5_autonomous_commerce_orchestration.sql
+|   |       20260529200000_south_indian_core_fmcg_kg_seed.sql
+|   |       20260529210000_south_indian_fresh_produce_taxonomy_seed.sql
+|   |       20260529220000_south_indian_fresh_produce_production_ingestion.sql
+|   |       20260529230000_tier4_hyperlocal_research_inventory_ingestion.sql
+|   |       20260530000000_tier5_infrastructure_capacity_catalog_ingestion.sql
+|   |       20260530010000_acil_autonomous_commerce_intelligence_layer_ingestion.sql
+|   |       20260530020000_kartex_civilizational_architecture_capability_ingestion.sql
+|   |       20260530030000_tier_8_knowledge_system_ingestion.sql
+|   |       20260530040000_tier_10_civilizational_governance_simulation.sql
+|   |       20260530050000_tier_11_secis_implementation.sql
+|   |       20260530060000_tier_14_universal_intelligence.sql
+|   |       20260601000000_sp3_geo_tables.sql
+|   |       20260601000001_sp3_geo_hardening.sql
+|   |       20260601000002_sp3_geo_integrity.sql
+|   |       20260603000000_pi1_commerce_graph.sql
+|   |       20260604000000_pi2_inventory_foundation.sql
+|   |       20260605000000_pi3_availability_engine.sql
+|   |       20260606000000_population_program.sql
+|   |       20260606010000_ppa_category_universe.sql
+|   |       20260606020000_ppb_brand_universe.sql
+|   |       20260607000000_hl1_nearby_discovery.sql
+|   |       20260607000001_discovery_population.sql
+|   |       20260608000000_hl2_hyperlocal_ranking.sql
+|   |       20260609000000_hl3_eta_engine.sql
+|   |       20260610000000_ppc_schema_hardening.sql
+|   |       20260612000000_ppc2_product_universe_repair.sql
+|   |       ROLLBACK_ppc2_product_universe_repair.sql
+|   |       
+|   \---seed
+|           phase_1_marketplace_seed.sql
+|           
++---test-results
+|   |   .last-run.json
+|   |   
+|   +---phase-u2
+|   |       categories-mobile-final.png
+|   |       categories-mobile.png
+|   |       home-desktop-final.png
+|   |       home-desktop.png
+|   |       search-desktop-final.png
+|   |       search-desktop.png
+|   |       search-mobile-final.png
+|   |       search-mobile.png
+|   |       
+|   +---phase-u3
+|   |       home-desktop-final.png
+|   |       home-desktop.png
+|   |       home-mobile-final.png
+|   |       home-mobile.png
+|   |       search-desktop-final.png
+|   |       search-desktop.png
+|   |       search-mobile-final.png
+|   |       search-mobile.png
+|   |       
+|   +---phase-u4-discovery
+|   |       categories-desktop.png
+|   |       home-desktop.png
+|   |       product-related.png
+|   |       search-desktop.png
+|   |       search-empty.png
+|   |       search-mobile.png
+|   |       
+|   \---phase-u5-humanization
+|           cart-desktop.png
+|           checkout-desktop.png
+|           home-desktop.png
+|           home-mobile.png
+|           orders-desktop.png
+|           product-desktop.png
+|           product-final-desktop.png
+|           product-mobile.png
+|           search-desktop.png
+|           search-mobile.png
+|           tracking-desktop.png
+|           tracking-final.png
+|           
++---tests
+|   +---e2e
+|   |       accessibility-smoke.spec.ts
+|   |       accessibility.spec.ts
+|   |       buyer-flow.spec.ts
+|   |       operational-health.spec.ts
+|   |       regression.spec.ts
+|   |       
+|   +---hl1
+|   |       nearby-discovery.test.ts
+|   |       
+|   +---hl2
+|   |       hyperlocal-ranking.test.ts
+|   |       
+|   +---hl3
+|   |       eta-engine.test.ts
+|   |       
+|   +---integration
+|   |       operational-health-route.test.ts
+|   |       
+|   +---pi1
+|   |       commerce-graph.test.ts
+|   |       
+|   +---pi2
+|   |       inventory-foundation.test.ts
+|   |       
+|   +---pi3
+|   |       availability-engine.test.ts
+|   |       
+|   +---reliability
+|   |       concurrency-rollback.test.ts
+|   |       
+|   +---unit
+|   |       ai-commerce-automation.test.ts
+|   |       async-infrastructure.test.ts
+|   |       autonomous-commerce-orchestration.test.ts
+|   |       autonomous-operations.test.ts
+|   |       catalog-governance.test.ts
+|   |       commerce-foundation.test.ts
+|   |       commerce-pricing-lifecycle.test.ts
+|   |       delivery-execution.test.ts
+|   |       developer-platform.test.ts
+|   |       enterprise-governance.test.ts
+|   |       executive-intelligence.test.ts
+|   |       experience-governance.test.ts
+|   |       geo-ai-reliability.test.ts
+|   |       global-infrastructure.test.ts
+|   |       governance-trust-engine.test.ts
+|   |       hyperlocal-discovery.test.ts
+|   |       hyperlocal-operations.test.ts
+|   |       india-commerce-stabilization.test.ts
+|   |       live-logistics-operations.test.ts
+|   |       marketplace-financial-engine.test.ts
+|   |       merchant-intelligence.test.ts
+|   |       observability-reliability.test.ts
+|   |       payment-rate-limit.test.ts
+|   |       performance-cache.test.ts
+|   |       phase33-ai-commerce.test.ts
+|   |       phase34-finance-operating-system.test.ts
+|   |       reliability-survivability.test.ts
+|   |       security-hardening.test.ts
+|   |       tier10-civilizational-systems.test.ts
+|   |       tier11-implementation.test.ts
+|   |       tier13-architecture-kernel.test.ts
+|   |       tier14-implementation.test.ts
+|   |       tier15-implementation.test.ts
+|   |       
+|   \---utils
+|           failure-simulator.ts
+|           fixtures.ts
+|           setup.ts
+|           
+\---types
+        ai-commerce-automation.ts
+        autonomous-commerce-orchestration.ts
+        catalog-governance.ts
+        commerce-foundation.ts
+        database.ts
+        hyperlocal-discovery.ts
+        hyperlocal-operations.ts
+        index.ts
+        
