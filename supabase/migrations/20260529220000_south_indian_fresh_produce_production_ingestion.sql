@@ -1,5 +1,5 @@
 create extension if not exists "pgcrypto";
-create extension if not exists "fuzzystrmatch";
+create extension if not exists "fuzzystrmatch" with schema extensions;
 
 create unique index if not exists catalog_product_variants_sku_template_unique_idx
   on public.catalog_product_variants(sku_template);
@@ -88,7 +88,7 @@ declare
   v jsonb;
   a text;
   token text;
-  image_kind text;
+  v_image_kind text;
   product_uuid uuid;
   variant_uuid uuid;
   dept_uuid uuid;
@@ -691,7 +691,7 @@ begin
         governance_metadata = public.product_families.governance_metadata || excluded.governance_metadata
     returning id into family_uuid;
 
-    product_sku := 'SI-FP-' || p->>'code' || '-' || lpad((mod(('x' || substr(md5(p->>'slug'), 1, 8))::bit(32)::bigint, 1000000))::text, 6, '0');
+    product_sku := 'SI-FP-' || (p->>'code') || '-' || lpad((mod(('x' || substr(md5(p->>'slug'), 1, 8))::bit(32)::bigint, 1000000))::text, 6, '0');
     region_code := (p->>'region')::public.commerce_region;
 
     insert into public.master_products (
@@ -855,7 +855,7 @@ begin
         product_uuid, a, lower(regexp_replace(a, '\s+', ' ', 'g')),
         case when a = any(array(select jsonb_array_elements_text(p->'phonetic'))) then 'PHONETIC'::public.product_alias_type else 'REGIONAL'::public.product_alias_type end,
         'roman', all_regions, 0.97, 'curated_research_seed',
-        jsonb_build_object('soundex_key',soundex(a),'voice_ready',true,'ocr_ready',true,'source_dataset','south_indian_production_ingestion')
+        jsonb_build_object('soundex_key',extensions.soundex(a),'voice_ready',true,'ocr_ready',true,'source_dataset','south_indian_production_ingestion')
       )
       on conflict (product_id, normalized_alias, alias_type, language) do update
       set confidence = greatest(public.product_aliases.confidence, excluded.confidence),
@@ -913,7 +913,7 @@ begin
         voice_variants = excluded.voice_variants,
         metadata = public.multilingual_mappings.metadata || excluded.metadata;
 
-    foreach image_kind in array array['HERO','TRANSPARENT_PNG','SHELF','PACKAGING','MOBILE_THUMBNAIL']
+    foreach v_image_kind in array array['HERO','TRANSPARENT_PNG','SHELF','PACKAGING','MOBILE_THUMBNAIL']
     loop
       insert into public.catalog_product_images (
         product_id, image_kind, storage_path, alt_text, width, height, aspect_ratio,
@@ -922,24 +922,24 @@ begin
         dominant_colors, metadata
       )
       values (
-        product_uuid, image_kind::public.product_image_kind,
-        'catalog-ingestion/pending/south-indian-production-ingestion/' || (p->>'slug') || '/' || lower(image_kind) || '.webp',
-        (p->>'name') || ' ' || lower(replace(image_kind, '_', ' ')) || ' ingestion slot',
-        case when image_kind = 'SHELF' then 1600 else 1200 end,
-        case when image_kind = 'SHELF' then 900 else 1200 end,
-        case when image_kind = 'SHELF' then '16:9' else '1:1' end,
-        'image/webp', image_kind <> 'SHELF', true, true, 'pending_curated_capture_5500k_6500k',
-        0, true, case when image_kind in ('PACKAGING','SHELF') then 0.7 else 0.55 end,
-        case when image_kind in ('PACKAGING','SHELF') then 0.65 else 0.35 end,
+        product_uuid, v_image_kind::public.product_image_kind,
+        'catalog-ingestion/pending/south-indian-production-ingestion/' || (p->>'slug') || '/' || lower(v_image_kind) || '.webp',
+        (p->>'name') || ' ' || lower(replace(v_image_kind, '_', ' ')) || ' ingestion slot',
+        case when v_image_kind = 'SHELF' then 1600 else 1200 end,
+        case when v_image_kind = 'SHELF' then 900 else 1200 end,
+        case when v_image_kind = 'SHELF' then '16:9' else '1:1' end,
+        'image/webp', v_image_kind <> 'SHELF', true, true, 'pending_curated_capture_5500k_6500k',
+        0, true, case when v_image_kind in ('PACKAGING','SHELF') then 0.7 else 0.55 end,
+        case when v_image_kind in ('PACKAGING','SHELF') then 0.65 else 0.35 end,
         array['fresh-produce-natural','south-indian-market'],
         jsonb_build_object(
           'image_status','placeholder_for_curated_ingestion',
           'image_requirements', image_requirements,
           'image_search_terms', p->'image'->'search_terms',
           'visual_search_tags', p->'image'->'visual_search_tags',
-          'packaging_visibility_requirements', jsonb_build_object('loose_product_visible',true,'shelf_label_visible',image_kind in ('SHELF','PACKAGING')),
+          'packaging_visibility_requirements', jsonb_build_object('loose_product_visible',true,'shelf_label_visible',v_image_kind in ('SHELF','PACKAGING')),
           'duplicate_detection_hints', jsonb_build_array(lower(p->>'name'), lower(p->>'botanical'), p->>'slug'),
-          'ocr_visibility_requirements', jsonb_build_object('regional_alias_label_allowed',true,'canonical_name_label_required_for_shelf',image_kind = 'SHELF'),
+          'ocr_visibility_requirements', jsonb_build_object('regional_alias_label_allowed',true,'canonical_name_label_required_for_shelf',v_image_kind = 'SHELF'),
           'reject', jsonb_build_array('watermark','marketplace_screenshot','fake_ai_packaging','low_resolution_thumbnail')
         )
       )
@@ -1042,7 +1042,7 @@ begin
   insert into public.recipe_mappings (recipe_key, recipe_name, language, region, required_terms, optional_terms, metadata)
   values
     ('sambar-starter-bundle', 'Sambar Starter Bundle', 'en', 'TN', array['country-tomato','bangalore-rose-onion','drumstick','curry-leaves'], array['okra','brinjal'], '{"association_rule":{"small_onion_to_drumstick":{"support":0.18,"confidence":0.72,"lift":3.40}}}'::jsonb),
-    ('kerala-tempering-bundle', 'Kerala Tempering Bundle', 'en', 'KL', array['fresh-coconut','curry-leaves','byadagi-chilli'], array[], '{"sadya_base":true}'::jsonb),
+    ('kerala-tempering-bundle', 'Kerala Tempering Bundle', 'en', 'KL', array['fresh-coconut','curry-leaves','byadagi-chilli'], array[]::text[], '{"sadya_base":true}'::jsonb),
     ('keerai-poriyal-bundle', 'Keerai Poriyal Bundle', 'en', 'TN', array['amaranth-greens','kodaikanal-malai-poondu','fresh-coconut'], array['curry-leaves'], '{"association_rule":{"greens_to_garlic":{"support":0.14,"confidence":0.65,"lift":2.80}}}'::jsonb)
   on conflict (recipe_key, (coalesce(region, 'all')), language) do update
   set required_terms = excluded.required_terms,

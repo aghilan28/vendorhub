@@ -1,5 +1,5 @@
 create extension if not exists "pgcrypto";
-create extension if not exists "fuzzystrmatch";
+create extension if not exists "fuzzystrmatch" with schema extensions;
 
 create unique index if not exists tier4_hyperlocal_search_tokens_replay_idx
   on public.search_tokens(product_id, normalized_token, token_type, language)
@@ -14,7 +14,7 @@ declare
   v jsonb;
   alias_item jsonb;
   token_item jsonb;
-  image_kind text;
+  v_image_kind text;
   dept_uuid uuid;
   cat_uuid uuid;
   subcat_uuid uuid;
@@ -546,7 +546,7 @@ begin
         (alias_item->>1)::public.product_alias_type, (alias_item->>2)::public.commerce_language,
         all_regions, case when alias_item->>1 = 'MISSPELLING' then 0.82 else 0.95 end,
         'tier4_hyperlocal_research_inventory_ingestion',
-        jsonb_build_object('soundex_key', soundex(alias_item->>0), 'voice_ready', true, 'ocr_ready', true)
+        jsonb_build_object('soundex_key', extensions.soundex(alias_item->>0), 'voice_ready', true, 'ocr_ready', true)
       )
       on conflict (product_id, normalized_alias, alias_type, language) do update
       set confidence = greatest(public.product_aliases.confidence, excluded.confidence),
@@ -580,12 +580,12 @@ begin
         case token_item->>'type' when 'SEMANTIC' then 1.1 when 'RECIPE' then 0.95 else 0.9 end,
         jsonb_build_object('source_dataset','tier4_hyperlocal_research_inventory_ingestion','qdrant_hybrid_ready',true)
       )
-      on conflict (product_id, normalized_token, token_type, language) do update
+      on conflict (product_id, normalized_token, token_type, language) where product_id is not null do update
       set weight = greatest(public.search_tokens.weight, excluded.weight),
           metadata = public.search_tokens.metadata || excluded.metadata;
     end loop;
 
-    foreach image_kind in array array['HERO','TRANSPARENT_PNG','PACKAGING','SHELF','MOBILE_THUMBNAIL']
+    foreach v_image_kind in array array['HERO','TRANSPARENT_PNG','PACKAGING','SHELF','MOBILE_THUMBNAIL']
     loop
       insert into public.catalog_product_images (
         product_id, variant_id, image_kind, storage_path, alt_text, width, height, aspect_ratio,
@@ -593,21 +593,21 @@ begin
         compression_artifact_score, packaging_visibility, ocr_readability, dominant_colors, metadata
       )
       values (
-        product_uuid, variant_uuid, image_kind::public.product_image_kind,
-        'catalog-ingestion/pending/tier4-hyperlocal-research/' || (p->>'slug') || '/' || lower(image_kind) || '.webp',
-        (p->>'name') || ' ' || lower(replace(image_kind, '_', ' ')) || ' ingestion slot',
-        case when image_kind = 'SHELF' then 1600 else 1200 end,
-        case when image_kind = 'SHELF' then 900 else 1200 end,
-        case when image_kind = 'SHELF' then '16:9' when image_kind = 'MOBILE_THUMBNAIL' then '1:1' else '4:5' end,
+        product_uuid, variant_uuid, v_image_kind::public.product_image_kind,
+        'catalog-ingestion/pending/tier4-hyperlocal-research/' || (p->>'slug') || '/' || lower(v_image_kind) || '.webp',
+        (p->>'name') || ' ' || lower(replace(v_image_kind, '_', ' ')) || ' ingestion slot',
+        case when v_image_kind = 'SHELF' then 1600 else 1200 end,
+        case when v_image_kind = 'SHELF' then 900 else 1200 end,
+        case when v_image_kind = 'SHELF' then '16:9' when v_image_kind = 'MOBILE_THUMBNAIL' then '1:1' else '4:5' end,
         'image/webp', true, true, true, 'pending_validation', 0,
-        case when image_kind in ('PACKAGING','SHELF') then 0.85 else 0.65 end,
-        case when image_kind in ('PACKAGING','SHELF') then 0.8 else 0.4 end,
+        case when v_image_kind in ('PACKAGING','SHELF') then 0.85 else 0.65 end,
+        case when v_image_kind in ('PACKAGING','SHELF') then 0.8 else 0.4 end,
         array[]::text[],
         jsonb_build_object(
           'image_requirements', image_requirements,
           'image_search_terms', p->'image'->'search_terms',
           'visual_search_tags', p->'image'->'visual_search_tags',
-          'duplicate_detection_hints', jsonb_build_array(p->>'slug', p->>'sku', lower(image_kind)),
+          'duplicate_detection_hints', jsonb_build_array(p->>'slug', p->>'sku', lower(v_image_kind)),
           'status','pending_asset_ingestion',
           'reject_watermark', true,
           'reject_marketplace_screenshot', true,

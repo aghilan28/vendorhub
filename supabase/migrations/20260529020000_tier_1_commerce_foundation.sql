@@ -215,8 +215,13 @@ create table if not exists public.brands (
   country_code char(2) not null default 'IN',
   aliases text[] not null default '{}',
   is_local_brand boolean not null default false,
+  logo_url text,
+  status text not null default 'ACTIVE',
   metadata jsonb not null default '{}'::jsonb
 );
+alter table public.brands
+  add column if not exists logo_url text,
+  add column if not exists status text not null default 'ACTIVE';
 
 create table if not exists public.packaging_types (
   id uuid primary key default gen_random_uuid(),

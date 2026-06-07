@@ -2,7 +2,7 @@ create extension if not exists "pgcrypto";
 create extension if not exists "vector";
 
 create table if not exists public.scientific_claim (
-  claim_id text primary key default ('sclaim_' || encode(gen_random_bytes(16), 'hex')),
+  claim_id text primary key default ('sclaim_' || encode(extensions.gen_random_bytes(16), 'hex')),
   submitter_did text not null,
   claim_text text not null,
   field text not null,
@@ -18,7 +18,7 @@ create table if not exists public.scientific_claim (
 );
 
 create table if not exists public.replication_contract (
-  contract_id text primary key default ('rcon_' || encode(gen_random_bytes(16), 'hex')),
+  contract_id text primary key default ('rcon_' || encode(extensions.gen_random_bytes(16), 'hex')),
   claim_id text not null references public.scientific_claim(claim_id) on delete cascade,
   protocol_hash text not null,
   minimum_replications integer not null check (minimum_replications > 0),
@@ -33,7 +33,7 @@ create table if not exists public.replication_contract (
 );
 
 create table if not exists public.validation_market (
-  market_id text primary key default ('vmarket_' || encode(gen_random_bytes(16), 'hex')),
+  market_id text primary key default ('vmarket_' || encode(extensions.gen_random_bytes(16), 'hex')),
   claim_id text not null references public.scientific_claim(claim_id) on delete cascade,
   contract_id text not null references public.replication_contract(contract_id) on delete restrict,
   market_state text not null check (market_state in ('MARKET_CREATED','FORECASTING','REPLICATION_RUNNING','EVIDENCE_COLLECTION','SETTLEMENT','REPUTATION_UPDATE','ARCHIVED')),
@@ -48,7 +48,7 @@ create table if not exists public.validation_market (
 );
 
 create table if not exists public.market_participant (
-  participant_id text primary key default ('mpart_' || encode(gen_random_bytes(16), 'hex')),
+  participant_id text primary key default ('mpart_' || encode(extensions.gen_random_bytes(16), 'hex')),
   did text not null unique,
   participant_type text not null check (participant_type in ('researcher','replicator','funder','auditor','institution','agent')),
   reputation_score numeric not null default 0.5 check (reputation_score >= 0 and reputation_score <= 1),
@@ -58,7 +58,7 @@ create table if not exists public.market_participant (
 );
 
 create table if not exists public.forecast_position (
-  position_id text primary key default ('fpos_' || encode(gen_random_bytes(16), 'hex')),
+  position_id text primary key default ('fpos_' || encode(extensions.gen_random_bytes(16), 'hex')),
   market_id text not null references public.validation_market(market_id) on delete cascade,
   participant_id text not null references public.market_participant(participant_id) on delete restrict,
   probability numeric not null check (probability > 0 and probability < 1),
@@ -71,7 +71,7 @@ create table if not exists public.forecast_position (
 );
 
 create table if not exists public.verification_evidence (
-  evidence_id text primary key default ('vevid_' || encode(gen_random_bytes(16), 'hex')),
+  evidence_id text primary key default ('vevid_' || encode(extensions.gen_random_bytes(16), 'hex')),
   claim_id text not null references public.scientific_claim(claim_id) on delete cascade,
   contract_id text references public.replication_contract(contract_id) on delete set null,
   evidence_type text not null check (evidence_type in ('dataset','code','lab_report','audit','proof','observation','external_registry')),
@@ -86,7 +86,7 @@ create table if not exists public.verification_evidence (
 );
 
 create table if not exists public.claim_settlement (
-  settlement_id text primary key default ('cset_' || encode(gen_random_bytes(16), 'hex')),
+  settlement_id text primary key default ('cset_' || encode(extensions.gen_random_bytes(16), 'hex')),
   market_id text not null references public.validation_market(market_id) on delete cascade,
   claim_id text not null references public.scientific_claim(claim_id) on delete cascade,
   outcome text not null check (outcome in ('replicated','not_replicated','inconclusive','invalid')),
@@ -103,7 +103,7 @@ create table if not exists public.claim_settlement (
 );
 
 create table if not exists public.reputation_adjustment (
-  adjustment_id text primary key default ('radj_' || encode(gen_random_bytes(16), 'hex')),
+  adjustment_id text primary key default ('radj_' || encode(extensions.gen_random_bytes(16), 'hex')),
   participant_id text not null references public.market_participant(participant_id) on delete cascade,
   settlement_id text references public.claim_settlement(settlement_id) on delete set null,
   adjustment_type text not null check (adjustment_type in ('accuracy_reward','replication_reward','lineage_reward','slashing','decay','governance_override')),
@@ -116,7 +116,7 @@ create table if not exists public.reputation_adjustment (
 );
 
 create table if not exists public.consensus_session (
-  session_id text primary key default ('csess_' || encode(gen_random_bytes(16), 'hex')),
+  session_id text primary key default ('csess_' || encode(extensions.gen_random_bytes(16), 'hex')),
   subject_type text not null,
   subject_id text not null,
   protocol text not null check (protocol in ('delphi','fortytwo_swarm','peer_prediction','bradley_terry','reputation_market')),
@@ -127,7 +127,7 @@ create table if not exists public.consensus_session (
 );
 
 create table if not exists public.consensus_round (
-  round_id text primary key default ('cround_' || encode(gen_random_bytes(16), 'hex')),
+  round_id text primary key default ('cround_' || encode(extensions.gen_random_bytes(16), 'hex')),
   session_id text not null references public.consensus_session(session_id) on delete cascade,
   round_number integer not null check (round_number > 0),
   round_state text not null check (round_state in ('open','closed','scored','discarded')),
@@ -139,7 +139,7 @@ create table if not exists public.consensus_round (
 );
 
 create table if not exists public.swarm_node (
-  node_id text primary key default ('snode_' || encode(gen_random_bytes(16), 'hex')),
+  node_id text primary key default ('snode_' || encode(extensions.gen_random_bytes(16), 'hex')),
   participant_id text not null references public.market_participant(participant_id) on delete cascade,
   session_id text not null references public.consensus_session(session_id) on delete cascade,
   node_weight numeric not null check (node_weight >= 0),
@@ -149,7 +149,7 @@ create table if not exists public.swarm_node (
 );
 
 create table if not exists public.swarm_vote (
-  vote_id text primary key default ('svote_' || encode(gen_random_bytes(16), 'hex')),
+  vote_id text primary key default ('svote_' || encode(extensions.gen_random_bytes(16), 'hex')),
   round_id text not null references public.consensus_round(round_id) on delete cascade,
   node_id text not null references public.swarm_node(node_id) on delete cascade,
   vote_vector numeric[] not null,
@@ -159,7 +159,7 @@ create table if not exists public.swarm_vote (
 );
 
 create table if not exists public.peer_prediction (
-  prediction_id text primary key default ('ppred_' || encode(gen_random_bytes(16), 'hex')),
+  prediction_id text primary key default ('ppred_' || encode(extensions.gen_random_bytes(16), 'hex')),
   round_id text not null references public.consensus_round(round_id) on delete cascade,
   participant_id text not null references public.market_participant(participant_id) on delete cascade,
   private_signal boolean not null,
@@ -170,7 +170,7 @@ create table if not exists public.peer_prediction (
 );
 
 create table if not exists public.consensus_outcome (
-  outcome_id text primary key default ('cout_' || encode(gen_random_bytes(16), 'hex')),
+  outcome_id text primary key default ('cout_' || encode(extensions.gen_random_bytes(16), 'hex')),
   session_id text not null references public.consensus_session(session_id) on delete cascade,
   outcome_payload jsonb not null,
   confidence numeric not null check (confidence >= 0 and confidence <= 1),
@@ -181,7 +181,7 @@ create table if not exists public.consensus_outcome (
 );
 
 create table if not exists public.reputation_node (
-  reputation_node_id text primary key default ('rnode_' || encode(gen_random_bytes(16), 'hex')),
+  reputation_node_id text primary key default ('rnode_' || encode(extensions.gen_random_bytes(16), 'hex')),
   subject_id text not null,
   subject_type text not null check (subject_type in ('participant','claim','asset','institution','agent','policy')),
   reputation_score numeric not null check (reputation_score >= 0 and reputation_score <= 1),
@@ -193,7 +193,7 @@ create table if not exists public.reputation_node (
 );
 
 create table if not exists public.reputation_edge (
-  reputation_edge_id text primary key default ('redge_' || encode(gen_random_bytes(16), 'hex')),
+  reputation_edge_id text primary key default ('redge_' || encode(extensions.gen_random_bytes(16), 'hex')),
   source_node_id text not null references public.reputation_node(reputation_node_id) on delete cascade,
   target_node_id text not null references public.reputation_node(reputation_node_id) on delete cascade,
   edge_type text not null check (edge_type in ('contributed_to','verified','cited','contradicted','delegated_trust','slashed_by')),
@@ -204,7 +204,7 @@ create table if not exists public.reputation_edge (
 );
 
 create table if not exists public.accuracy_metric (
-  metric_id text primary key default ('ametric_' || encode(gen_random_bytes(16), 'hex')),
+  metric_id text primary key default ('ametric_' || encode(extensions.gen_random_bytes(16), 'hex')),
   reputation_node_id text not null references public.reputation_node(reputation_node_id) on delete cascade,
   metric_type text not null check (metric_type in ('forecast_accuracy','replication_accuracy','audit_accuracy','citation_quality','policy_outcome')),
   value numeric not null check (value >= 0 and value <= 1),
@@ -216,7 +216,7 @@ create table if not exists public.accuracy_metric (
 );
 
 create table if not exists public.slashing_event (
-  slashing_id text primary key default ('slash_' || encode(gen_random_bytes(16), 'hex')),
+  slashing_id text primary key default ('slash_' || encode(extensions.gen_random_bytes(16), 'hex')),
   reputation_node_id text not null references public.reputation_node(reputation_node_id) on delete cascade,
   severity text not null check (severity in ('minor','major','critical')),
   penalty numeric not null check (penalty >= 0 and penalty <= 1),
@@ -227,7 +227,7 @@ create table if not exists public.slashing_event (
 );
 
 create table if not exists public.trust_snapshot (
-  snapshot_id text primary key default ('tsnap_' || encode(gen_random_bytes(16), 'hex')),
+  snapshot_id text primary key default ('tsnap_' || encode(extensions.gen_random_bytes(16), 'hex')),
   scope text not null,
   subject_id text not null,
   trust_score numeric not null check (trust_score >= 0 and trust_score <= 1),
@@ -238,7 +238,7 @@ create table if not exists public.trust_snapshot (
 );
 
 create table if not exists public.knowledge_asset (
-  asset_id text primary key default ('kasset_' || encode(gen_random_bytes(16), 'hex')),
+  asset_id text primary key default ('kasset_' || encode(extensions.gen_random_bytes(16), 'hex')),
   asset_type text not null check (asset_type in ('claim','dataset','model','policy','simulation','proof','ontology')),
   title text not null,
   content_hash text not null unique,
@@ -249,7 +249,7 @@ create table if not exists public.knowledge_asset (
 );
 
 create table if not exists public.knowledge_owner (
-  owner_id text primary key default ('kown_' || encode(gen_random_bytes(16), 'hex')),
+  owner_id text primary key default ('kown_' || encode(extensions.gen_random_bytes(16), 'hex')),
   asset_id text not null references public.knowledge_asset(asset_id) on delete cascade,
   owner_did text not null,
   ownership_share numeric not null check (ownership_share > 0 and ownership_share <= 1),
@@ -258,7 +258,7 @@ create table if not exists public.knowledge_owner (
 );
 
 create table if not exists public.fact_dependency (
-  dependency_id text primary key default ('fdep_' || encode(gen_random_bytes(16), 'hex')),
+  dependency_id text primary key default ('fdep_' || encode(extensions.gen_random_bytes(16), 'hex')),
   asset_id text not null references public.knowledge_asset(asset_id) on delete cascade,
   depends_on_asset_id text not null references public.knowledge_asset(asset_id) on delete restrict,
   dependency_type text not null check (dependency_type in ('derives_from','cites','uses_dataset','uses_model','validates','refutes')),
@@ -268,7 +268,7 @@ create table if not exists public.fact_dependency (
 );
 
 create table if not exists public.lineage_royalty (
-  royalty_id text primary key default ('lroy_' || encode(gen_random_bytes(16), 'hex')),
+  royalty_id text primary key default ('lroy_' || encode(extensions.gen_random_bytes(16), 'hex')),
   asset_id text not null references public.knowledge_asset(asset_id) on delete cascade,
   beneficiary_asset_id text references public.knowledge_asset(asset_id) on delete set null,
   beneficiary_owner_id text references public.knowledge_owner(owner_id) on delete set null,
@@ -278,7 +278,7 @@ create table if not exists public.lineage_royalty (
 );
 
 create table if not exists public.citation_revenue (
-  revenue_id text primary key default ('crev_' || encode(gen_random_bytes(16), 'hex')),
+  revenue_id text primary key default ('crev_' || encode(extensions.gen_random_bytes(16), 'hex')),
   asset_id text not null references public.knowledge_asset(asset_id) on delete cascade,
   citation_event_id text not null,
   gross_amount numeric not null check (gross_amount >= 0),
@@ -289,7 +289,7 @@ create table if not exists public.citation_revenue (
 );
 
 create table if not exists public.simulation_world (
-  world_id text primary key default ('sworld_' || encode(gen_random_bytes(16), 'hex')),
+  world_id text primary key default ('sworld_' || encode(extensions.gen_random_bytes(16), 'hex')),
   world_name text not null,
   scenario_hash text not null,
   seed bigint not null,
@@ -299,7 +299,7 @@ create table if not exists public.simulation_world (
 );
 
 create table if not exists public.simulation_tick (
-  tick_id text primary key default ('stick_' || encode(gen_random_bytes(16), 'hex')),
+  tick_id text primary key default ('stick_' || encode(extensions.gen_random_bytes(16), 'hex')),
   world_id text not null references public.simulation_world(world_id) on delete cascade,
   tick_number bigint not null check (tick_number >= 0),
   psi numeric not null,
@@ -316,7 +316,7 @@ create table if not exists public.simulation_tick (
 );
 
 create table if not exists public.population_state (
-  state_id text primary key default ('pop_' || encode(gen_random_bytes(16), 'hex')),
+  state_id text primary key default ('pop_' || encode(extensions.gen_random_bytes(16), 'hex')),
   tick_id text not null references public.simulation_tick(tick_id) on delete cascade,
   cohort_key text not null,
   population_count numeric not null check (population_count >= 0),
@@ -326,7 +326,7 @@ create table if not exists public.population_state (
 );
 
 create table if not exists public.elite_state (
-  state_id text primary key default ('elite_' || encode(gen_random_bytes(16), 'hex')),
+  state_id text primary key default ('elite_' || encode(extensions.gen_random_bytes(16), 'hex')),
   tick_id text not null references public.simulation_tick(tick_id) on delete cascade,
   elite_count numeric not null check (elite_count >= 0),
   elite_positions numeric not null check (elite_positions > 0),
@@ -335,7 +335,7 @@ create table if not exists public.elite_state (
 );
 
 create table if not exists public.institution_state (
-  state_id text primary key default ('istate_' || encode(gen_random_bytes(16), 'hex')),
+  state_id text primary key default ('istate_' || encode(extensions.gen_random_bytes(16), 'hex')),
   tick_id text not null references public.simulation_tick(tick_id) on delete cascade,
   institution_ref text not null,
   capacity numeric not null check (capacity >= 0 and capacity <= 1),
@@ -344,7 +344,7 @@ create table if not exists public.institution_state (
 );
 
 create table if not exists public.governance_state (
-  state_id text primary key default ('gstate_' || encode(gen_random_bytes(16), 'hex')),
+  state_id text primary key default ('gstate_' || encode(extensions.gen_random_bytes(16), 'hex')),
   tick_id text not null references public.simulation_tick(tick_id) on delete cascade,
   policy_ref text not null,
   enforcement_strength numeric not null check (enforcement_strength >= 0 and enforcement_strength <= 1),
@@ -353,7 +353,7 @@ create table if not exists public.governance_state (
 );
 
 create table if not exists public.economic_state (
-  state_id text primary key default ('estate_' || encode(gen_random_bytes(16), 'hex')),
+  state_id text primary key default ('estate_' || encode(extensions.gen_random_bytes(16), 'hex')),
   tick_id text not null references public.simulation_tick(tick_id) on delete cascade,
   gdp numeric not null check (gdp >= 0),
   debt_to_gdp numeric not null check (debt_to_gdp >= 0),
@@ -362,7 +362,7 @@ create table if not exists public.economic_state (
 );
 
 create table if not exists public.hypothesis (
-  hypothesis_id text primary key default ('hyp_' || encode(gen_random_bytes(16), 'hex')),
+  hypothesis_id text primary key default ('hyp_' || encode(extensions.gen_random_bytes(16), 'hex')),
   generated_by text not null,
   claim_text text not null,
   symbolic_form text not null,
@@ -372,7 +372,7 @@ create table if not exists public.hypothesis (
 );
 
 create table if not exists public.experiment (
-  experiment_id text primary key default ('exp_' || encode(gen_random_bytes(16), 'hex')),
+  experiment_id text primary key default ('exp_' || encode(extensions.gen_random_bytes(16), 'hex')),
   hypothesis_id text not null references public.hypothesis(hypothesis_id) on delete cascade,
   design_hash text not null,
   minimum_power numeric not null check (minimum_power > 0 and minimum_power <= 1),
@@ -381,7 +381,7 @@ create table if not exists public.experiment (
 );
 
 create table if not exists public.experiment_plan (
-  plan_id text primary key default ('eplan_' || encode(gen_random_bytes(16), 'hex')),
+  plan_id text primary key default ('eplan_' || encode(extensions.gen_random_bytes(16), 'hex')),
   experiment_id text not null references public.experiment(experiment_id) on delete cascade,
   schedule_window tstzrange not null,
   resource_manifest jsonb not null,
@@ -390,7 +390,7 @@ create table if not exists public.experiment_plan (
 );
 
 create table if not exists public.execution_run (
-  run_id text primary key default ('erun_' || encode(gen_random_bytes(16), 'hex')),
+  run_id text primary key default ('erun_' || encode(extensions.gen_random_bytes(16), 'hex')),
   experiment_id text not null references public.experiment(experiment_id) on delete cascade,
   run_state text not null check (run_state in ('queued','running','completed','failed','quarantined')),
   executor_ref text not null,
@@ -401,7 +401,7 @@ create table if not exists public.execution_run (
 );
 
 create table if not exists public.observation (
-  observation_id text primary key default ('obs_' || encode(gen_random_bytes(16), 'hex')),
+  observation_id text primary key default ('obs_' || encode(extensions.gen_random_bytes(16), 'hex')),
   run_id text not null references public.execution_run(run_id) on delete cascade,
   metric_key text not null,
   metric_value numeric not null,
@@ -411,7 +411,7 @@ create table if not exists public.observation (
 );
 
 create table if not exists public.symbolic_model (
-  model_id text primary key default ('sym_' || encode(gen_random_bytes(16), 'hex')),
+  model_id text primary key default ('sym_' || encode(extensions.gen_random_bytes(16), 'hex')),
   hypothesis_id text references public.hypothesis(hypothesis_id) on delete set null,
   expression text not null,
   variables text[] not null,
@@ -422,7 +422,7 @@ create table if not exists public.symbolic_model (
 );
 
 create table if not exists public.policy_manifest (
-  manifest_id text primary key default ('pman_' || encode(gen_random_bytes(16), 'hex')),
+  manifest_id text primary key default ('pman_' || encode(extensions.gen_random_bytes(16), 'hex')),
   policy_key text not null,
   source_hash text not null,
   dsl_version text not null,
@@ -433,7 +433,7 @@ create table if not exists public.policy_manifest (
 );
 
 create table if not exists public.compiled_policy (
-  compiled_policy_id text primary key default ('cpol_' || encode(gen_random_bytes(16), 'hex')),
+  compiled_policy_id text primary key default ('cpol_' || encode(extensions.gen_random_bytes(16), 'hex')),
   manifest_id text not null references public.policy_manifest(manifest_id) on delete cascade,
   target_runtime text not null check (target_runtime in ('open_policy','temporal','sql_rls','kafka_stream','agent_guardrail')),
   artifact_uri text not null,
@@ -443,7 +443,7 @@ create table if not exists public.compiled_policy (
 );
 
 create table if not exists public.policy_version (
-  policy_version_id text primary key default ('pver_' || encode(gen_random_bytes(16), 'hex')),
+  policy_version_id text primary key default ('pver_' || encode(extensions.gen_random_bytes(16), 'hex')),
   manifest_id text not null references public.policy_manifest(manifest_id) on delete cascade,
   version text not null,
   parent_version_id text references public.policy_version(policy_version_id),
@@ -453,7 +453,7 @@ create table if not exists public.policy_version (
 );
 
 create table if not exists public.verification_proof (
-  proof_id text primary key default ('vproof_' || encode(gen_random_bytes(16), 'hex')),
+  proof_id text primary key default ('vproof_' || encode(extensions.gen_random_bytes(16), 'hex')),
   subject_type text not null,
   subject_id text not null,
   method text not null check (method in ('tla','smt','alloy','simulation','property_test','audit')),
@@ -464,7 +464,7 @@ create table if not exists public.verification_proof (
 );
 
 create table if not exists public.claim (
-  claim_id text primary key default ('claim_' || encode(gen_random_bytes(16), 'hex')),
+  claim_id text primary key default ('claim_' || encode(extensions.gen_random_bytes(16), 'hex')),
   canonical_claim_id text references public.scientific_claim(claim_id) on delete set null,
   claim_text text not null,
   truth_state text not null check (truth_state in ('unverified','supported','contested','contradicted','quarantined','deprecated')),
@@ -473,7 +473,7 @@ create table if not exists public.claim (
 );
 
 create table if not exists public.claim_edge (
-  edge_id text primary key default ('cedge_' || encode(gen_random_bytes(16), 'hex')),
+  edge_id text primary key default ('cedge_' || encode(extensions.gen_random_bytes(16), 'hex')),
   source_claim_id text not null references public.claim(claim_id) on delete cascade,
   target_claim_id text not null references public.claim(claim_id) on delete cascade,
   edge_type text not null check (edge_type in ('supports','contradicts','depends_on','generalizes','specializes','supersedes')),
@@ -483,7 +483,7 @@ create table if not exists public.claim_edge (
 );
 
 create table if not exists public.contradiction (
-  contradiction_id text primary key default ('contra11_' || encode(gen_random_bytes(16), 'hex')),
+  contradiction_id text primary key default ('contra11_' || encode(extensions.gen_random_bytes(16), 'hex')),
   claim_ids text[] not null,
   severity text not null check (severity in ('low','medium','high','critical')),
   detection_method text not null,
@@ -492,7 +492,7 @@ create table if not exists public.contradiction (
 );
 
 create table if not exists public.quarantine_record (
-  quarantine_id text primary key default ('qrec_' || encode(gen_random_bytes(16), 'hex')),
+  quarantine_id text primary key default ('qrec_' || encode(extensions.gen_random_bytes(16), 'hex')),
   subject_type text not null,
   subject_id text not null,
   reason_code text not null,
@@ -502,7 +502,7 @@ create table if not exists public.quarantine_record (
 );
 
 create table if not exists public.verification_record (
-  verification_id text primary key default ('vrec_' || encode(gen_random_bytes(16), 'hex')),
+  verification_id text primary key default ('vrec_' || encode(extensions.gen_random_bytes(16), 'hex')),
   subject_type text not null,
   subject_id text not null,
   verifier_did text not null,
@@ -512,7 +512,7 @@ create table if not exists public.verification_record (
 );
 
 create table if not exists public.legitimacy_policy (
-  policy_id text primary key default ('lpol_' || encode(gen_random_bytes(16), 'hex')),
+  policy_id text primary key default ('lpol_' || encode(extensions.gen_random_bytes(16), 'hex')),
   scope text not null,
   trigger_type text not null check (trigger_type in ('stress_watch','adaptive_policy_review','redistribution_required')),
   threshold numeric not null check (threshold >= 0 and threshold <= 1),
@@ -521,7 +521,7 @@ create table if not exists public.legitimacy_policy (
 );
 
 create table if not exists public.legitimacy_signal (
-  signal_id text primary key default ('lsig_' || encode(gen_random_bytes(16), 'hex')),
+  signal_id text primary key default ('lsig_' || encode(extensions.gen_random_bytes(16), 'hex')),
   scope text not null,
   psi numeric not null,
   trust numeric not null check (trust >= 0 and trust <= 1),
@@ -534,7 +534,7 @@ create table if not exists public.legitimacy_signal (
 );
 
 create table if not exists public.research_problem (
-  problem_id text primary key default ('rprob_' || encode(gen_random_bytes(16), 'hex')),
+  problem_id text primary key default ('rprob_' || encode(extensions.gen_random_bytes(16), 'hex')),
   title text not null,
   problem_statement text not null,
   owner_did text not null,
@@ -544,7 +544,7 @@ create table if not exists public.research_problem (
 );
 
 create table if not exists public.research_dependency (
-  dependency_id text primary key default ('rdep_' || encode(gen_random_bytes(16), 'hex')),
+  dependency_id text primary key default ('rdep_' || encode(extensions.gen_random_bytes(16), 'hex')),
   problem_id text not null references public.research_problem(problem_id) on delete cascade,
   depends_on_problem_id text not null references public.research_problem(problem_id) on delete restrict,
   dependency_type text not null check (dependency_type in ('blocks','informs','requires_dataset','requires_proof','requires_replication')),
@@ -552,7 +552,7 @@ create table if not exists public.research_dependency (
 );
 
 create table if not exists public.research_status (
-  status_id text primary key default ('rstat_' || encode(gen_random_bytes(16), 'hex')),
+  status_id text primary key default ('rstat_' || encode(extensions.gen_random_bytes(16), 'hex')),
   problem_id text not null references public.research_problem(problem_id) on delete cascade,
   previous_status text,
   next_status text not null,
@@ -562,7 +562,7 @@ create table if not exists public.research_status (
 );
 
 create table if not exists public.research_priority (
-  priority_id text primary key default ('rpri_' || encode(gen_random_bytes(16), 'hex')),
+  priority_id text primary key default ('rpri_' || encode(extensions.gen_random_bytes(16), 'hex')),
   problem_id text not null references public.research_problem(problem_id) on delete cascade,
   priority_score numeric not null,
   impact_score numeric not null,
@@ -572,7 +572,7 @@ create table if not exists public.research_priority (
 );
 
 create table if not exists public.research_outcome (
-  outcome_id text primary key default ('rout_' || encode(gen_random_bytes(16), 'hex')),
+  outcome_id text primary key default ('rout_' || encode(extensions.gen_random_bytes(16), 'hex')),
   problem_id text not null references public.research_problem(problem_id) on delete cascade,
   outcome_type text not null check (outcome_type in ('claim_validated','claim_refuted','model_created','policy_changed','dataset_created','null_result')),
   artifact_refs text[] not null,

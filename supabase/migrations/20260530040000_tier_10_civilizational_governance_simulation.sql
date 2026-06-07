@@ -1,7 +1,7 @@
 create extension if not exists "pgcrypto";
 
 create table if not exists public.institutional_entities (
-  institution_id text primary key default ('inst_' || encode(gen_random_bytes(16), 'hex')),
+  institution_id text primary key default ('inst_' || encode(extensions.gen_random_bytes(16), 'hex')),
   institution_type text not null,
   creation_epoch bigint not null check (creation_epoch >= 0),
   parent_institution_id text references public.institutional_entities(institution_id) on delete set null,
@@ -17,7 +17,7 @@ create table if not exists public.institutional_entities (
 );
 
 create table if not exists public.institutional_mutations (
-  mutation_id text primary key default ('imut_' || encode(gen_random_bytes(16), 'hex')),
+  mutation_id text primary key default ('imut_' || encode(extensions.gen_random_bytes(16), 'hex')),
   institution_id text not null references public.institutional_entities(institution_id) on delete cascade,
   mutation_type text not null,
   trigger_event text not null,
@@ -29,7 +29,7 @@ create table if not exists public.institutional_mutations (
 );
 
 create table if not exists public.institutional_lifecycle_events (
-  event_id text primary key default ('ile_' || encode(gen_random_bytes(16), 'hex')),
+  event_id text primary key default ('ile_' || encode(extensions.gen_random_bytes(16), 'hex')),
   institution_id text not null references public.institutional_entities(institution_id) on delete cascade,
   event_type text not null check (event_type in ('birth','growth','stagnation','fragmentation','collapse','replacement')),
   timestamp timestamptz not null default now(),
@@ -37,7 +37,7 @@ create table if not exists public.institutional_lifecycle_events (
 );
 
 create table if not exists public.constitutions (
-  constitution_id text primary key default ('const_' || encode(gen_random_bytes(16), 'hex')),
+  constitution_id text primary key default ('const_' || encode(extensions.gen_random_bytes(16), 'hex')),
   constitution_version text not null unique,
   status text not null check (status in ('draft','active','superseded','rolled_back')),
   source_hash text not null,
@@ -48,7 +48,7 @@ create table if not exists public.constitutions (
 );
 
 create table if not exists public.constitutional_articles (
-  article_id text primary key default ('carticle_' || encode(gen_random_bytes(16), 'hex')),
+  article_id text primary key default ('carticle_' || encode(extensions.gen_random_bytes(16), 'hex')),
   constitution_id text not null references public.constitutions(constitution_id) on delete cascade,
   article_key text not null,
   title text not null,
@@ -60,7 +60,7 @@ create table if not exists public.constitutional_articles (
 );
 
 create table if not exists public.constitutional_amendments (
-  amendment_id text primary key default ('amend_' || encode(gen_random_bytes(16), 'hex')),
+  amendment_id text primary key default ('amend_' || encode(extensions.gen_random_bytes(16), 'hex')),
   constitution_id text not null references public.constitutions(constitution_id) on delete cascade,
   target_version text not null,
   proposer_did text not null,
@@ -75,7 +75,7 @@ create table if not exists public.constitutional_amendments (
 );
 
 create table if not exists public.governance_constraints (
-  constraint_id text primary key default ('gcon_' || encode(gen_random_bytes(16), 'hex')),
+  constraint_id text primary key default ('gcon_' || encode(extensions.gen_random_bytes(16), 'hex')),
   constraint_key text not null unique,
   scope text not null,
   expression text not null,
@@ -86,7 +86,7 @@ create table if not exists public.governance_constraints (
 );
 
 create table if not exists public.governance_invariants (
-  invariant_id text primary key default ('ginv_' || encode(gen_random_bytes(16), 'hex')),
+  invariant_id text primary key default ('ginv_' || encode(extensions.gen_random_bytes(16), 'hex')),
   invariant_key text not null unique,
   statement text not null,
   scope text not null,
@@ -97,7 +97,7 @@ create table if not exists public.governance_invariants (
 );
 
 create table if not exists public.governance_conflicts (
-  conflict_id text primary key default ('gconf_' || encode(gen_random_bytes(16), 'hex')),
+  conflict_id text primary key default ('gconf_' || encode(extensions.gen_random_bytes(16), 'hex')),
   conflict_type text not null,
   subject_id text not null,
   constraint_refs text[] not null default array[]::text[],
@@ -108,7 +108,7 @@ create table if not exists public.governance_conflicts (
 );
 
 create table if not exists public.governance_resolutions (
-  resolution_id text primary key default ('gres_' || encode(gen_random_bytes(16), 'hex')),
+  resolution_id text primary key default ('gres_' || encode(extensions.gen_random_bytes(16), 'hex')),
   conflict_id text not null references public.governance_conflicts(conflict_id) on delete cascade,
   resolution_type text not null,
   decision_payload jsonb not null,
@@ -118,7 +118,7 @@ create table if not exists public.governance_resolutions (
 );
 
 create table if not exists public.governance_decision_events (
-  event_id text primary key default ('gde_' || encode(gen_random_bytes(16), 'hex')),
+  event_id text primary key default ('gde_' || encode(extensions.gen_random_bytes(16), 'hex')),
   aggregate_type text not null,
   aggregate_id text not null,
   event_type text not null,
@@ -141,7 +141,7 @@ create table if not exists public.formal_invariant_registry (
 );
 
 create table if not exists public.governance_rule_compilations (
-  compilation_id text primary key default ('grc_' || encode(gen_random_bytes(16), 'hex')),
+  compilation_id text primary key default ('grc_' || encode(extensions.gen_random_bytes(16), 'hex')),
   rule_id text not null,
   target text not null check (target in ('tla','alloy','smt','open_policy')),
   compiled_artifact text not null,
@@ -151,7 +151,7 @@ create table if not exists public.governance_rule_compilations (
 );
 
 create table if not exists public.amendment_validation_runs (
-  validation_run_id text primary key default ('avr_' || encode(gen_random_bytes(16), 'hex')),
+  validation_run_id text primary key default ('avr_' || encode(extensions.gen_random_bytes(16), 'hex')),
   amendment_id text not null references public.constitutional_amendments(amendment_id) on delete cascade,
   tla_status text not null check (tla_status in ('pending','passed','failed')),
   alloy_status text not null check (alloy_status in ('pending','passed','failed')),
@@ -163,7 +163,7 @@ create table if not exists public.amendment_validation_runs (
 );
 
 create table if not exists public.knowledge_claims (
-  claim_id text primary key default ('kclaim_' || encode(gen_random_bytes(16), 'hex')),
+  claim_id text primary key default ('kclaim_' || encode(extensions.gen_random_bytes(16), 'hex')),
   claim_text text not null,
   claim_type text not null,
   confidence numeric not null check (confidence >= 0 and confidence <= 1),
@@ -174,7 +174,7 @@ create table if not exists public.knowledge_claims (
 );
 
 create table if not exists public.evidence_sources (
-  evidence_id text primary key default ('evid_' || encode(gen_random_bytes(16), 'hex')),
+  evidence_id text primary key default ('evid_' || encode(extensions.gen_random_bytes(16), 'hex')),
   source_type text not null,
   source_uri text not null,
   source_hash text not null,
@@ -184,7 +184,7 @@ create table if not exists public.evidence_sources (
 );
 
 create table if not exists public.evidence_graph (
-  edge_id text primary key default ('eedge_' || encode(gen_random_bytes(16), 'hex')),
+  edge_id text primary key default ('eedge_' || encode(extensions.gen_random_bytes(16), 'hex')),
   claim_id text not null references public.knowledge_claims(claim_id) on delete cascade,
   evidence_id text not null references public.evidence_sources(evidence_id) on delete cascade,
   relation_type text not null check (relation_type in ('supports','contradicts','qualifies','derives_from')),
@@ -194,7 +194,7 @@ create table if not exists public.evidence_graph (
 );
 
 create table if not exists public.truth_state_registry (
-  truth_state_id text primary key default ('truth_' || encode(gen_random_bytes(16), 'hex')),
+  truth_state_id text primary key default ('truth_' || encode(extensions.gen_random_bytes(16), 'hex')),
   claim_id text not null references public.knowledge_claims(claim_id) on delete cascade,
   previous_state text,
   current_state text not null,
@@ -205,7 +205,7 @@ create table if not exists public.truth_state_registry (
 );
 
 create table if not exists public.contradiction_registry (
-  contradiction_id text primary key default ('contra_' || encode(gen_random_bytes(16), 'hex')),
+  contradiction_id text primary key default ('contra_' || encode(extensions.gen_random_bytes(16), 'hex')),
   claim_ids text[] not null,
   evidence_ids text[] not null,
   severity text not null check (severity in ('low','medium','high','critical')),
@@ -214,7 +214,7 @@ create table if not exists public.contradiction_registry (
 );
 
 create table if not exists public.uncertainty_registry (
-  uncertainty_id text primary key default ('unc_' || encode(gen_random_bytes(16), 'hex')),
+  uncertainty_id text primary key default ('unc_' || encode(extensions.gen_random_bytes(16), 'hex')),
   claim_id text not null references public.knowledge_claims(claim_id) on delete cascade,
   uncertainty_type text not null,
   lower_bound numeric not null,
@@ -233,7 +233,7 @@ create table if not exists public.archival_tiers (
 );
 
 create table if not exists public.knowledge_artifacts (
-  artifact_id text primary key default ('kart_' || encode(gen_random_bytes(16), 'hex')),
+  artifact_id text primary key default ('kart_' || encode(extensions.gen_random_bytes(16), 'hex')),
   artifact_type text not null,
   title text not null,
   content_hash text not null,
@@ -244,7 +244,7 @@ create table if not exists public.knowledge_artifacts (
 );
 
 create table if not exists public.preservation_strategies (
-  strategy_id text primary key default ('pstrat_' || encode(gen_random_bytes(16), 'hex')),
+  strategy_id text primary key default ('pstrat_' || encode(extensions.gen_random_bytes(16), 'hex')),
   artifact_id text not null references public.knowledge_artifacts(artifact_id) on delete cascade,
   migration_policy text not null,
   verification_cadence interval not null,
@@ -253,7 +253,7 @@ create table if not exists public.preservation_strategies (
 );
 
 create table if not exists public.replication_policies (
-  policy_id text primary key default ('rpol_' || encode(gen_random_bytes(16), 'hex')),
+  policy_id text primary key default ('rpol_' || encode(extensions.gen_random_bytes(16), 'hex')),
   artifact_id text not null references public.knowledge_artifacts(artifact_id) on delete cascade,
   replica_count integer not null check (replica_count > 0),
   region_count integer not null check (region_count > 0),
@@ -262,7 +262,7 @@ create table if not exists public.replication_policies (
 );
 
 create table if not exists public.decay_models (
-  decay_model_id text primary key default ('decay_' || encode(gen_random_bytes(16), 'hex')),
+  decay_model_id text primary key default ('decay_' || encode(extensions.gen_random_bytes(16), 'hex')),
   artifact_id text not null references public.knowledge_artifacts(artifact_id) on delete cascade,
   half_life_years numeric not null check (half_life_years > 0),
   format_obsolescence_risk numeric not null check (format_obsolescence_risk >= 0 and format_obsolescence_risk <= 1),
@@ -270,7 +270,7 @@ create table if not exists public.decay_models (
 );
 
 create table if not exists public.retrieval_tests (
-  retrieval_test_id text primary key default ('rtest_' || encode(gen_random_bytes(16), 'hex')),
+  retrieval_test_id text primary key default ('rtest_' || encode(extensions.gen_random_bytes(16), 'hex')),
   artifact_id text not null references public.knowledge_artifacts(artifact_id) on delete cascade,
   tested_at timestamptz not null default now(),
   retrieval_latency_seconds numeric not null check (retrieval_latency_seconds >= 0),
@@ -280,7 +280,7 @@ create table if not exists public.retrieval_tests (
 );
 
 create table if not exists public.alignment_principles (
-  principle_id text primary key default ('alignp_' || encode(gen_random_bytes(16), 'hex')),
+  principle_id text primary key default ('alignp_' || encode(extensions.gen_random_bytes(16), 'hex')),
   principle_key text not null unique,
   statement text not null,
   priority_weight numeric not null check (priority_weight >= 0 and priority_weight <= 1),
@@ -288,7 +288,7 @@ create table if not exists public.alignment_principles (
 );
 
 create table if not exists public.constitutional_policies (
-  policy_id text primary key default ('cpol_' || encode(gen_random_bytes(16), 'hex')),
+  policy_id text primary key default ('cpol_' || encode(extensions.gen_random_bytes(16), 'hex')),
   principle_id text not null references public.alignment_principles(principle_id),
   policy_key text not null unique,
   expression text not null,
@@ -297,7 +297,7 @@ create table if not exists public.constitutional_policies (
 );
 
 create table if not exists public.alignment_measurements (
-  measurement_id text primary key default ('ameas_' || encode(gen_random_bytes(16), 'hex')),
+  measurement_id text primary key default ('ameas_' || encode(extensions.gen_random_bytes(16), 'hex')),
   principle_id text not null references public.alignment_principles(principle_id),
   subject_type text not null,
   subject_id text not null,
@@ -307,7 +307,7 @@ create table if not exists public.alignment_measurements (
 );
 
 create table if not exists public.alignment_drift_events (
-  drift_event_id text primary key default ('adrift_' || encode(gen_random_bytes(16), 'hex')),
+  drift_event_id text primary key default ('adrift_' || encode(extensions.gen_random_bytes(16), 'hex')),
   principle_id text not null references public.alignment_principles(principle_id),
   subject_type text not null,
   subject_id text not null,
@@ -318,7 +318,7 @@ create table if not exists public.alignment_drift_events (
 );
 
 create table if not exists public.remediation_actions (
-  remediation_id text primary key default ('rem_' || encode(gen_random_bytes(16), 'hex')),
+  remediation_id text primary key default ('rem_' || encode(extensions.gen_random_bytes(16), 'hex')),
   drift_event_id text not null references public.alignment_drift_events(drift_event_id) on delete cascade,
   action_type text not null,
   action_payload jsonb not null,
@@ -327,7 +327,7 @@ create table if not exists public.remediation_actions (
 );
 
 create table if not exists public.audit_history (
-  audit_id text primary key default ('audit_' || encode(gen_random_bytes(16), 'hex')),
+  audit_id text primary key default ('audit_' || encode(extensions.gen_random_bytes(16), 'hex')),
   audit_scope text not null,
   subject_id text not null,
   auditor text not null,
@@ -338,7 +338,7 @@ create table if not exists public.audit_history (
 );
 
 create table if not exists public.civilizational_agents (
-  agent_id text primary key default ('cagent_' || encode(gen_random_bytes(16), 'hex')),
+  agent_id text primary key default ('cagent_' || encode(extensions.gen_random_bytes(16), 'hex')),
   agent_type text not null,
   capability_vector jsonb not null,
   preference_vector jsonb not null,
@@ -346,21 +346,21 @@ create table if not exists public.civilizational_agents (
 );
 
 create table if not exists public.civilizational_institutions (
-  civilization_institution_id text primary key default ('cinst_' || encode(gen_random_bytes(16), 'hex')),
+  civilization_institution_id text primary key default ('cinst_' || encode(extensions.gen_random_bytes(16), 'hex')),
   institution_id text references public.institutional_entities(institution_id) on delete set null,
   governance_capacity numeric not null check (governance_capacity >= 0 and governance_capacity <= 1),
   service_capacity numeric not null check (service_capacity >= 0 and service_capacity <= 1)
 );
 
 create table if not exists public.governance_nodes (
-  node_id text primary key default ('gnode_' || encode(gen_random_bytes(16), 'hex')),
+  node_id text primary key default ('gnode_' || encode(extensions.gen_random_bytes(16), 'hex')),
   node_type text not null,
   authority_scope text not null,
   legitimacy_score numeric not null check (legitimacy_score >= 0 and legitimacy_score <= 1)
 );
 
 create table if not exists public.resource_systems (
-  resource_system_id text primary key default ('rsys_' || encode(gen_random_bytes(16), 'hex')),
+  resource_system_id text primary key default ('rsys_' || encode(extensions.gen_random_bytes(16), 'hex')),
   resource_type text not null,
   carrying_capacity numeric not null check (carrying_capacity >= 0),
   current_stock numeric not null check (current_stock >= 0),
@@ -368,14 +368,14 @@ create table if not exists public.resource_systems (
 );
 
 create table if not exists public.environmental_constraints (
-  constraint_id text primary key default ('envc_' || encode(gen_random_bytes(16), 'hex')),
+  constraint_id text primary key default ('envc_' || encode(extensions.gen_random_bytes(16), 'hex')),
   constraint_type text not null,
   severity numeric not null check (severity >= 0 and severity <= 1),
   affected_resources text[] not null default array[]::text[]
 );
 
 create table if not exists public.trust_networks (
-  edge_id text primary key default ('trust_' || encode(gen_random_bytes(16), 'hex')),
+  edge_id text primary key default ('trust_' || encode(extensions.gen_random_bytes(16), 'hex')),
   source_agent_id text not null references public.civilizational_agents(agent_id) on delete cascade,
   target_agent_id text not null references public.civilizational_agents(agent_id) on delete cascade,
   trust_weight numeric not null check (trust_weight >= 0 and trust_weight <= 1),
@@ -383,7 +383,7 @@ create table if not exists public.trust_networks (
 );
 
 create table if not exists public.technology_networks (
-  edge_id text primary key default ('tnet_' || encode(gen_random_bytes(16), 'hex')),
+  edge_id text primary key default ('tnet_' || encode(extensions.gen_random_bytes(16), 'hex')),
   source_technology_id text not null,
   target_technology_id text not null,
   relation_type text not null check (relation_type in ('enables','competes_with','displaces','depends_on')),
@@ -391,7 +391,7 @@ create table if not exists public.technology_networks (
 );
 
 create table if not exists public.conflict_networks (
-  edge_id text primary key default ('cnet_' || encode(gen_random_bytes(16), 'hex')),
+  edge_id text primary key default ('cnet_' || encode(extensions.gen_random_bytes(16), 'hex')),
   source_agent_id text not null references public.civilizational_agents(agent_id) on delete cascade,
   target_agent_id text not null references public.civilizational_agents(agent_id) on delete cascade,
   conflict_intensity numeric not null check (conflict_intensity >= 0 and conflict_intensity <= 1),
@@ -399,7 +399,7 @@ create table if not exists public.conflict_networks (
 );
 
 create table if not exists public.simulation_runs (
-  simulation_run_id text primary key default ('simrun_' || encode(gen_random_bytes(16), 'hex')),
+  simulation_run_id text primary key default ('simrun_' || encode(extensions.gen_random_bytes(16), 'hex')),
   simulation_type text not null,
   horizon_years integer not null check (horizon_years in (10,25,50,100,250,500)),
   seed bigint not null,
@@ -410,7 +410,7 @@ create table if not exists public.simulation_runs (
 );
 
 create table if not exists public.population_metrics (
-  metric_id text primary key default ('popm_' || encode(gen_random_bytes(16), 'hex')),
+  metric_id text primary key default ('popm_' || encode(extensions.gen_random_bytes(16), 'hex')),
   scope_id text not null,
   measured_at timestamptz not null default now(),
   population_total numeric not null check (population_total >= 0),
@@ -421,7 +421,7 @@ create table if not exists public.population_metrics (
 );
 
 create table if not exists public.elite_metrics (
-  metric_id text primary key default ('elitem_' || encode(gen_random_bytes(16), 'hex')),
+  metric_id text primary key default ('elitem_' || encode(extensions.gen_random_bytes(16), 'hex')),
   scope_id text not null,
   measured_at timestamptz not null default now(),
   elite_count numeric not null check (elite_count >= 0),
@@ -431,7 +431,7 @@ create table if not exists public.elite_metrics (
 );
 
 create table if not exists public.state_metrics (
-  metric_id text primary key default ('statem_' || encode(gen_random_bytes(16), 'hex')),
+  metric_id text primary key default ('statem_' || encode(extensions.gen_random_bytes(16), 'hex')),
   scope_id text not null,
   measured_at timestamptz not null default now(),
   fiscal_distress numeric not null check (fiscal_distress >= 0),
@@ -441,7 +441,7 @@ create table if not exists public.state_metrics (
 );
 
 create table if not exists public.political_stress_metrics (
-  metric_id text primary key default ('psim_' || encode(gen_random_bytes(16), 'hex')),
+  metric_id text primary key default ('psim_' || encode(extensions.gen_random_bytes(16), 'hex')),
   scope_id text not null,
   measured_at timestamptz not null default now(),
   mmp numeric not null check (mmp >= 0),
@@ -461,7 +461,7 @@ create table if not exists public.historical_civilizations (
 );
 
 create table if not exists public.calibration_runs (
-  calibration_run_id text primary key default ('cal_' || encode(gen_random_bytes(16), 'hex')),
+  calibration_run_id text primary key default ('cal_' || encode(extensions.gen_random_bytes(16), 'hex')),
   civilization_id text not null references public.historical_civilizations(civilization_id),
   model_version text not null,
   input_digest text not null,
@@ -470,7 +470,7 @@ create table if not exists public.calibration_runs (
 );
 
 create table if not exists public.validation_runs (
-  validation_run_id text primary key default ('val_' || encode(gen_random_bytes(16), 'hex')),
+  validation_run_id text primary key default ('val_' || encode(extensions.gen_random_bytes(16), 'hex')),
   calibration_run_id text not null references public.calibration_runs(calibration_run_id) on delete cascade,
   holdout_period text not null,
   validation_score numeric not null check (validation_score >= 0 and validation_score <= 1),
@@ -478,7 +478,7 @@ create table if not exists public.validation_runs (
 );
 
 create table if not exists public.benchmark_results (
-  benchmark_result_id text primary key default ('bench_' || encode(gen_random_bytes(16), 'hex')),
+  benchmark_result_id text primary key default ('bench_' || encode(extensions.gen_random_bytes(16), 'hex')),
   validation_run_id text not null references public.validation_runs(validation_run_id) on delete cascade,
   benchmark_name text not null,
   score numeric not null check (score >= 0 and score <= 1),
@@ -486,7 +486,7 @@ create table if not exists public.benchmark_results (
 );
 
 create table if not exists public.prediction_results (
-  prediction_result_id text primary key default ('pred_' || encode(gen_random_bytes(16), 'hex')),
+  prediction_result_id text primary key default ('pred_' || encode(extensions.gen_random_bytes(16), 'hex')),
   simulation_run_id text references public.simulation_runs(simulation_run_id) on delete set null,
   civilization_id text references public.historical_civilizations(civilization_id) on delete set null,
   horizon_years integer not null check (horizon_years in (10,25,50,100,250,500)),
@@ -495,7 +495,7 @@ create table if not exists public.prediction_results (
 );
 
 create table if not exists public.technologies (
-  technology_id text primary key default ('tech_' || encode(gen_random_bytes(16), 'hex')),
+  technology_id text primary key default ('tech_' || encode(extensions.gen_random_bytes(16), 'hex')),
   name text not null unique,
   technology_domain text not null,
   maturity numeric not null check (maturity >= 0 and maturity <= 1),
@@ -503,7 +503,7 @@ create table if not exists public.technologies (
 );
 
 create table if not exists public.adoption_events (
-  adoption_event_id text primary key default ('adopt_' || encode(gen_random_bytes(16), 'hex')),
+  adoption_event_id text primary key default ('adopt_' || encode(extensions.gen_random_bytes(16), 'hex')),
   technology_id text not null references public.technologies(technology_id) on delete cascade,
   adopter_scope text not null,
   adoption_fraction numeric not null check (adoption_fraction >= 0 and adoption_fraction <= 1),
@@ -511,7 +511,7 @@ create table if not exists public.adoption_events (
 );
 
 create table if not exists public.diffusion_curves (
-  diffusion_curve_id text primary key default ('diff_' || encode(gen_random_bytes(16), 'hex')),
+  diffusion_curve_id text primary key default ('diff_' || encode(extensions.gen_random_bytes(16), 'hex')),
   technology_id text not null references public.technologies(technology_id) on delete cascade,
   model_type text not null check (model_type in ('bass_diffusion','polya_urn','competition')),
   parameters jsonb not null,
@@ -520,7 +520,7 @@ create table if not exists public.diffusion_curves (
 );
 
 create table if not exists public.lockin_events (
-  lockin_event_id text primary key default ('lock_' || encode(gen_random_bytes(16), 'hex')),
+  lockin_event_id text primary key default ('lock_' || encode(extensions.gen_random_bytes(16), 'hex')),
   technology_id text not null references public.technologies(technology_id) on delete cascade,
   lockin_strength numeric not null check (lockin_strength >= 0 and lockin_strength <= 1),
   mechanism text not null,
@@ -528,7 +528,7 @@ create table if not exists public.lockin_events (
 );
 
 create table if not exists public.displacement_events (
-  displacement_event_id text primary key default ('disp_' || encode(gen_random_bytes(16), 'hex')),
+  displacement_event_id text primary key default ('disp_' || encode(extensions.gen_random_bytes(16), 'hex')),
   incumbent_technology_id text not null references public.technologies(technology_id),
   challenger_technology_id text not null references public.technologies(technology_id),
   displacement_rate numeric not null check (displacement_rate >= 0 and displacement_rate <= 1),
@@ -536,7 +536,7 @@ create table if not exists public.displacement_events (
 );
 
 create table if not exists public.innovation_cycles (
-  innovation_cycle_id text primary key default ('innov_' || encode(gen_random_bytes(16), 'hex')),
+  innovation_cycle_id text primary key default ('innov_' || encode(extensions.gen_random_bytes(16), 'hex')),
   technology_id text not null references public.technologies(technology_id) on delete cascade,
   cycle_phase text not null check (cycle_phase in ('invention','diffusion','lock_in','displacement','renewal')),
   phase_started_at timestamptz not null default now(),
@@ -544,7 +544,7 @@ create table if not exists public.innovation_cycles (
 );
 
 create table if not exists public.coalitions (
-  coalition_id text primary key default ('coal_' || encode(gen_random_bytes(16), 'hex')),
+  coalition_id text primary key default ('coal_' || encode(extensions.gen_random_bytes(16), 'hex')),
   name text not null,
   coalition_type text not null,
   cohesion_score numeric not null check (cohesion_score >= 0 and cohesion_score <= 1),
@@ -559,21 +559,21 @@ create table if not exists public.coalition_members (
 );
 
 create table if not exists public.coalition_resources (
-  coalition_resource_id text primary key default ('cores_' || encode(gen_random_bytes(16), 'hex')),
+  coalition_resource_id text primary key default ('cores_' || encode(extensions.gen_random_bytes(16), 'hex')),
   coalition_id text not null references public.coalitions(coalition_id) on delete cascade,
   resource_type text not null,
   resource_amount numeric not null check (resource_amount >= 0)
 );
 
 create table if not exists public.attrition_models (
-  attrition_model_id text primary key default ('attr_' || encode(gen_random_bytes(16), 'hex')),
+  attrition_model_id text primary key default ('attr_' || encode(extensions.gen_random_bytes(16), 'hex')),
   model_type text not null check (model_type in ('ccag','lanchester_linear','lanchester_square')),
   parameters jsonb not null,
   invariant_refs text[] not null default array[]::text[]
 );
 
 create table if not exists public.conflict_scenarios (
-  conflict_scenario_id text primary key default ('cscen_' || encode(gen_random_bytes(16), 'hex')),
+  conflict_scenario_id text primary key default ('cscen_' || encode(extensions.gen_random_bytes(16), 'hex')),
   coalition_a_id text not null references public.coalitions(coalition_id),
   coalition_b_id text not null references public.coalitions(coalition_id),
   attrition_model_id text not null references public.attrition_models(attrition_model_id),
@@ -582,7 +582,7 @@ create table if not exists public.conflict_scenarios (
 );
 
 create table if not exists public.strategic_deception_events (
-  deception_event_id text primary key default ('sdec_' || encode(gen_random_bytes(16), 'hex')),
+  deception_event_id text primary key default ('sdec_' || encode(extensions.gen_random_bytes(16), 'hex')),
   coalition_id text not null references public.coalitions(coalition_id) on delete cascade,
   signal_type text not null,
   signal_payload jsonb not null,

@@ -1,5 +1,5 @@
 create extension if not exists "pgcrypto";
-create extension if not exists "fuzzystrmatch";
+create extension if not exists "fuzzystrmatch" with schema extensions;
 
 create unique index if not exists catalog_product_variants_sku_template_unique_idx
   on public.catalog_product_variants(sku_template);
@@ -10,7 +10,7 @@ declare
   alias_key text;
   alias_value text;
   token text;
-  image_kind text;
+  v_image_kind text;
   product_uuid uuid;
   variant_uuid uuid;
   dept_uuid uuid;
@@ -262,7 +262,7 @@ begin
         quality_score = greatest(public.master_products.quality_score, excluded.quality_score)
     returning id into product_uuid;
 
-    variant_sku := 'SKU-' || p->>'code' || '-' || lpad((mod(('x' || substr(md5(p->>'slug'), 1, 8))::bit(32)::bigint, 1000000))::text, 6, '0');
+    variant_sku := 'SKU-' || (p->>'code') || '-' || lpad((mod(('x' || substr(md5(p->>'slug'), 1, 8))::bit(32)::bigint, 1000000))::text, 6, '0');
     select id into perishability_uuid from public.perishability_profiles where slug = case when p->>'class' = 'dry' then 'loose-dal-dry-stable-ambient' when p->>'class' = 'root' then 'loose-root-tuber-30d-ambient' else 'loose-fresh-vegetable-7-14d-cool-ventilated' end;
     select id into delivery_uuid from public.delivery_constraints where slug = case when p->>'class' = 'dry' then 'dry-dal-hyperlocal-standard' else 'fresh-produce-hyperlocal-standard' end;
 
@@ -317,7 +317,7 @@ begin
           product_uuid, token, lower(regexp_replace(token, '\s+', ' ', 'g')), 'REGIONAL',
           case alias_key when 'ta' then 'ta'::public.commerce_language when 'te' then 'te'::public.commerce_language when 'kn' then 'kn'::public.commerce_language when 'ml' then 'ml'::public.commerce_language when 'hi' then 'hi'::public.commerce_language else 'roman'::public.commerce_language end,
           array['TN','KL','KA','AP','TS']::public.commerce_region[], 0.96, 'curated_research_seed',
-          jsonb_build_object('script_type','romanized','botanical_name',p->>'botanical','phonetic_key',soundex(token))
+          jsonb_build_object('script_type','romanized','botanical_name',p->>'botanical','phonetic_key',extensions.soundex(token))
         )
         on conflict (product_id, normalized_alias, alias_type, language) do update
         set confidence = excluded.confidence,
@@ -340,7 +340,7 @@ begin
       values (
         product_uuid, token, regexp_replace(lower(token), '[aeiou ]', '', 'g'), 'PHONETIC', 'roman',
         array['TN','KL','KA','AP','TS']::public.commerce_region[], 0.92,
-        jsonb_build_object('source_dataset','south_indian_fresh_produce_taxonomy','itrans_edit_distance_ready',true,'soundex_key',soundex(token))
+        jsonb_build_object('source_dataset','south_indian_fresh_produce_taxonomy','itrans_edit_distance_ready',true,'soundex_key',extensions.soundex(token))
       )
       on conflict do nothing;
 
@@ -375,7 +375,7 @@ begin
           metadata = public.multilingual_mappings.metadata || excluded.metadata;
     end loop;
 
-    foreach image_kind in array array['HERO','TRANSPARENT_PNG','SHELF','PACKAGING','MOBILE_THUMBNAIL']
+    foreach v_image_kind in array array['HERO','TRANSPARENT_PNG','SHELF','PACKAGING','MOBILE_THUMBNAIL']
     loop
       insert into public.catalog_product_images (
         product_id, variant_id, image_kind, storage_path, alt_text, width, height, aspect_ratio,
@@ -384,15 +384,15 @@ begin
         dominant_colors, metadata
       )
       values (
-        product_uuid, variant_uuid, image_kind::public.product_image_kind,
-        'catalog-ingestion/pending/south-indian-fresh-produce-taxonomy/' || (p->>'slug') || '/' || lower(image_kind) || '.webp',
-        (p->>'name') || ' ' || lower(replace(image_kind, '_', ' ')) || ' ingestion slot',
-        case when image_kind = 'SHELF' then 1600 else 1200 end,
-        case when image_kind = 'SHELF' then 900 else 1200 end,
-        case when image_kind = 'SHELF' then '16:9' else '1:1' end,
-        'image/webp', image_kind <> 'SHELF', true, true, 'pending_curated_capture',
-        0, true, case when image_kind in ('HERO','PACKAGING','MOBILE_THUMBNAIL') then 0.75 else 0.55 end,
-        case when image_kind in ('PACKAGING','SHELF') then 0.65 else 0.45 end,
+        product_uuid, variant_uuid, v_image_kind::public.product_image_kind,
+        'catalog-ingestion/pending/south-indian-fresh-produce-taxonomy/' || (p->>'slug') || '/' || lower(v_image_kind) || '.webp',
+        (p->>'name') || ' ' || lower(replace(v_image_kind, '_', ' ')) || ' ingestion slot',
+        case when v_image_kind = 'SHELF' then 1600 else 1200 end,
+        case when v_image_kind = 'SHELF' then 900 else 1200 end,
+        case when v_image_kind = 'SHELF' then '16:9' else '1:1' end,
+        'image/webp', v_image_kind <> 'SHELF', true, true, 'pending_curated_capture',
+        0, true, case when v_image_kind in ('HERO','PACKAGING','MOBILE_THUMBNAIL') then 0.75 else 0.55 end,
+        case when v_image_kind in ('PACKAGING','SHELF') then 0.65 else 0.45 end,
         array['fresh-produce-natural','market-bin'],
         jsonb_build_object(
           'image_status','placeholder_for_ingestion',
@@ -401,7 +401,7 @@ begin
           'visual_search_tags', jsonb_build_array(p->>'name', p->>'botanical', p->>'class', 'loose produce', 'south indian market'),
           'packaging_signatures', jsonb_build_object('packaging_type','loose','must_show_natural_surface',true,'reject_branded_packaging_unless_seller_uploaded',true),
           'duplicate_detection_hints', jsonb_build_array(lower(p->>'name'), lower(p->>'botanical'), p->>'slug'),
-          'ocr_visibility_requirements', jsonb_build_object('shelf_label_required', image_kind in ('SHELF','PACKAGING'), 'alias_label_allowed', true),
+          'ocr_visibility_requirements', jsonb_build_object('shelf_label_required', v_image_kind in ('SHELF','PACKAGING'), 'alias_label_allowed', true),
           'ai_match_tokens', romanized_aliases || array[p->>'name', p->>'botanical']
         )
       )

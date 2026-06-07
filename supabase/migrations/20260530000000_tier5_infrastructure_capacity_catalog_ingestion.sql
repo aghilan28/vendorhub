@@ -1,5 +1,5 @@
 create extension if not exists "pgcrypto";
-create extension if not exists "fuzzystrmatch";
+create extension if not exists "fuzzystrmatch" with schema extensions;
 
 create unique index if not exists catalog_product_variants_sku_template_unique_idx
   on public.catalog_product_variants(sku_template);
@@ -17,7 +17,7 @@ declare
   v jsonb;
   alias_item jsonb;
   token_item jsonb;
-  image_kind text;
+  v_image_kind text;
   dept_uuid uuid;
   cat_uuid uuid;
   subcat_uuid uuid;
@@ -528,7 +528,7 @@ begin
         all_regions,
         0.94,
         'tier5_architecture_capacity_catalog_ingestion',
-        jsonb_build_object('soundex_key', soundex(alias_item->>0), 'voice_ready', true, 'ocr_ready', true, 'customer_marketplace_visible', false)
+        jsonb_build_object('soundex_key', extensions.soundex(alias_item->>0), 'voice_ready', true, 'ocr_ready', true, 'customer_marketplace_visible', false)
       )
       on conflict (product_id, normalized_alias, alias_type, language) do update
       set confidence = greatest(public.product_aliases.confidence, excluded.confidence),
@@ -566,12 +566,12 @@ begin
         case token_item->>'type' when 'SEMANTIC' then 1.05 else 0.85 end,
         jsonb_build_object('source_dataset','tier5_architecture_capacity_catalog_ingestion','qdrant_hybrid_ready',true,'customer_marketplace_visible',false)
       )
-      on conflict (product_id, normalized_token, token_type, language) do update
+      on conflict (product_id, normalized_token, token_type, language) where product_id is not null do update
       set weight = greatest(public.search_tokens.weight, excluded.weight),
           metadata = public.search_tokens.metadata || excluded.metadata;
     end loop;
 
-    foreach image_kind in array array['HERO','TRANSPARENT_PNG','PACKAGING','SHELF','MOBILE_THUMBNAIL']
+    foreach v_image_kind in array array['HERO','TRANSPARENT_PNG','PACKAGING','SHELF','MOBILE_THUMBNAIL']
     loop
       insert into public.catalog_product_images (
         product_id, variant_id, image_kind, storage_path, alt_text, width, height, aspect_ratio,
@@ -581,26 +581,26 @@ begin
       values (
         product_uuid,
         variant_uuid,
-        image_kind::public.product_image_kind,
-        'catalog-ingestion/pending/tier5-infrastructure-capacity/' || (p->>'slug') || '/' || lower(image_kind) || '.webp',
-        (p->>'name') || ' ' || lower(replace(image_kind, '_', ' ')) || ' governance-held ingestion slot',
-        case when image_kind = 'SHELF' then 1920 else 1600 end,
-        case when image_kind = 'SHELF' then 1080 else 1600 end,
-        case when image_kind = 'SHELF' then '16:9' when image_kind = 'MOBILE_THUMBNAIL' then '1:1' else '4:5' end,
+        v_image_kind::public.product_image_kind,
+        'catalog-ingestion/pending/tier5-infrastructure-capacity/' || (p->>'slug') || '/' || lower(v_image_kind) || '.webp',
+        (p->>'name') || ' ' || lower(replace(v_image_kind, '_', ' ')) || ' governance-held ingestion slot',
+        case when v_image_kind = 'SHELF' then 1920 else 1600 end,
+        case when v_image_kind = 'SHELF' then 1080 else 1600 end,
+        case when v_image_kind = 'SHELF' then '16:9' when v_image_kind = 'MOBILE_THUMBNAIL' then '1:1' else '4:5' end,
         'image/webp',
         true,
         true,
         true,
         'pending_validation',
         0,
-        case when image_kind in ('PACKAGING','SHELF') then 0.9 else 0.7 end,
-        case when image_kind in ('PACKAGING','SHELF') then 0.85 else 0.45 end,
+        case when v_image_kind in ('PACKAGING','SHELF') then 0.9 else 0.7 end,
+        case when v_image_kind in ('PACKAGING','SHELF') then 0.85 else 0.45 end,
         array[]::text[],
         jsonb_build_object(
           'image_requirements', image_requirements,
           'image_search_terms', p->'image'->'search_terms',
           'visual_search_tags', p->'image'->'visual_search_tags',
-          'duplicate_detection_hints', jsonb_build_array(p->>'slug', p->>'sku', lower(image_kind)),
+          'duplicate_detection_hints', jsonb_build_array(p->>'slug', p->>'sku', lower(v_image_kind)),
           'status','pending_asset_ingestion',
           'reject_watermark', true,
           'reject_marketplace_screenshot', true,

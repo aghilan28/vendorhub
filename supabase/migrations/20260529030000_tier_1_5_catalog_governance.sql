@@ -159,10 +159,13 @@ create table if not exists public.product_quality_scores (
   moderation_confidence_score integer not null check (moderation_confidence_score between 0 and 100),
   auto_visibility public.catalog_product_status not null,
   findings jsonb not null default '[]'::jsonb,
+  metadata jsonb not null default '{}'::jsonb,
   scan_job_id uuid,
   scored_at timestamptz not null default now(),
   unique (product_id, scored_at)
 );
+alter table public.product_quality_scores
+  add column if not exists metadata jsonb not null default '{}'::jsonb;
 
 create table if not exists public.product_duplicate_clusters (
   id uuid primary key default gen_random_uuid(),

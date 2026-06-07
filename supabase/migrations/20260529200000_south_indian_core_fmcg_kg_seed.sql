@@ -1,5 +1,5 @@
 create extension if not exists "pgcrypto";
-create extension if not exists "fuzzystrmatch";
+create extension if not exists "fuzzystrmatch" with schema extensions;
 
 create unique index if not exists catalog_product_variants_sku_template_unique_idx
   on public.catalog_product_variants(sku_template);
@@ -85,7 +85,7 @@ declare
   v jsonb;
   token text;
   alias_item jsonb;
-  image_kind text;
+  v_image_kind text;
   product_uuid uuid;
   variant_uuid uuid;
   dept_uuid uuid;
@@ -624,7 +624,7 @@ begin
         voice_variants = excluded.voice_variants,
         metadata = public.multilingual_mappings.metadata || excluded.metadata;
 
-    foreach image_kind in array array['HERO','TRANSPARENT_PNG','PACKAGING','SHELF','MOBILE_THUMBNAIL']
+    foreach v_image_kind in array array['HERO','TRANSPARENT_PNG','PACKAGING','SHELF','MOBILE_THUMBNAIL']
     loop
       insert into public.catalog_product_images (
         product_id, image_kind, storage_path, alt_text, width, height, aspect_ratio, mime_type,
@@ -633,20 +633,20 @@ begin
       )
       values (
         product_uuid,
-        image_kind::public.product_image_kind,
-        'catalog-ingestion/pending/south-indian-core-fmcg/' || (p->>'slug') || '/' || lower(image_kind) || '.webp',
-        (p->>'name') || ' ' || lower(replace(image_kind, '_', ' ')) || ' ingestion slot',
-        case when image_kind = 'SHELF' then 1600 else 1200 end,
-        case when image_kind = 'SHELF' then 900 else 1200 end,
-        case when image_kind = 'SHELF' then '16:9' else '1:1' end,
+        v_image_kind::public.product_image_kind,
+        'catalog-ingestion/pending/south-indian-core-fmcg/' || (p->>'slug') || '/' || lower(v_image_kind) || '.webp',
+        (p->>'name') || ' ' || lower(replace(v_image_kind, '_', ' ')) || ' ingestion slot',
+        case when v_image_kind = 'SHELF' then 1600 else 1200 end,
+        case when v_image_kind = 'SHELF' then 900 else 1200 end,
+        case when v_image_kind = 'SHELF' then '16:9' else '1:1' end,
         'image/webp',
-        image_kind <> 'SHELF',
+        v_image_kind <> 'SHELF',
         true,
         true,
         'pending_curated_capture',
         0,
-        case when image_kind in ('PACKAGING','HERO','MOBILE_THUMBNAIL') then 0.85 else 0.65 end,
-        case when image_kind in ('PACKAGING','HERO') then 0.8 else 0.55 end,
+        case when v_image_kind in ('PACKAGING','HERO','MOBILE_THUMBNAIL') then 0.85 else 0.65 end,
+        case when v_image_kind in ('PACKAGING','HERO') then 0.8 else 0.55 end,
         array[p->'visual'->>'primary', p->'visual'->>'accent'],
         jsonb_build_object(
           'image_status','placeholder_for_ingestion',
@@ -819,7 +819,7 @@ declare
   v jsonb;
   token text;
   alias_item jsonb;
-  image_kind text;
+  v_image_kind text;
   product_uuid uuid;
   variant_uuid uuid;
   dept_uuid uuid;
@@ -1152,7 +1152,7 @@ begin
         array['TN','KL','KA','AP','TS']::public.commerce_region[],
         case when alias_item->>1 = 'MISSPELLING' then 0.82 else 0.94 end,
         'tier_1_completion_recovery',
-        jsonb_build_object('seed_slug', p->>'slug', 'soundex_key', soundex(alias_item->>0), 'double_metaphone_style_key', regexp_replace(lower(alias_item->>0), '[aeiou ]', '', 'g'))
+        jsonb_build_object('seed_slug', p->>'slug', 'soundex_key', extensions.soundex(alias_item->>0), 'double_metaphone_style_key', regexp_replace(lower(alias_item->>0), '[aeiou ]', '', 'g'))
       )
       on conflict (product_id, normalized_alias, alias_type, language) do update
       set alias = excluded.alias,
@@ -1175,7 +1175,7 @@ begin
         voice_variants = excluded.voice_variants,
         metadata = public.multilingual_mappings.metadata || excluded.metadata;
 
-    foreach image_kind in array array['HERO','TRANSPARENT_PNG','PACKAGING','SHELF','MOBILE_THUMBNAIL','MULTI_ANGLE']
+    foreach v_image_kind in array array['HERO','TRANSPARENT_PNG','PACKAGING','SHELF','MOBILE_THUMBNAIL','MULTI_ANGLE']
     loop
       insert into public.catalog_product_images (
         product_id, variant_id, image_kind, storage_path, alt_text, width, height, aspect_ratio, mime_type,
@@ -1183,23 +1183,23 @@ begin
         packaging_visibility, ocr_readability, dominant_colors, metadata
       )
       values (
-        product_uuid, variant_uuid, image_kind::public.product_image_kind,
-        'catalog-ingestion/pending/tier-1-south-indian-fmcg/' || (p->>'slug') || '/' || lower(image_kind) || '.webp',
-        (p->>'name') || ' ' || lower(replace(image_kind, '_', ' ')) || ' ingestion slot',
-        case when image_kind = 'SHELF' then 1600 else 1200 end,
-        case when image_kind = 'SHELF' then 900 else 1200 end,
-        case when image_kind = 'SHELF' then '16:9' else '1:1' end,
+        product_uuid, variant_uuid, v_image_kind::public.product_image_kind,
+        'catalog-ingestion/pending/tier-1-south-indian-fmcg/' || (p->>'slug') || '/' || lower(v_image_kind) || '.webp',
+        (p->>'name') || ' ' || lower(replace(v_image_kind, '_', ' ')) || ' ingestion slot',
+        case when v_image_kind = 'SHELF' then 1600 else 1200 end,
+        case when v_image_kind = 'SHELF' then 900 else 1200 end,
+        case when v_image_kind = 'SHELF' then '16:9' else '1:1' end,
         'image/webp',
-        image_kind <> 'SHELF', true, true, 'pending_curated_capture', 0,
-        case when image_kind in ('PACKAGING','HERO','MOBILE_THUMBNAIL','MULTI_ANGLE') then 0.85 else 0.65 end,
-        case when image_kind in ('PACKAGING','HERO','MULTI_ANGLE') then 0.8 else 0.55 end,
+        v_image_kind <> 'SHELF', true, true, 'pending_curated_capture', 0,
+        case when v_image_kind in ('PACKAGING','HERO','MOBILE_THUMBNAIL','MULTI_ANGLE') then 0.85 else 0.65 end,
+        case when v_image_kind in ('PACKAGING','HERO','MULTI_ANGLE') then 0.8 else 0.55 end,
         array[p->'visual'->>'primary', p->'visual'->>'accent'],
         jsonb_build_object(
           'image_status','placeholder_for_ingestion',
           'validation_rules', image_requirements,
           'image_search_terms', p->'tokens',
           'packaging_focus', p->'visual'->>'layout',
-          'cv_validation_requirements', jsonb_build_object('ocr_alias_visibility', true, 'packaging_angle_required', image_kind in ('PACKAGING','MULTI_ANGLE'), 'scale_reference_required', true),
+          'cv_validation_requirements', jsonb_build_object('ocr_alias_visibility', true, 'packaging_angle_required', v_image_kind in ('PACKAGING','MULTI_ANGLE'), 'scale_reference_required', true),
           'duplicate_detection_hints', jsonb_build_array(p->>'brand', p->>'slug', p->'visual'->>'primary')
         )
       )
@@ -1209,7 +1209,7 @@ begin
     foreach token in array array(select jsonb_array_elements_text(p->'tokens'))
     loop
       insert into public.search_tokens (product_id, token, normalized_token, token_type, language, region_codes, weight, metadata)
-      values (product_uuid, token, lower(token), 'SEMANTIC', 'roman', array['TN','KL','KA','AP','TS']::public.commerce_region[], 1.0, jsonb_build_object('seed_slug', p->>'slug', 'soundex_key', soundex(token), 'voice_normalization', regexp_replace(lower(token), '[^a-z0-9]+', ' ', 'g')))
+      values (product_uuid, token, lower(token), 'SEMANTIC', 'roman', array['TN','KL','KA','AP','TS']::public.commerce_region[], 1.0, jsonb_build_object('seed_slug', p->>'slug', 'soundex_key', extensions.soundex(token), 'voice_normalization', regexp_replace(lower(token), '[^a-z0-9]+', ' ', 'g')))
       on conflict do nothing;
 
       insert into public.search_tokens (product_id, token, normalized_token, token_type, language, region_codes, weight, metadata)

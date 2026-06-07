@@ -1109,9 +1109,11 @@ def write_sql(products):
     # ---- categories ----
     A("-- 3. Categories (existing + new). Populate both legacy and taxonomy columns.")
     for slug, (cid, dep_slug, name) in CATEGORIES.items():
-        did = DEPARTMENTS[dep_slug][0]
+        # Resolve department_id by slug subquery: a department with this slug may already
+        # exist (from tier_1) with a different id, and ON CONFLICT(slug) keeps that id.
+        dep_lookup = f"(select id from public.departments where slug = {sql_str(dep_slug)})"
         A(f"INSERT INTO public.categories (id, department_id, name, slug, canonical_name, is_active) VALUES "
-          f"('{cid}', '{did}', {sql_str(name)}, {sql_str(slug)}, {sql_str(name)}, true) "
+          f"('{cid}', {dep_lookup}, {sql_str(name)}, {sql_str(slug)}, {sql_str(name)}, true) "
           f"ON CONFLICT (slug) DO UPDATE SET department_id = EXCLUDED.department_id, "
           f"canonical_name = COALESCE(public.categories.canonical_name, EXCLUDED.canonical_name), "
           f"name = EXCLUDED.name, is_active = true;")
@@ -1137,7 +1139,7 @@ def write_sql(products):
           f"email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, "
           f"confirmation_token, email_change, email_change_token_new, recovery_token) VALUES "
           f"('00000000-0000-0000-0000-000000000000', '{v['owner']}', 'authenticated', 'authenticated', "
-          f"{sql_str(v['email'])}, crypt('VendorHub@123!', gen_salt('bf')), now(), "
+          f"{sql_str(v['email'])}, extensions.crypt('VendorHub@123!', extensions.gen_salt('bf')), now(), "
           f"'{{\"provider\":\"email\",\"providers\":[\"email\"]}}'::jsonb, "
           f"'{{\"full_name\":{json.dumps(v['name'])}}}'::jsonb, now(), now(), '', '', '', '') "
           f"ON CONFLICT (id) DO NOTHING;")
@@ -1163,14 +1165,24 @@ def write_sql(products):
           f"ON CONFLICT (vendor_id, user_id) DO UPDATE SET role = 'OWNER';")
     A("")
     # ---- products ----
+    # Reverse maps so products resolve category_id / brand_id BY SLUG.
+    # A category or brand slug may already exist (from tier_1 / south_indian seeds)
+    # with a different id; ON CONFLICT(slug) keeps that id, so hardcoded ids can be
+    # stale. Slug subqueries are always correct.
+    cat_id_to_slug = {cid: slug for slug, (cid, _dep, _name) in CATEGORIES.items()}
+    brand_id_to_slug = {v["id"]: s for s, v in BRAND.items()}
     A("-- 6. Products")
     A("INSERT INTO public.products (id, vendor_id, category_id, brand_id, name, slug, description, "
       "status, base_price, currency, unit, package_size, image_url, search_terms, published_at) VALUES")
     rows = []
     for p in products:
         img = f"https://assets.vendorhub.in/products/{p['slug']}.png"
+        cat_slug = cat_id_to_slug[p['cat_id']]
+        brand_slug = brand_id_to_slug[p['brand_id']]
+        cat_ref = f"(select id from public.categories where slug = {sql_str(cat_slug)})"
+        brand_ref = f"(select id from public.brands where slug = {sql_str(brand_slug)})"
         rows.append(
-            f"  ('{p['id']}', '{p['vendor_id']}', '{p['cat_id']}', '{p['brand_id']}', "
+            f"  ('{p['id']}', '{p['vendor_id']}', {cat_ref}, {brand_ref}, "
             f"{sql_str(p['name'])}, {sql_str(p['slug'])}, {sql_str(p['desc'])}, 'ACTIVE', "
             f"{p['price']}, 'INR', {sql_str(p['unit'])}, {sql_str(p['size'])}, {sql_str(img)}, "
             f"{sql_arr(p['terms'])}, now())")
