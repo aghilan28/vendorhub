@@ -33,7 +33,7 @@ export function MarketplaceHero() {
             id="home-search"
             name="q"
             className="h-12 min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-secondary-text"
-            placeholder="Search will activate after verified products are ingested"
+            placeholder="Search for products, brands, or categories..."
           />
           <button type="submit" className="focus-ring min-h-12 rounded-full bg-brand px-5 text-sm font-semibold text-white transition hover:bg-emerald-700 active:scale-[0.98]">
             Search

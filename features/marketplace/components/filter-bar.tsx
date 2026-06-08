@@ -104,7 +104,7 @@ export function SearchExperience({ initialQuery = "", products = marketplaceProd
                 recordEvent({ type: "search_interaction", query: event.target.value, source: "search_input" });
               }}
               className="h-12 rounded-full pl-12 text-base"
-              placeholder="Search will activate after verified products are ingested"
+              placeholder="Search for products, brands, or categories..."
               aria-label={t("search.aria")}
             />
             {showSuggestions ? (

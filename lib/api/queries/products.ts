@@ -23,8 +23,8 @@ export async function listPublicProducts(input: ProductSearchInput = {}) {
         description,
         base_price,
         currency,
-        vendor:vendors(id, name, slug, rating_average),
-        category:categories(id, name, slug),
+        vendor:vendors!inner(id, name, slug, rating_average),
+        category:categories!inner(id, name, slug),
         images:product_images(storage_path, alt_text, is_primary),
         inventory(stock_quantity, reserved_quantity, low_stock_threshold, stock_status)
       `,
