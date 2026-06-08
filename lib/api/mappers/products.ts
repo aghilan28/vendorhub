@@ -85,7 +85,6 @@ export function mapProductRowToProduct(row: ProductListRow): Product {
   // IMPROVEMENT: Use high-quality synthetic images for certification demo
   // Since real assets.vendorhub.in are not available in this environment,
   // we map categories to specific Unsplash categories to ensure a 'Full' look.
-  const categoryRow = first(row.category);
   const categorySlug = categoryRow?.slug ?? "general";
   
   const categoryImageMap: Record<string, string> = {
