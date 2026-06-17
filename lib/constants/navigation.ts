@@ -24,6 +24,31 @@ import {
   Flag,
   HeartPulse,
   PackageCheck,
+  FlaskConical,
+  SlidersHorizontal,
+  Play,
+  History,
+  GitCompare,
+  Lightbulb,
+  Sparkles,
+  Workflow,
+  ClipboardCheck,
+  Layers,
+  Waypoints,
+  Share2,
+  Zap,
+  Activity,
+  Gauge,
+  ShieldAlert,
+  GitBranch,
+  FileText,
+  Gavel,
+  Stamp,
+  XCircle,
+  ScrollText,
+  FileWarning,
+  FileBarChart,
+  Network,
 } from "lucide-react";
 
 export const buyerNavigation = [
@@ -65,4 +90,69 @@ export const adminNavigation = [
 export const buyerQuickActions = [
   { label: "Cart", href: "/cart", icon: ShoppingCart },
   { label: "Tracking", href: "/tracking", icon: Truck },
+] as const;
+
+export const simulationNavigation = [
+  { label: "Intelligence Hub", href: "/intelligence", icon: Network },
+  { label: "Command Center", href: "/simulations", icon: LayoutDashboard },
+  { label: "Templates", href: "/simulations/templates", icon: FlaskConical },
+  { label: "Scenario Builder", href: "/simulations/scenarios", icon: SlidersHorizontal },
+  { label: "Execution", href: "/simulations/runs", icon: Play },
+  { label: "Results & Analysis", href: "/simulations/results", icon: BarChart3 },
+  { label: "Comparison", href: "/simulations/compare", icon: GitCompare },
+  { label: "Insights", href: "/simulations/insights", icon: Lightbulb },
+  { label: "Recommendations", href: "/simulations/recommendations", icon: Sparkles },
+  { label: "Workflows", href: "/simulations/workflows", icon: Workflow },
+  { label: "Reviews", href: "/simulations/reviews", icon: ClipboardCheck },
+  { label: "History", href: "/simulations/history", icon: History },
+  { label: "Settings", href: "/simulations/settings", icon: Settings2 },
+] as const;
+
+export const secisNavigation = [
+  { label: "Intelligence Hub", href: "/intelligence", icon: Network },
+  { label: "Command Center", href: "/secis", icon: LayoutDashboard },
+  { label: "Entity Explorer", href: "/secis/entities", icon: Boxes },
+  { label: "System Explorer", href: "/secis/systems", icon: Layers },
+  { label: "Dependencies", href: "/secis/dependencies", icon: Waypoints },
+  { label: "Relationships", href: "/secis/relationships", icon: Share2 },
+  { label: "Change Events", href: "/secis/change-events", icon: Zap },
+  { label: "Evolution", href: "/secis/evolution", icon: Activity },
+  { label: "Impact", href: "/secis/impact", icon: Gauge },
+  { label: "Risk", href: "/secis/risk", icon: ShieldAlert },
+  { label: "Scenarios", href: "/secis/scenarios", icon: GitBranch },
+  { label: "Compare", href: "/secis/compare", icon: GitCompare },
+  { label: "Recommendations", href: "/secis/recommendations", icon: Lightbulb },
+  { label: "History", href: "/secis/history", icon: History },
+  { label: "Workflows", href: "/secis/workflows", icon: Workflow },
+  { label: "Settings", href: "/secis/settings", icon: Settings2 },
+] as const;
+
+export const governanceNavigation = [
+  { label: "Intelligence Hub", href: "/intelligence", icon: Network },
+  { label: "Command Center", href: "/governance", icon: LayoutDashboard },
+  { label: "Policies", href: "/governance/policies", icon: FileText },
+  { label: "Decisions", href: "/governance/decisions", icon: Gavel },
+  { label: "Reviews", href: "/governance/reviews", icon: ClipboardCheck },
+  { label: "Approvals", href: "/governance/approvals", icon: Stamp },
+  { label: "Rejections", href: "/governance/rejections", icon: XCircle },
+  { label: "Workflows", href: "/governance/workflows", icon: Workflow },
+  { label: "Audit", href: "/governance/audit", icon: ScrollText },
+  { label: "Compliance", href: "/governance/compliance", icon: ShieldCheck },
+  { label: "Risks", href: "/governance/risks", icon: ShieldAlert },
+  { label: "Exceptions", href: "/governance/exceptions", icon: FileWarning },
+  { label: "Reports", href: "/governance/reports", icon: FileBarChart },
+  { label: "History", href: "/governance/history", icon: History },
+  { label: "Settings", href: "/governance/settings", icon: Settings2 },
+] as const;
+
+
+export const intelligenceNavigation = [
+  { label: "Dashboard", href: "/intelligence", icon: LayoutDashboard },
+  { label: "Workflows", href: "/intelligence/workflows", icon: Workflow },
+  { label: "Lineage", href: "/intelligence/lineage", icon: Share2 },
+  { label: "Provenance", href: "/intelligence/provenance", icon: ScrollText },
+  { label: "Search", href: "/intelligence/search", icon: Search },
+  { label: "Simulation OS", href: "/simulations", icon: FlaskConical },
+  { label: "SECIS", href: "/secis", icon: Waypoints },
+  { label: "Governance OS", href: "/governance", icon: ShieldCheck },
 ] as const;
