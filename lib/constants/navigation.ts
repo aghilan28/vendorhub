@@ -24,6 +24,18 @@ import {
   Flag,
   HeartPulse,
   PackageCheck,
+  Layers,
+  Waypoints,
+  Share2,
+  Zap,
+  Activity,
+  Gauge,
+  ShieldAlert,
+  GitBranch,
+  GitCompare,
+  Lightbulb,
+  History,
+  Workflow,
 } from "lucide-react";
 
 export const buyerNavigation = [
@@ -65,4 +77,23 @@ export const adminNavigation = [
 export const buyerQuickActions = [
   { label: "Cart", href: "/cart", icon: ShoppingCart },
   { label: "Tracking", href: "/tracking", icon: Truck },
+] as const;
+
+
+export const secisNavigation = [
+  { label: "Command Center", href: "/secis", icon: LayoutDashboard },
+  { label: "Entity Explorer", href: "/secis/entities", icon: Boxes },
+  { label: "System Explorer", href: "/secis/systems", icon: Layers },
+  { label: "Dependencies", href: "/secis/dependencies", icon: Waypoints },
+  { label: "Relationships", href: "/secis/relationships", icon: Share2 },
+  { label: "Change Events", href: "/secis/change-events", icon: Zap },
+  { label: "Evolution", href: "/secis/evolution", icon: Activity },
+  { label: "Impact", href: "/secis/impact", icon: Gauge },
+  { label: "Risk", href: "/secis/risk", icon: ShieldAlert },
+  { label: "Scenarios", href: "/secis/scenarios", icon: GitBranch },
+  { label: "Compare", href: "/secis/compare", icon: GitCompare },
+  { label: "Recommendations", href: "/secis/recommendations", icon: Lightbulb },
+  { label: "History", href: "/secis/history", icon: History },
+  { label: "Workflows", href: "/secis/workflows", icon: Workflow },
+  { label: "Settings", href: "/secis/settings", icon: Settings2 },
 ] as const;
