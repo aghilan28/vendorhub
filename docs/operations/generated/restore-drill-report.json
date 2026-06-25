@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-05-30T05:48:05.904Z",
+  "mode": "logical",
+  "startedAt": "2026-05-30T05:48:05.883Z",
+  "recoveryDurationMs": 12,
+  "recoveryAccuracy": {
+    "tables": 3,
+    "rowsRestored": 1910,
+    "rowsExpected": 1910,
+    "accuracyPct": 100
+  },
+  "verification": {
+    "checks": [
+      {
+        "name": "orders.rowCount",
+        "expected": 500,
+        "actual": 500,
+        "passed": true
+      },
+      {
+        "name": "orders.checksum",
+        "passed": true
+      },
+      {
+        "name": "payments.rowCount",
+        "expected": 500,
+        "actual": 500,
+        "passed": true
+      },
+      {
+        "name": "payments.checksum",
+        "passed": true
+      },
+      {
+        "name": "ledger_entries.rowCount",
+        "expected": 910,
+        "actual": 910,
+        "passed": true
+      },
+      {
+        "name": "ledger_entries.checksum",
+        "passed": true
+      },
+      {
+        "name": "ledger.debit_equals_credit",
+        "passed": true
+      }
+    ],
+    "passed": true
+  },
+  "passed": true,
+  "note": "Logical drill validating restore procedure + integrity verification on a representative dataset. Production data drill (Supabase PITR) is an operational task requiring production credentials."
+}
