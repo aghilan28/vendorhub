@@ -1,0 +1,55 @@
+{
+  "meta": {
+    "name": "KARTEX Phase B — Qdrant collection definitions",
+    "registrar": "infra/qdrant/register-collections.sh",
+    "embeddingContract": "Default model bge-small-en-v1.5 (384d). Migration to a new model => new collection suffix _vN + dual-write + cutover. Vectors are a derived index; source of truth stays in Postgres.",
+    "hybrid": "Dense (Qdrant) + sparse/keyword (Postgres FTS) fused at query time (RRF)."
+  },
+  "collections": [
+    {
+      "name": "product_catalog_v1",
+      "useCase": "semantic product search + similar-product",
+      "vectors": { "size": 384, "distance": "Cosine", "on_disk": true },
+      "embeddingModel": "bge-small-en-v1.5",
+      "chunking": "one vector per product (title + brand + category + key attributes); long descriptions truncated to 512 tokens",
+      "payloadSchema": {
+        "productId": "keyword",
+        "sellerId": "keyword",
+        "categoryId": "keyword",
+        "pincodeServiceable": "keyword[]",
+        "priceMinor": "integer",
+        "inStock": "bool",
+        "status": "keyword",
+        "updatedAt": "integer"
+      },
+      "payloadIndexes": ["sellerId", "categoryId", "pincodeServiceable", "status", "inStock"],
+      "filterStrategy": "pre-filter on status=ACTIVE AND inStock=true AND pincode match before ANN",
+      "retention": "live; deleted/archived products are removed on catalog event",
+      "updateStrategy": "upsert on kartex.search.catalog.indexing / kartex.ai.embedding.requested"
+    },
+    {
+      "name": "recommendation_profiles_v1",
+      "useCase": "personalized recommendations (buyer taste vectors)",
+      "vectors": { "size": 384, "distance": "Cosine", "on_disk": true },
+      "embeddingModel": "bge-small-en-v1.5",
+      "chunking": "one vector per buyer rolling-interest profile",
+      "payloadSchema": { "buyerId": "keyword", "marketId": "keyword", "updatedAt": "integer" },
+      "payloadIndexes": ["buyerId", "marketId"],
+      "filterStrategy": "filter by marketId/serviceable region",
+      "retention": "TTL 180d since last activity",
+      "updateStrategy": "ai.personalization.refresh"
+    },
+    {
+      "name": "knowledge_chunks_v1",
+      "useCase": "knowledge/RAG retrieval (taxonomy, policies, ops runbooks)",
+      "vectors": { "size": 384, "distance": "Cosine", "on_disk": true },
+      "embeddingModel": "bge-small-en-v1.5",
+      "chunking": "recursive 512-token chunks, 64-token overlap; metadata-tagged by source doc",
+      "payloadSchema": { "docId": "keyword", "source": "keyword", "section": "keyword", "lang": "keyword", "updatedAt": "integer" },
+      "payloadIndexes": ["docId", "source", "lang"],
+      "filterStrategy": "filter by source + lang",
+      "retention": "versioned; superseded chunks deleted on re-ingest",
+      "updateStrategy": "ai.semantic.index"
+    }
+  ]
+}
